@@ -1,0 +1,4 @@
+// @ts-expect-error
+const x: any = value;
+console.debug('temporary');
+debugger;

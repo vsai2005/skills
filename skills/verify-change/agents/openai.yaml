@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Change"
+  short_description: "Run honest completion checks before declaring done"
+  default_prompt: "Use $verify-change to review this patch's correctness, safeguards, failure paths, structure, and actual verification evidence."

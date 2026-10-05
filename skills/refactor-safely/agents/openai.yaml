@@ -1,0 +1,4 @@
+interface:
+  display_name: "Refactor Safely"
+  short_description: "Improve structure while preserving behavior"
+  default_prompt: "Use $refactor-safely to improve this code's structure while protecting behavior and contracts."

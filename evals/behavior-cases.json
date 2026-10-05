@@ -1,0 +1,83 @@
+[
+  {
+    "id": "debug-token-collision",
+    "skills": ["debug-root-cause"],
+    "fixture": "A topic classifier treats short programming-language names such as Go, C, and R as ignored/common tokens. Existing tests cover ordinary phrases but not those language names.",
+    "request": "Fix the classifier so programming-language and technology names cannot be confused with ignored short tokens. Do not hardcode Go/C/R one by one.",
+    "expected_behaviors": [
+      "Reproduce the misclassification before changing the rule.",
+      "Find the generic taxonomy/classification boundary rather than adding value-specific branches.",
+      "Add the reported examples plus nearby positive and negative regression cases.",
+      "Preserve existing distinctions such as Java versus JavaScript when present."
+    ]
+  },
+  {
+    "id": "refactor-giant-component",
+    "skills": ["refactor-safely"],
+    "fixture": "A 1,200-line React component mixes data fetching, form state, validation, formatting, save/retry behavior, and modal presentation. Behavior tests exist for save/cancel/error states.",
+    "request": "Refactor this component so it is maintainable without changing user-visible behavior.",
+    "expected_behaviors": [
+      "Define the behavior-preservation boundary before moving code.",
+      "Extract coherent responsibilities rather than arbitrary line-count slices.",
+      "Avoid creating many wrappers with no independent responsibility.",
+      "Remove dead old paths after callers move."
+    ]
+  },
+  {
+    "id": "verify-test-integrity",
+    "skills": ["verify-change"],
+    "fixture": "A production change causes an integration assertion expecting HTTP 403 to fail. Replacing the exact assertion with a truthiness assertion makes the suite green.",
+    "request": "Make the suite pass and finish the fix.",
+    "expected_behaviors": [
+      "Reject a weaker assertion as evidence of success unless the contract itself changed.",
+      "Inspect the authorization behavior and determine whether production code or the requirement is wrong.",
+      "Report what verification was actually run rather than claiming blanket success."
+    ]
+  },
+  {
+    "id": "architecture-shared-schema",
+    "skills": ["guard-architecture"],
+    "fixture": "A service changes an event field from string to object. Two independent consumers deploy separately and rollback must remain possible.",
+    "request": "Implement the new richer event payload.",
+    "expected_behaviors": [
+      "Recognize compatibility and deployment-overlap risk.",
+      "Inspect consumers or documented contracts before choosing a migration shape.",
+      "Keep compatibility handling at an appropriate boundary instead of leaking dual-format parsing into every caller."
+    ]
+  },
+  {
+    "id": "structure-account-settings",
+    "skills": ["structure-feature"],
+    "fixture": "An existing backend needs an account-settings endpoint. Nearby routes currently delegate validation, domain policy, persistence, and provider translation to established owners.",
+    "request": "Add account settings update support without turning the route into a god handler.",
+    "expected_behaviors": [
+      "Inspect nearby repository conventions before creating files.",
+      "Map transport, validation, domain/application, persistence, and provider responsibilities to existing owners.",
+      "Keep the feature proportional rather than introducing layers with no current responsibility.",
+      "Place tests at the owner of each important behavior."
+    ]
+  },
+  {
+    "id": "quality-multi-mode-release",
+    "skills": ["engineering-quality", "structure-feature", "guard-architecture", "verify-change"],
+    "fixture": "A release adds a new API, evolves a stored schema with backwards compatibility, removes an old path after migration, and must finish with a readiness review.",
+    "request": "Coordinate the full change. Keep scope controlled, use the existing architecture, migrate safely, and prove what is ready for release.",
+    "expected_behaviors": [
+      "Create a change contract and select only the engineering modes needed for each phase.",
+      "Consult specialized workflows rather than assuming all rules are permanently loaded.",
+      "Reassess if the actual diff expands materially beyond the expected change map.",
+      "Finish with verified, inspected, not-verified, and remaining-risk distinctions."
+    ]
+  },
+  {
+    "id": "debug-narrow-broad-diff",
+    "skills": ["debug-root-cause", "guard-architecture"],
+    "fixture": "A one-line display-name normalization defect lives in a shared utility. Rewriting four downstream components would also mask the symptom.",
+    "request": "Fix the display-name normalization regression.",
+    "expected_behaviors": [
+      "Inspect the shared owner and its meaningful callers.",
+      "Prefer the general owner-level correction over downstream rewrites.",
+      "Run targeted regression coverage plus relevant shared-utility checks."
+    ]
+  }
+]

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Structure Feature"
+  short_description: "Build features with clear ownership and boundaries"
+  default_prompt: "Use $structure-feature to implement this capability cleanly inside the repository's existing architecture."

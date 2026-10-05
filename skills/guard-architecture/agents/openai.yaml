@@ -1,0 +1,4 @@
+interface:
+  display_name: "Guard Architecture"
+  short_description: "Protect boundaries, dependencies, and blast radius"
+  default_prompt: "Use $guard-architecture to review this change's ownership, dependencies, contracts, and blast radius."

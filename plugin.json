@@ -1,0 +1,16 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "engineering-quality",
+  "version": "1.0.1",
+  "description": "Provider-neutral engineering quality skills for clean feature work, root-cause debugging, safe refactoring, architecture protection, and rigorous change verification.",
+  "skills": "./skills/",
+  "license": "MIT",
+  "keywords": [
+    "code-quality",
+    "debugging",
+    "refactoring",
+    "architecture",
+    "testing",
+    "agent-skills"
+  ]
+}

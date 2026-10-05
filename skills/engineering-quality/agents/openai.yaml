@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineering Quality"
+  short_description: "Coordinate clean, verifiable software changes"
+  default_prompt: "Use $engineering-quality to coordinate this multi-phase software change with controlled scope and honest verification."

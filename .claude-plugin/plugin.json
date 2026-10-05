@@ -1,0 +1,14 @@
+{
+  "name": "engineering-quality",
+  "version": "1.0.1",
+  "description": "Engineering quality workflows for building, debugging, refactoring, architecture review, and verification.",
+  "license": "MIT",
+  "keywords": [
+    "code-quality",
+    "debugging",
+    "refactoring",
+    "architecture",
+    "testing",
+    "agent-skills"
+  ]
+}
