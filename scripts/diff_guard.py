@@ -43,7 +43,14 @@ def parse_numstat(text: str) -> list[FileChange]:
 
 
 def run_git(repo: Path, args: list[str]) -> str:
-    result = subprocess.run(["git", "-C", str(repo), *args], check=False, text=True, capture_output=True)
+    result = subprocess.run(
+        ["git", "-C", str(repo), *args],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+    )
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or "git command failed")
     return result.stdout
