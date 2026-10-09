@@ -4,6 +4,7 @@ All notable changes to this project will be documented here.
 
 ## 1.9.0 - Empirical model evidence and executable composition benchmarks
 
+- Fixed Windows CI portability for temp-path aliasing (8.3 vs long paths) and command identity checks containing Windows backslashes.
 - Added `benchmark_campaign.py` plus `evals/benchmark-policy.json` for repeatable core/full Codex/Claude benchmark campaigns with explicit models, planned arm counts, campaign manifests, and post-run analysis.
 - Live RED/GREEN records now include campaign IDs, exact skill/case/suite hashes, repository version/commit, provider CLI version, and enabled/evaluated skill sets so evidence cannot be silently mixed across changed skills or fixtures.
 - RED/GREEN arm order alternates across repetitions to reduce simple time/order bias, and completed arms can be resumed by stable campaign ID without paying to rerun them.

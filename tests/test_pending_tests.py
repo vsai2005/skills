@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from scripts.evidence_ledger import main as evidence_main
-from scripts.pending_tests import add_item, complete_item, load_items, render, write_items
+from scripts.pending_tests import _commands_equivalent, add_item, complete_item, load_items, render, write_items
 
 
 def init_git_repo(root: Path) -> None:
@@ -47,6 +47,12 @@ class PendingTestsTests(unittest.TestCase):
             self.assertEqual(item, completed)
             self.assertEqual([], load_items(path))
             self.assertIn("No pending tests.", path.read_text(encoding="utf-8"))
+
+
+    def test_windows_command_paths_compare_without_losing_backslashes(self):
+        raw = r"C:\\hostedtoolcache\\windows\\Python\\3.12\\python.exe -c pass"
+        joined = r"'C:\\hostedtoolcache\\windows\\Python\\3.12\\python.exe' -c pass"
+        self.assertTrue(_commands_equivalent(raw, joined))
 
     def test_stale_evidence_cannot_complete_pending_item(self):
         with tempfile.TemporaryDirectory() as tmp:

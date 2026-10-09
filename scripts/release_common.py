@@ -154,9 +154,13 @@ def iter_release_files(root: Path) -> Iterator[Path]:
     """Yield safe release files in stable repository-relative order.
 
     Git worktrees package tracked files only. Source archives without Git use a
-    filesystem scan, but still reject symlinks and sensitive filenames.
+    filesystem scan, but still reject symlinks and sensitive filenames. Keep the
+    caller's absolute path spelling instead of resolving it so Windows 8.3 short
+    paths and their long-path aliases do not make yielded paths unusable with
+    ``Path.relative_to(caller_root)``. Security comparisons still resolve paths
+    inside ``_git_tracked_paths`` where canonical identity matters.
     """
-    root = root.resolve()
+    root = root.absolute()
     tracked = _git_tracked_paths(root)
     if tracked is not None:
         for path in tracked:

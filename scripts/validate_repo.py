@@ -95,11 +95,17 @@ def validate_skill_reachability(skill_dir: Path) -> list[Problem]:
     if not entry.is_file():
         return []
 
-    resource_files: set[Path] = set()
+    # Compare resources canonically, but keep the caller-visible path spelling
+    # for diagnostics. On Windows, resolving a temp path can expand an 8.3 alias
+    # (RUNNER~1 -> runneradmin), which otherwise breaks exact Path comparisons in
+    # callers and tests even though both paths name the same file.
+    resource_files: dict[Path, Path] = {}
     for folder_name in ("references", "assets"):
         folder = skill_dir / folder_name
         if folder.is_dir():
-            resource_files.update(p.resolve() for p in folder.rglob("*.md") if p.is_file())
+            for path in folder.rglob("*.md"):
+                if path.is_file():
+                    resource_files[path.resolve()] = path
     if not resource_files:
         return []
 
@@ -120,8 +126,12 @@ def validate_skill_reachability(skill_dir: Path) -> list[Problem]:
                 queue.append(candidate)
 
     return [
-        Problem("WARN", resource, "resource is not reachable from SKILL.md progressive-disclosure links")
-        for resource in sorted(resource_files - reachable)
+        Problem(
+            "WARN",
+            resource_files[resource],
+            "resource is not reachable from SKILL.md progressive-disclosure links",
+        )
+        for resource in sorted(set(resource_files) - reachable)
     ]
 
 
@@ -225,7 +235,10 @@ def validate_markdown_links(root: Path) -> list[Problem]:
 
 
 def validate_repo(root: Path) -> list[Problem]:
-    root = root.resolve()
+    # Preserve the caller's absolute path spelling for Problem.path values.
+    # Windows can represent the same temp directory with short and long aliases;
+    # resolving here made diagnostics unexpectedly change path identity.
+    root = root.absolute()
     if not root.is_dir():
         return [Problem("ERROR", root, "repository root does not exist or is not a directory")]
 

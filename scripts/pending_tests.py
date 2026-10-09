@@ -103,11 +103,25 @@ def add_item(path: Path, command: str, reason: str, trigger: str) -> PendingTest
     return item
 
 
-def _commands_equivalent(left: str, right: str) -> bool:
+def _command_tokens(command: str) -> tuple[str, ...]:
+    """Tokenize command text without destroying Windows path separators."""
+    windows_path = re.search(r"(?:^|[\s\"\'])[A-Za-z]:\\", command) is not None
     try:
-        return shlex.split(left) == shlex.split(right)
+        parts = shlex.split(command, posix=not windows_path)
     except ValueError:
-        return " ".join(left.split()) == " ".join(right.split())
+        return tuple(command.split())
+    if windows_path:
+        parts = [
+            part[1:-1]
+            if len(part) >= 2 and part[0] == part[-1] and part[0] in {"'", '"'}
+            else part
+            for part in parts
+        ]
+    return tuple(parts)
+
+
+def _commands_equivalent(left: str, right: str) -> bool:
+    return _command_tokens(left) == _command_tokens(right)
 
 
 def _require_completion_evidence(

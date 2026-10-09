@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shlex
 import subprocess
 import sys
@@ -166,10 +167,20 @@ def _snapshot_is_stale(recorded: RepoSnapshot, current: RepoSnapshot | None) -> 
 
 
 def _canonical_command(command: str) -> tuple[str, ...]:
+    """Canonicalize command text while preserving Windows backslashes."""
+    windows_path = re.search(r"(?:^|[\s\"\'])[A-Za-z]:\\", command) is not None
     try:
-        return tuple(shlex.split(command))
+        parts = shlex.split(command, posix=not windows_path)
     except ValueError:
         return tuple(command.split())
+    if windows_path:
+        parts = [
+            part[1:-1]
+            if len(part) >= 2 and part[0] == part[-1] and part[0] in {"'", '"'}
+            else part
+            for part in parts
+        ]
+    return tuple(parts)
 
 
 def _known_command(events: list[dict[str, object]], evidence_id: str) -> str | None:
