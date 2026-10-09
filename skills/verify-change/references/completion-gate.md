@@ -41,5 +41,9 @@ Mark each applicable item PASS, FAIL, or NOT VERIFIED.
 
 ## Evidence
 
-- Verification commands are listed accurately.
-- Unavailable environment checks are stated as not verified.
+- Verification commands are recorded with exit code, timestamp, provenance, and repository state when the evidence ledger is available.
+- Successful evidence is current for the final repository state; stale evidence was rerun.
+- Externally recorded results are not presented as locally executed verification.
+- Outstanding `PENDING_TESTS.md` items appear under `Not verified`.
+- `Verified` / `Not verified` sections are generated from ledger state rather than memory.
+- Unavailable environment checks are planned or otherwise stated as not verified.

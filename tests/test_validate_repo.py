@@ -88,6 +88,39 @@ class ValidateRepoTests(unittest.TestCase):
             problems = validate_repo(root)
             self.assertTrue(any(p.level == "ERROR" and p.path.name == "FILE_MANIFEST.txt" and ("mismatch" in p.message or "missing release file" in p.message) for p in problems))
 
+    def test_invalid_live_eval_fixture_fails_validation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = copy_repo(tmp)
+            path = root / "evals" / "live-cases.json"
+            data = json.loads(path.read_text(encoding="utf-8"))
+            data[0]["fixture"] = "evals/live-fixtures/does-not-exist"
+            path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+            refresh_manifest(root)
+            problems = validate_repo(root)
+            self.assertTrue(any(p.level == "ERROR" and p.path == path and "invalid live evals" in p.message for p in problems))
+
+    def test_invalid_benchmark_policy_fails_validation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = copy_repo(tmp)
+            path = root / "evals" / "benchmark-policy.json"
+            data = json.loads(path.read_text(encoding="utf-8"))
+            data["confidence"] = 2.0
+            path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+            refresh_manifest(root)
+            problems = validate_repo(root)
+            self.assertTrue(any(p.level == "ERROR" and p.path == path and "benchmark policy" in p.message for p in problems))
+
+    def test_live_eval_coverage_is_required(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = copy_repo(tmp)
+            path = root / "evals" / "live-cases.json"
+            data = json.loads(path.read_text(encoding="utf-8"))
+            data = [case for case in data if case.get("skill") != "flaky-test-triage"]
+            path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+            refresh_manifest(root)
+            problems = validate_repo(root)
+            self.assertTrue(any(p.level == "ERROR" and p.path == path and "live evals do not cover" in p.message for p in problems))
+
 
 if __name__ == "__main__":
     unittest.main()

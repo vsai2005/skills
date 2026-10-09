@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flaky Test Triage"
+  short_description: "Measure and isolate nondeterministic test failures"
+  default_prompt: "Use $flaky-test-triage to reproduce this flake N times, report its failure rate, and investigate order or shared-resource causes without timeout inflation."

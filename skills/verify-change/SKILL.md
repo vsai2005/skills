@@ -33,9 +33,15 @@ Review for:
 - removed type/lint/security checks;
 - changed fixtures that merely stop reproducing the bug.
 
-Use [references/test-integrity.md](references/test-integrity.md). For a concrete example of why a greener but weaker assertion is not a fix, see [references/case-study-test-integrity.md](references/case-study-test-integrity.md).
+Use [references/test-integrity.md](references/test-integrity.md). For high-value new regression tests, optionally use the isolated [test-the-test mutation probe](references/mutation-probe.md). For a concrete example of why a greener but weaker assertion is not a fix, see [references/case-study-test-integrity.md](references/case-study-test-integrity.md).
 
-## 3. Run risk-proportionate verification
+## 3. Build the verification evidence ledger
+
+For non-trivial changes, register the checks that should prove readiness, then run or record them through `scripts/evidence_ledger.py` when available. This prevents a final summary from relying on memory.
+
+Use [references/evidence-ledger.md](references/evidence-ledger.md).
+
+## 4. Run risk-proportionate verification
 
 Use a layered sequence:
 
@@ -47,11 +53,13 @@ Use a layered sequence:
 
 Do not claim a check passed without running it successfully in the current environment.
 
-## 4. Review failure paths
+## 5. Review failure paths
 
 Use [references/failure-paths.md](references/failure-paths.md) for applicable boundaries. Focus on realistic failure behavior, not exhaustive hypothetical branches.
 
-## 5. Review security and data boundaries
+When behavior crosses a runtime boundary, use [references/runtime-validation.md](references/runtime-validation.md) and record actual runtime evidence.
+
+## 6. Review security and data boundaries
 
 Apply additional scrutiny when touched code handles:
 
@@ -65,9 +73,9 @@ Apply additional scrutiny when touched code handles:
 - payment/value transfer;
 - migrations/destructive writes.
 
-Use [references/security-performance.md](references/security-performance.md).
+Use [references/security-performance.md](references/security-performance.md). For a substantive trust-boundary change, apply the dedicated `security-hardening` workflow instead of treating this final checklist as the security design process.
 
-## 6. Review obvious performance regressions
+## 7. Review obvious performance regressions
 
 Look for changes such as:
 
@@ -79,7 +87,7 @@ Look for changes such as:
 
 Do not optimize speculative micro-performance without evidence.
 
-## 7. Inspect maintainability residue
+## 8. Inspect maintainability residue
 
 Search the diff for:
 
@@ -91,19 +99,18 @@ Search the diff for:
 - duplicate helper/rule;
 - compatibility hack with no owner/removal condition.
 
-## 8. Apply the completion gate
+## 9. Require fresh independent review for high-risk changes
+
+For authentication/security, public contracts, persistence migrations, architecture changes, or other high-blast-radius work, require an `independent-review` pass before the final completion gate when the host/workflow supports it. If review-state evidence exists, confirm that it is still bound to the current diff. Treat unresolved critical/important findings as not ready. Do not require a separate reviewer for trivial edits merely to satisfy process.
+
+## 10. Apply the completion gate
 
 Use [references/completion-gate.md](references/completion-gate.md). A failed gate should result in a fix or an explicit remaining-risk statement, not a hidden pass.
 
-## 9. Report verification precisely
+## 11. Build the completion report from evidence
+
+Generate the `Verified` / `Not verified` sections from the ledger instead of reconstructing them from memory. The report must include outstanding `PENDING_TESTS.md` items. Evidence is not `Verified` when it is stale, externally recorded, unbound to Git state, or produced by a command that mutated the candidate without an explicit state-change allowance. Then add static inspection and remaining-risk notes around that evidence.
 
 For repeatable handoff, use [assets/completion-report.md](assets/completion-report.md).
 
-A useful completion report separates:
-
-- **Verified:** commands/tests actually run and passed.
-- **Inspected:** properties checked statically/reviewed.
-- **Not verified:** environment-dependent areas not exercised.
-- **Remaining risk/debt:** known limitations or temporary workarounds.
-
-Do not say "all tests pass" when only targeted tests ran.
+Do not say "all tests pass" when only targeted tests ran, and do not move a failed command into `Verified`.

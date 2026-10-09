@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "default_repetitions": 5,
+  "minimum_pairs_for_claim": 5,
+  "confidence": 0.95,
+  "bootstrap_samples": 5000,
+  "minimum_score_effect": 0.05,
+  "costly_overhead_ratio": 1.5,
+  "arm_order": "alternate",
+  "profiles": {
+    "core": {
+      "local_live_cases": true,
+      "historical_debug_cases": false,
+      "composition_cases": false
+    },
+    "full": {
+      "local_live_cases": true,
+      "historical_debug_cases": true,
+      "composition_cases": true
+    }
+  }
+}

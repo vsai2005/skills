@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tiered Testing"
+  short_description: "Stage cheap and heavy checks without losing evidence"
+  default_prompt: "Use $tiered-testing to choose cheap versus heavy checks, trigger broader tests for shared code, and track deferred verification explicitly."

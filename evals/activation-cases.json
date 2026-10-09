@@ -1,32 +1,272 @@
 [
-  {"id":"build-direct-01","prompt":"Add a profile settings page to this existing Next.js app and follow its current conventions.","expected_primary_skill":"structure-feature"},
-  {"id":"build-indirect-01","prompt":"We need a webhook endpoint, but I do not want another giant route handler with validation, provider calls, and business rules mixed together.","expected_primary_skill":"structure-feature"},
-  {"id":"build-incomplete-01","prompt":"I need a new account export flow in this repo. Work out where it belongs before you start adding files.","expected_primary_skill":"structure-feature"},
-
-  {"id":"debug-direct-01","prompt":"This parser started classifying technology names as normal words. Find the root cause and fix it without hardcoding the examples.","expected_primary_skill":"debug-root-cause"},
-  {"id":"debug-indirect-01","prompt":"The integration test became flaky after the retry change. Please figure out what is actually racing instead of just increasing sleeps.","expected_primary_skill":"debug-root-cause"},
-  {"id":"debug-incomplete-01","prompt":"Something is wrong with auth after the refactor; users intermittently get the wrong permission result.","expected_primary_skill":"debug-root-cause"},
-
-  {"id":"refactor-direct-01","prompt":"Split this 1,300-line React component while preserving behavior and public props.","expected_primary_skill":"refactor-safely"},
-  {"id":"refactor-indirect-01","prompt":"This provider layer has the same translation logic in four places. Clean it up without changing the API contract.","expected_primary_skill":"refactor-safely"},
-  {"id":"refactor-ambiguous-01","prompt":"This service has become hard to change and owns validation, retries, persistence, and formatting. Improve the structure but keep behavior stable.","expected_primary_skill":"refactor-safely"},
-
-  {"id":"arch-direct-01","prompt":"Review whether this change creates a circular dependency between domain and web packages.","expected_primary_skill":"guard-architecture"},
-  {"id":"arch-indirect-01","prompt":"We are changing a shared event schema consumed by three services. Check blast radius and migration safety.","expected_primary_skill":"guard-architecture"},
-  {"id":"arch-incomplete-01","prompt":"A shared type changed and I am not sure who depends on it or whether separate deployments will break.","expected_primary_skill":"guard-architecture"},
-
-  {"id":"verify-direct-01","prompt":"Is this patch actually ready to merge? Check tests, suppressions, failure paths, and leftover debug code.","expected_primary_skill":"verify-change"},
-  {"id":"verify-indirect-01","prompt":"Look over this final diff before I merge it and tell me what was truly verified versus only inspected.","expected_primary_skill":"verify-change"},
-  {"id":"verify-regression-01","prompt":"Verify this bug fix and make sure the tests were not weakened to get green.","expected_primary_skill":"verify-change"},
-
-  {"id":"multi-direct-01","prompt":"Implement the new auth flow, fix any regressions it exposes, keep the architecture clean, and do a final readiness pass.","expected_primary_skill":"engineering-quality"},
-  {"id":"multi-indirect-01","prompt":"Modernize this storage module, migrate callers safely, debug resulting failures, and verify the full change.","expected_primary_skill":"engineering-quality"},
-  {"id":"multi-ambiguous-01","prompt":"This change spans a new API, a data migration, cleanup of the old path, and final release verification. Coordinate the whole thing without broadening scope unnecessarily.","expected_primary_skill":"engineering-quality"},
-
-  {"id":"none-explain-01","prompt":"Explain JavaScript Array.map to a beginner.","expected_primary_skill":"none"},
-  {"id":"none-concept-01","prompt":"What is the difference between REST and FastAPI?","expected_primary_skill":"none"},
-  {"id":"none-snippet-01","prompt":"Write a small one-off Python snippet that prints numbers 1 to 5.","expected_primary_skill":"none"},
-  {"id":"none-trivial-edit-01","prompt":"Rename this local variable from x to count.","expected_primary_skill":"none"},
-  {"id":"none-test-only-01","prompt":"Add one straightforward unit test for this already-correct pure function.","expected_primary_skill":"none"},
-  {"id":"none-advice-01","prompt":"What are some general clean-code principles?","expected_primary_skill":"none"}
+  {
+    "id": "build-direct-01",
+    "prompt": "Add a profile settings page to this existing Next.js app and follow its current conventions.",
+    "expected_primary_skill": "structure-feature"
+  },
+  {
+    "id": "build-indirect-01",
+    "prompt": "We need a webhook endpoint, but I do not want another giant route handler with validation, provider calls, and business rules mixed together.",
+    "expected_primary_skill": "structure-feature"
+  },
+  {
+    "id": "build-incomplete-01",
+    "prompt": "I need a new account export flow in this repo. Work out where it belongs before you start adding files.",
+    "expected_primary_skill": "structure-feature"
+  },
+  {
+    "id": "debug-direct-01",
+    "prompt": "This parser started classifying technology names as normal words. Find the root cause and fix it without hardcoding the examples.",
+    "expected_primary_skill": "debug-root-cause"
+  },
+  {
+    "id": "flake-retry-race-01",
+    "prompt": "The integration test became flaky after the retry change. Please figure out what is actually racing instead of just increasing sleeps.",
+    "expected_primary_skill": "flaky-test-triage"
+  },
+  {
+    "id": "debug-incomplete-01",
+    "prompt": "Something is wrong with auth after the refactor; users intermittently get the wrong permission result.",
+    "expected_primary_skill": "debug-root-cause"
+  },
+  {
+    "id": "refactor-direct-01",
+    "prompt": "Split this 1,300-line React component while preserving behavior and public props.",
+    "expected_primary_skill": "refactor-safely"
+  },
+  {
+    "id": "refactor-indirect-01",
+    "prompt": "This provider layer has the same translation logic in four places. Clean it up without changing the API contract.",
+    "expected_primary_skill": "refactor-safely"
+  },
+  {
+    "id": "refactor-ambiguous-01",
+    "prompt": "This service has become hard to change and owns validation, retries, persistence, and formatting. Improve the structure but keep behavior stable.",
+    "expected_primary_skill": "refactor-safely"
+  },
+  {
+    "id": "arch-direct-01",
+    "prompt": "Review whether this change creates a circular dependency between domain and web packages.",
+    "expected_primary_skill": "guard-architecture"
+  },
+  {
+    "id": "arch-indirect-01",
+    "prompt": "We are changing a shared event schema consumed by three services. Check blast radius and migration safety.",
+    "expected_primary_skill": "guard-architecture"
+  },
+  {
+    "id": "arch-incomplete-01",
+    "prompt": "A shared type changed and I am not sure who depends on it or whether separate deployments will break.",
+    "expected_primary_skill": "guard-architecture"
+  },
+  {
+    "id": "tiered-direct-01",
+    "prompt": "Plan the verification for this change in cheap and heavy tiers, and track any deferred e2e checks in PENDING_TESTS.md.",
+    "expected_primary_skill": "tiered-testing"
+  },
+  {
+    "id": "tiered-shared-01",
+    "prompt": "I changed a shared validation helper used by many features. Which tests should run immediately versus later?",
+    "expected_primary_skill": "tiered-testing"
+  },
+  {
+    "id": "tiered-incomplete-01",
+    "prompt": "The full browser suite is too expensive to run on every edit, but I do not want us to forget it before merge.",
+    "expected_primary_skill": "tiered-testing"
+  },
+  {
+    "id": "baseline-direct-01",
+    "prompt": "The test suite already has failures. Compare this patch with the baseline and label every failure pre-existing or regression.",
+    "expected_primary_skill": "baseline-compare"
+  },
+  {
+    "id": "baseline-worktree-01",
+    "prompt": "Use a clean git worktree at the parent commit to prove whether these current failures existed before my change.",
+    "expected_primary_skill": "baseline-compare"
+  },
+  {
+    "id": "baseline-manual-01",
+    "prompt": "The old commit will not run without a few compatibility edits. Rebuild the baseline carefully and list every change you make.",
+    "expected_primary_skill": "baseline-compare"
+  },
+  {
+    "id": "flake-direct-01",
+    "prompt": "This test fails sometimes and passes on rerun. Run it 20 times and tell me the failure rate before changing it.",
+    "expected_primary_skill": "flaky-test-triage"
+  },
+  {
+    "id": "flake-order-01",
+    "prompt": "This test passes alone but flakes in the full suite. Check test order and shared resources instead of increasing timeouts.",
+    "expected_primary_skill": "flaky-test-triage"
+  },
+  {
+    "id": "flake-incomplete-01",
+    "prompt": "CI randomly fails this integration test about once every few runs.",
+    "expected_primary_skill": "flaky-test-triage"
+  },
+  {
+    "id": "verify-direct-01",
+    "prompt": "Is this patch actually ready to merge? Check tests, suppressions, failure paths, and leftover debug code.",
+    "expected_primary_skill": "verify-change"
+  },
+  {
+    "id": "verify-indirect-01",
+    "prompt": "Look over this final diff before I merge it and tell me what was truly verified versus only inspected.",
+    "expected_primary_skill": "verify-change"
+  },
+  {
+    "id": "verify-regression-01",
+    "prompt": "Verify this bug fix and make sure the tests were not weakened to get green.",
+    "expected_primary_skill": "verify-change"
+  },
+  {
+    "id": "multi-direct-01",
+    "prompt": "Implement the new auth flow, fix any regressions it exposes, keep the architecture clean, and do a final readiness pass.",
+    "expected_primary_skill": "engineering-quality"
+  },
+  {
+    "id": "multi-indirect-01",
+    "prompt": "Modernize this storage module, migrate callers safely, debug resulting failures, and verify the full change.",
+    "expected_primary_skill": "engineering-quality"
+  },
+  {
+    "id": "multi-ambiguous-01",
+    "prompt": "This change spans a new API, a data migration, cleanup of the old path, and final release verification. Coordinate the whole thing without broadening scope unnecessarily.",
+    "expected_primary_skill": "engineering-quality"
+  },
+  {
+    "id": "none-explain-01",
+    "prompt": "Explain JavaScript Array.map to a beginner.",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "none-concept-01",
+    "prompt": "What is the difference between REST and FastAPI?",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "none-snippet-01",
+    "prompt": "Write a small one-off Python snippet that prints numbers 1 to 5.",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "none-trivial-edit-01",
+    "prompt": "Rename this local variable from x to count.",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "none-test-only-01",
+    "prompt": "Add one straightforward unit test for this already-correct pure function.",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "none-advice-01",
+    "prompt": "What are some general clean-code principles?",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "baseline-signature-01",
+    "prompt": "The same test name fails on the parent and my branch, but the error message and observed behavior are different. Is it really pre-existing?",
+    "expected_primary_skill": "baseline-compare"
+  },
+  {
+    "id": "flake-zero-tests-01",
+    "prompt": "Our repeat command exits zero sometimes, but I suspect it occasionally collects no tests. Measure the flake without counting zero-test runs as passes.",
+    "expected_primary_skill": "flaky-test-triage"
+  },
+  {
+    "id": "verify-stale-evidence-01",
+    "prompt": "Tests passed earlier, then I changed production code. Tell me whether the old verification still counts for this final diff.",
+    "expected_primary_skill": "verify-change"
+  },
+  {
+    "id": "context-direct-01",
+    "prompt": "This is a large unfamiliar repo. Before changing the account flow, identify the applicable instructions, likely owner, nearby precedent, tests, and contracts without loading everything.",
+    "expected_primary_skill": "context-engineering"
+  },
+  {
+    "id": "context-nearmiss-01",
+    "prompt": "Rename this obvious local variable in the function I already showed you.",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "source-direct-01",
+    "prompt": "This project uses a specific SDK version and I am not sure whether this API changed. Verify the installed version and official docs before implementing it.",
+    "expected_primary_skill": "source-grounded-development"
+  },
+  {
+    "id": "source-nearmiss-01",
+    "prompt": "Refactor this pure local calculation; no external API or framework behavior changes.",
+    "expected_primary_skill": "refactor-safely"
+  },
+  {
+    "id": "review-direct-01",
+    "prompt": "Do a fresh independent review of this authentication diff before final verification. Focus on correctness, security, contracts, and evidence, not the implementer explanation.",
+    "expected_primary_skill": "independent-review"
+  },
+  {
+    "id": "review-nearmiss-01",
+    "prompt": "Is this finished and what tests actually passed?",
+    "expected_primary_skill": "verify-change"
+  },
+  {
+    "id": "ste100-direct-01",
+    "prompt": "Rewrite this troubleshooting procedure in ASD-STE100-inspired technical English. Keep code and UI identifiers exact and use about 80% strictness.",
+    "expected_primary_skill": "asd-ste100-writing"
+  },
+  {
+    "id": "ste100-indirect-01",
+    "prompt": "This engineering note is wordy and inconsistent. Make the technical English short, direct, and consistent, with one term per concept and clear procedural steps.",
+    "expected_primary_skill": "asd-ste100-writing"
+  },
+  {
+    "id": "ste100-nearmiss-01",
+    "prompt": "Fix the parser bug in this function; the wording of the explanation is not the task.",
+    "expected_primary_skill": "debug-root-cause"
+  },
+  {
+    "id": "humanizer-direct-01",
+    "prompt": "Humanize this engineering update. Keep every fact and number the same, but make the prose sound natural, specific, and less templated.",
+    "expected_primary_skill": "humanizer-writing"
+  },
+  {
+    "id": "humanizer-indirect-01",
+    "prompt": "This draft feels stiff and machine-like, with repetitive transitions and generic praise. Rewrite it in a natural professional voice without inventing anything.",
+    "expected_primary_skill": "humanizer-writing"
+  },
+  {
+    "id": "humanizer-nearmiss-01",
+    "prompt": "Rewrite this maintenance procedure in strict, consistent controlled technical English with short direct steps and stable terminology.",
+    "expected_primary_skill": "asd-ste100-writing"
+  },
+  {
+    "id": "humanizer-voice-01",
+    "prompt": "Here are three paragraphs I wrote. Rewrite this draft in the same natural voice and rhythm, but keep every fact, number, citation, and identifier unchanged.",
+    "expected_primary_skill": "humanizer-writing"
+  },
+  {
+    "id": "humanizer-light-01",
+    "prompt": "This note is mostly fine. Give it only a light humanizing pass: remove the stiff phrases, but do not restructure it unless necessary.",
+    "expected_primary_skill": "humanizer-writing"
+  },
+  {
+    "id": "humanizer-stop-01",
+    "prompt": "Check whether this already reads naturally. If it does, leave it alone instead of rewriting it just to sound different.",
+    "expected_primary_skill": "humanizer-writing"
+  },
+  {
+    "id": "security-direct-01",
+    "prompt": "Review this file upload endpoint for path traversal, symlink, auth, and secret-handling risks, then harden the actual trust boundary.",
+    "expected_primary_skill": "security-hardening"
+  },
+  {
+    "id": "security-authz-01",
+    "prompt": "This API lets a user edit another tenant resource by changing the object ID. Fix the authorization boundary and add abuse-case regression tests.",
+    "expected_primary_skill": "security-hardening"
+  },
+  {
+    "id": "security-nearmiss-01",
+    "prompt": "Refactor this local pure formatting helper without changing behavior.",
+    "expected_primary_skill": "refactor-safely"
+  }
 ]

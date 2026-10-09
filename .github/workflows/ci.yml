@@ -4,15 +4,27 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   validate:
-    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.10", "3.12", "3.13"]
+        include:
+          - os: ubuntu-latest
+            python-version: "3.10"
+          - os: ubuntu-latest
+            python-version: "3.12"
+          - os: ubuntu-latest
+            python-version: "3.13"
+          - os: windows-latest
+            python-version: "3.12"
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile Python
@@ -21,6 +33,20 @@ jobs:
         run: python scripts/validate_repo.py . --warnings-as-errors
       - name: Check release manifest
         run: python scripts/generate_manifest.py . --check
+      - name: Check pending release tests
+        run: python scripts/pending_tests.py check
+      - name: Check context budget
+        run: python scripts/context_budget.py . --fail-on-budget
+      - name: Check portability
+        run: python scripts/portability_check.py . --warnings-as-errors
+      - name: Validate live behavior evals
+        run: python scripts/live_eval.py validate
+      - name: Validate historical debug evals
+        run: python scripts/live_eval.py validate --cases evals/historical-debug-cases.json
+      - name: Validate composition evals
+        run: python scripts/composition_eval.py validate
+      - name: Validate empirical benchmark policy
+        run: python scripts/benchmark_campaign.py validate
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
       - name: Heuristic self-audit
@@ -30,6 +56,6 @@ jobs:
           --exclude "tests/fixtures/audit_structure/**"
           --fail-on high
       - name: Package smoke test
-        run: |
-          python scripts/package_release.py . --output-dir /tmp/engineering-quality-release
-          unzip -t /tmp/engineering-quality-release/engineering-quality-agent-skills-v$(cat VERSION).zip
+        run: python scripts/package_release.py . --output-dir .ci-release
+      - name: Test release ZIP
+        run: python -c "from pathlib import Path; import zipfile; p=next(Path('.ci-release').glob('*.zip')); z=zipfile.ZipFile(p); bad=z.testzip(); assert bad is None, bad; print(p)"

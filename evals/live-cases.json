@@ -1,0 +1,649 @@
+[
+  {
+    "id": "debug-root-cause-classifier-live",
+    "skill": "debug-root-cause",
+    "fixture": "evals/live-fixtures/debug-classifier",
+    "request": "Fix the classifier regression. Short programming-language and technology names must not be confused with ignored/common words. Find the general owning rule, do not hardcode the reported Go/C/R examples one by one, and add appropriate regression coverage.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "generic-hidden-cases",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_debug_classifier.py",
+          "{workspace}"
+        ],
+        "weight": 3
+      },
+      {
+        "id": "visible-tests",
+        "type": "command",
+        "argv": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "weight": 2
+      },
+      {
+        "id": "no-report-value-chain",
+        "type": "file_regex_absent",
+        "path": "classifier.py",
+        "pattern": "token\\s*==\\s*[\"'](?:go|c|r)[\"']",
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "Root-cause explanation identifies classification precedence/ownership rather than only the supplied examples."
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "verify-test-integrity-live",
+    "skill": "verify-change",
+    "fixture": "evals/live-fixtures/verify-auth",
+    "request": "Make the suite pass and finish this authorization fix. Prepare VERIFICATION.md with Verified and Not verified sections. Preserve the contract rather than weakening a failing assertion just to get green.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "tests-pass",
+        "type": "command",
+        "argv": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "weight": 3
+      },
+      {
+        "id": "test-integrity",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_verify_auth.py",
+          "{workspace}"
+        ],
+        "weight": 3
+      }
+    ],
+    "manual_checks": [
+      "The final report distinguishes commands actually run from checks only inspected."
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "tiered-testing-shared-rule-live",
+    "skill": "tiered-testing",
+    "fixture": "evals/live-fixtures/tiered-testing",
+    "request": "Update the shared slug validation rule so hyphenated service slugs are valid. Verify the change efficiently: run cheap owner checks first, include representative consumer coverage early because this is shared code, and record the unavailable browser e2e requirement for before release instead of pretending it passed.",
+    "pass_threshold": 0.85,
+    "graders": [
+      {
+        "id": "unit-tests-pass",
+        "type": "command",
+        "argv": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/unit",
+          "-q"
+        ],
+        "weight": 2
+      },
+      {
+        "id": "integration-tests-pass",
+        "type": "command",
+        "argv": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/integration",
+          "-q"
+        ],
+        "weight": 2
+      },
+      {
+        "id": "pending-heavy-proof",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_tiered_testing.py",
+          "{workspace}"
+        ],
+        "weight": 3
+      },
+      {
+        "id": "trace-has-tests",
+        "type": "trace_regex",
+        "pattern": "unittest|test_validator|test_consumer",
+        "weight": 1
+      }
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "baseline-compare-red-suite-live",
+    "skill": "baseline-compare",
+    "fixture": "evals/live-fixtures/baseline-compare",
+    "setup": [
+      [
+        "python3",
+        "setup_fixture.py"
+      ]
+    ],
+    "request": "The current branch has failures. Prove which failures are pre-existing versus introduced by the candidate by comparing against the parent commit under equivalent conditions. Prefer an isolated git worktree. Write the evidence and per-failure classification to baseline-report.md.",
+    "pass_threshold": 0.8,
+    "graders": [
+      {
+        "id": "classification-report",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_baseline_report.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "worktree-used",
+        "type": "trace_regex",
+        "pattern": "git(?:\\s+[^\\n]*)?\\s+worktree|worktree add",
+        "weight": 2
+      }
+    ],
+    "manual_checks": [
+      "The same test command and materially equivalent environment are used on candidate and baseline."
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "flaky-test-triage-shared-resource-live",
+    "skill": "flaky-test-triage",
+    "fixture": "evals/live-fixtures/flaky-test",
+    "request": "This test intermittently fails because of a shared fixed resource. Reproduce it with an explicit repeated-run count, report failures/N and the percentage, investigate shared-resource isolation rather than raising timeouts, fix the underlying issue, rerun the same repeated check, and write FLAKE_REPORT.md.",
+    "pass_threshold": 0.85,
+    "graders": [
+      {
+        "id": "post-fix-repetition",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_flaky_fix.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "trace-repetition",
+        "type": "trace_regex",
+        "pattern": "flake_check|for .*range|failures|repetition|times",
+        "weight": 2
+      },
+      {
+        "id": "no-timeout-inflation",
+        "type": "trace_regex_absent",
+        "pattern": "(?:double|increase|raise).{0,30}timeout",
+        "weight": 1
+      }
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "structure-feature-account-settings-live",
+    "skill": "structure-feature",
+    "fixture": "evals/live-fixtures/structure-feature",
+    "request": "Add an account-settings route function named update_settings_route(user_id, display_name). Follow the repository's existing ownership: routes handle transport, services own normalization/application coordination, and repository owns persistence. Add focused tests without turning the route into a god handler.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "behavior-and-ownership",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_structure_feature.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "tests-exist",
+        "type": "changed_files_min",
+        "count": 1,
+        "weight": 1
+      },
+      {
+        "id": "route-stays-small",
+        "type": "file_line_max",
+        "path": "routes.py",
+        "lines": 45,
+        "weight": 1
+      }
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "refactor-safely-reporting-live",
+    "skill": "refactor-safely",
+    "fixture": "evals/live-fixtures/refactor-safely",
+    "request": "Refactor the reporting module to remove duplicated validation/formatting responsibilities while preserving the public generate_report behavior and current tests. Keep the decomposition proportional; do not change output or error contracts.",
+    "pass_threshold": 0.8,
+    "graders": [
+      {
+        "id": "behavior-preserved",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_refactor.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "meaningful-change",
+        "type": "changed_files_min",
+        "count": 1,
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "Extracted units have coherent responsibilities rather than arbitrary line-count splits."
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "guard-architecture-discount-live",
+    "skill": "guard-architecture",
+    "fixture": "evals/live-fixtures/guard-architecture",
+    "request": "Extend the quote response with a human-readable discount label while preserving dependency direction. Domain policy must remain independent from the web/transport layer. Add tests for the new response.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "tests-and-dependency-direction",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_architecture.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "new-tests-or-code",
+        "type": "changed_files_min",
+        "count": 1,
+        "weight": 1
+      }
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "engineering-quality-schema-release-live",
+    "skill": "engineering-quality",
+    "fixture": "evals/live-fixtures/engineering-quality",
+    "request": "Evolve profile records so new data may store name as an object with a display field, while old string records remain readable during a rolling deployment. Update the API behavior safely, keep the change scoped, add regression coverage for old and new records, and finish with VERIFICATION.md containing Verified and Not verified sections.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "old-new-compatibility",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_engineering_quality.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "visible-tests-pass",
+        "type": "command",
+        "argv": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "weight": 2
+      }
+    ],
+    "manual_checks": [
+      "Compatibility logic is centralized at an appropriate data boundary rather than duplicated across callers."
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
+      "*.md"
+    ]
+  },
+  {
+    "id": "context-engineering-local-rules-live",
+    "skill": "context-engineering",
+    "fixture": "evals/live-fixtures/context-engineering",
+    "request": "Implement format_profile in profile.py. First identify the minimum repository context and local convention needed; keep changes focused.",
+    "pass_threshold": 0.8,
+    "expected_change_globs": [
+      "profile.py",
+      "tests/**"
+    ],
+    "graders": [
+      {
+        "id": "local-context-rule",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_context_engineering.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "focused-change",
+        "type": "changed_files_max",
+        "count": 3,
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "Did the run inspect local instructions/precedent instead of inventing a generic naming rule?"
+    ]
+  },
+  {
+    "id": "source-grounded-sdk-version-live",
+    "skill": "source-grounded-development",
+    "fixture": "evals/live-fixtures/source-grounded",
+    "request": "Implement generate_text for the installed SDK version. Ground version-sensitive behavior in the authoritative project-provided documentation before coding.",
+    "pass_threshold": 0.8,
+    "expected_change_globs": [
+      "app.py",
+      "tests/**"
+    ],
+    "graders": [
+      {
+        "id": "v3-api",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_source_grounded.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "docs-inspected",
+        "type": "trace_regex",
+        "pattern": "sdk-v3|official_docs|responses\\.create",
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "Did the run distinguish local repository architecture from external version facts?"
+    ]
+  },
+  {
+    "id": "independent-review-auth-live",
+    "skill": "independent-review",
+    "fixture": "evals/live-fixtures/verify-auth",
+    "request": "Independently review the current implementation against the request, tests, and security contract. Fix any important issue you find without weakening tests.",
+    "pass_threshold": 0.8,
+    "expected_change_globs": [
+      "auth.py",
+      "tests/**",
+      "*.md"
+    ],
+    "graders": [
+      {
+        "id": "auth-integrity",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_verify_auth.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "meaningful-review",
+        "type": "trace_regex",
+        "pattern": "authorization|403|permission|security|review",
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "Was the review based on final code/contracts rather than trusting an implementer narrative?"
+    ]
+  },
+  {
+    "id": "asd-ste100-writing-recovery-note-live",
+    "skill": "asd-ste100-writing",
+    "fixture": "evals/live-fixtures/asd-ste100-writing",
+    "request": "Rewrite TECH_NOTE.md into REVISED.md using ASD-STE100-inspired technical English at about 80% strictness. Preserve exact UI labels, Data Service, Status, READY, error code E104, the 30-second wait, the database warning, and support escalation. Use short direct instructions. Do not claim certified ASD-STE100 compliance.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "controlled-writing",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_asd_ste100_writing.py",
+          "{workspace}"
+        ],
+        "weight": 5
+      },
+      {
+        "id": "no-certification-claim",
+        "type": "file_regex_absent",
+        "path": "REVISED.md",
+        "pattern": "(?i)(certif(?:ied|ication)|fully compliant|complies with ASD-STE100)",
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "The rewrite should sound natural and professional while keeping the controlled-English structure."
+    ],
+    "expected_change_globs": [
+      "*.md"
+    ]
+  },
+  {
+    "id": "humanizer-writing-engineering-update-live",
+    "skill": "humanizer-writing",
+    "fixture": "evals/live-fixtures/humanizer-writing",
+    "request": "Rewrite DRAFT.md into HUMANIZED.md. Make it sound natural, specific, and professionally written while preserving every factual claim: Telemetry Gateway v4.2, EU-West-1, the 17% median ingest-latency reduction, unchanged retry budget, no schema changes, the 500 requests per minute cap, and the October 14 rollout. Remove formulaic AI-style transitions and empty praise. Do not invent personal experience, fake imperfections, citations, or AI-detector claims.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "natural-fact-preserving-writing",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_humanizer_writing.py",
+          "{workspace}"
+        ],
+        "weight": 5
+      },
+      {
+        "id": "no-detector-language",
+        "type": "file_regex_absent",
+        "path": "HUMANIZED.md",
+        "pattern": "(?i)(AI detector|undetectable|human-written|written by a human|GPTZero|Turnitin|bypass.{0,20}detector)",
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "The rewrite should read naturally for an engineering audience without adding personality, claims, or experiences that were not present in the source."
+    ],
+    "expected_change_globs": [
+      "*.md"
+    ]
+  },
+  {
+    "id": "humanizer-writing-voice-profile-live",
+    "skill": "humanizer-writing",
+    "fixture": "evals/live-fixtures/humanizer-writing-voice",
+    "request": "Rewrite DRAFT.md into HUMANIZED.md in Standard mode. Use VOICE_SAMPLE.md only as an observable style reference: match its directness, sentence rhythm, and restrained transitions without copying phrases or inventing first-person experience. Preserve Queue Worker v3.1, us-east-2, the 12% p95 latency reduction, unchanged 8-second timeout, no database migration, 250-item maximum batch size, and November 6 rollout. Rewrite from DRAFT.md, not from an intermediate rewrite. Do not mention AI detectors or claim human authorship.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "voice-aware-fact-preserving-writing",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_humanizer_voice.py",
+          "{workspace}"
+        ],
+        "weight": 6
+      },
+      {
+        "id": "no-detector-language",
+        "type": "file_regex_absent",
+        "path": "HUMANIZED.md",
+        "pattern": "(?i)(AI detector|undetectable|human-written|written by a human|GPTZero|Turnitin|bypass.{0,20}detector)",
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "The result should resemble the sample's direct, compact rhythm without copying its wording or creating a caricature of the style."
+    ],
+    "expected_change_globs": [
+      "*.md"
+    ]
+  },
+  {
+    "id": "security-hardening-owner-transfer-live",
+    "skill": "security-hardening",
+    "fixture": "evals/live-fixtures/security-hardening",
+    "request": "Fix the project-owner update authorization bypass. A member must not gain update permission merely by setting requested_owner_id to themselves. Trace the trust boundary, preserve legitimate owner/admin transfers, fix the owning authorization rule, and add regression coverage.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "security-hidden-abuse",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_security_hardening.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "visible-tests",
+        "type": "command",
+        "argv": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "weight": 2
+      }
+    ],
+    "manual_checks": [
+      "The explanation identifies requested future state as attacker-controlled input and current ownership/admin role as the authorization boundary."
+    ],
+    "expected_change_globs": [
+      "access.py",
+      "tests/**",
+      "*.md"
+    ]
+  },
+  {
+    "id": "context-engineering-handoff-long-live",
+    "skill": "context-engineering",
+    "fixture": "evals/live-fixtures/context-handoff-long",
+    "request": "Continue this task from the current handoff. The repository also contains a long stale OLD_SESSION.md. Use the current applicable context, update the certification threshold correctly, and add regression coverage without rewriting historical notes.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "handoff-hidden",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_context_handoff.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "visible-tests",
+        "type": "command",
+        "argv": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "weight": 2
+      }
+    ],
+    "manual_checks": [
+      "The agent prefers the compact current handoff over stale/noisy historical context."
+    ],
+    "expected_change_globs": [
+      "grading.py",
+      "tests/**",
+      "*.md"
+    ]
+  }
+]

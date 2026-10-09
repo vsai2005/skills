@@ -1,0 +1,3 @@
+# Queue Worker Update
+
+In today's rapidly evolving processing environment, it is important to highlight that Queue Worker v3.1 provides a robust improvement to operational performance. Furthermore, benchmark testing conducted in us-east-2 demonstrated that p95 processing latency was reduced by 12%. Additionally, the timeout remains unchanged at 8 seconds, and there is no database migration required for this release. Moreover, the maximum batch size continues to remain at 250 items. In conclusion, the rollout is scheduled for November 6, representing a seamless enhancement to the current processing workflow.

@@ -12,7 +12,7 @@ class InstallSkillsTests(unittest.TestCase):
     def test_discovers_expected_skills(self):
         skills = available_skills(ROOT / "skills")
         self.assertEqual(
-            {"engineering-quality", "structure-feature", "debug-root-cause", "refactor-safely", "guard-architecture", "verify-change"},
+            {"engineering-quality", "structure-feature", "debug-root-cause", "refactor-safely", "guard-architecture", "tiered-testing", "baseline-compare", "flaky-test-triage", "verify-change", "context-engineering", "source-grounded-development", "independent-review", "asd-ste100-writing", "humanizer-writing", "security-hardening"},
             set(skills),
         )
 

@@ -213,8 +213,71 @@ def validate_behavior_evals(root: Path, skill_names: set[str]) -> list[Problem]:
     return problems
 
 
+def validate_live_evals(root: Path, skill_names: set[str]) -> list[Problem]:
+    path = root / "evals" / "live-cases.json"
+    if not path.is_file():
+        return [Problem("ERROR", path, "live behavior eval file missing")]
+    try:
+        try:
+            from scripts.live_eval_support import load_live_cases
+        except ModuleNotFoundError:
+            from live_eval_support import load_live_cases
+        cases = load_live_cases(path, root)
+    except (ValueError, OSError, UnicodeError) as exc:
+        return [Problem("ERROR", path, f"invalid live evals: {exc}")]
+    covered = {str(case.get("skill", "")) for case in cases}
+    missing = sorted(skill_names - covered)
+    problems: list[Problem] = []
+    if missing:
+        problems.append(Problem("ERROR", path, f"live evals do not cover skill(s): {', '.join(missing)}"))
+    return problems
+
+
+
+def validate_composition_evals(root: Path, skill_names: set[str]) -> list[Problem]:
+    path = root / "evals" / "composition-cases.json"
+    if not path.is_file():
+        return [Problem("ERROR", path, "composition eval file missing")]
+    try:
+        try:
+            from scripts.composition_eval import load_cases
+        except ModuleNotFoundError:
+            from composition_eval import load_cases
+        cases = load_cases(path, root)
+    except (ValueError, OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [Problem("ERROR", path, f"invalid composition evals: {exc}")]
+    covered = {skill for case in cases for skill in case.get("skills", [])}
+    # Composition coverage is intentionally targeted rather than exhaustive.
+    if len(cases) < 4:
+        return [Problem("ERROR", path, "composition evals need at least four interaction cases")]
+    if not covered.issubset(skill_names):
+        return [Problem("ERROR", path, "composition evals reference unknown skills")]
+    return []
+
+
+
+def validate_benchmark_policy(root: Path) -> list[Problem]:
+    path = root / "evals" / "benchmark-policy.json"
+    if not path.is_file():
+        return [Problem("ERROR", path, "benchmark policy file missing")]
+    try:
+        try:
+            from scripts.benchmark_campaign import load_policy
+        except ModuleNotFoundError:
+            from benchmark_campaign import load_policy
+        load_policy(path)
+    except (ValueError, OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [Problem("ERROR", path, f"invalid benchmark policy: {exc}")]
+    return []
+
 def validate_evals(root: Path, skill_names: set[str]) -> list[Problem]:
-    return validate_activation_evals(root, skill_names) + validate_behavior_evals(root, skill_names)
+    return (
+        validate_activation_evals(root, skill_names)
+        + validate_behavior_evals(root, skill_names)
+        + validate_live_evals(root, skill_names)
+        + validate_composition_evals(root, skill_names)
+        + validate_benchmark_policy(root)
+    )
 
 
 def validate_file_manifest(root: Path) -> list[Problem]:

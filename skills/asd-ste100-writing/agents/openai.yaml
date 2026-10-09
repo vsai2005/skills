@@ -1,0 +1,4 @@
+interface:
+  display_name: "ASD-STE100-Inspired Writing"
+  short_description: "Write clear, controlled technical English"
+  default_prompt: "Use $asd-ste100-writing to rewrite this technical prose with about 80% controlled-English strictness while preserving exact technical meaning and identifiers."

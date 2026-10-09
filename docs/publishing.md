@@ -33,16 +33,20 @@ Current reference:
 
 ## Release integrity
 
+In a Git worktree, releases are built from Git-tracked files only. The release builder rejects symlinks and common secret-bearing filenames rather than following/copying them, and it refuses to package while required `PENDING_TESTS.md` entries remain. Source-archive fallback applies the same symlink/secret policy.
+
 A release should satisfy all of the following:
 
 ```bash
 python3 scripts/generate_manifest.py .
 python3 scripts/validate_repo.py . --warnings-as-errors
+python3 scripts/live_eval.py validate
 python3 -m unittest discover -s tests -v
 python3 scripts/audit_structure.py . \
   --exclude "scripts/audit_structure.py" \
   --exclude "tests/fixtures/audit_structure/**" \
   --fail-on high
+python3 scripts/pending_tests.py check
 python3 scripts/package_release.py . --output-dir dist
 ```
 

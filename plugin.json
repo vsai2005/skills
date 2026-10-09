@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "engineering-quality",
-  "version": "1.0.1",
-  "description": "Provider-neutral engineering quality skills for clean feature work, root-cause debugging, safe refactoring, architecture protection, and rigorous change verification.",
+  "version": "1.9.0",
+  "description": "Engineering quality workflows with adaptive rigor, security hardening, debugging, testing, writing quality, and version-bound empirical skill/composition benchmarking.",
   "skills": "./skills/",
   "license": "MIT",
   "keywords": [
@@ -11,6 +11,13 @@
     "refactoring",
     "architecture",
     "testing",
-    "agent-skills"
+    "agent-skills",
+    "technical-writing",
+    "controlled-english",
+    "natural-writing",
+    "humanized-writing",
+    "security-hardening",
+    "skill-evaluation",
+    "portability"
   ]
 }

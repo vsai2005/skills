@@ -35,7 +35,7 @@ Use `evals/behavior-cases.json` for machine-readable scenarios and `evals/behavi
 - Did a refactor keep public behavior/contracts stable?
 - Did final reporting distinguish verified from unverified checks?
 
-Repository CI validates eval schema and coverage only. It does **not** claim to execute live model behavior. If your Codex installation includes OpenAI's `plugin-eval` tooling, it can be used as an additional host-specific analysis/benchmark layer; it is optional and not required by this provider-neutral repository.
+Repository CI validates activation, semantic behavior, and executable live-eval definitions without spending model tokens. `evals/live-cases.json` adds disposable repository fixtures and deterministic graders for every bundled skill. Live Codex/Claude runs remain explicit because they require credentials, sandboxing, and spend limits.
 
 ## Variance
 
@@ -51,3 +51,27 @@ When changing a skill because of a failure:
 4. Re-run activation and behavior cases.
 
 This is the skill equivalent of adding a regression test before fixing code.
+
+## RED/GREEN live-model evaluation
+
+For important skill changes, use the executable A/B protocol in [Live Skill Evaluation Protocol](live-evaluation.md). `scripts/live_eval.py` runs real Codex or Claude Code control/treatment pairs, retains raw traces plus deterministic grading artifacts, alternates arm order across repetitions, and binds results to exact campaign/skill/case hashes. `scripts/eval_matrix.py` remains available for teams with a separate harness.
+
+For publishable empirical evidence, use [Empirical Benchmark Campaigns](empirical-benchmarking.md). A campaign requires repeated paired runs and an explicit model; CI validates the engine but never calls paid models.
+
+## Evaluate workflow cost as well as correctness
+
+v1.3.0+ records workflow-friction signals alongside deterministic correctness: changed-file count, diff churn, unrelated-file count when a scenario declares expected change globs, structured tool-event signals, runtime, tokens and cost. These are comparison signals, not a universal single quality score.
+
+Use repeated `--model` flags to evaluate the same provider/scenarios across multiple models. Reports group results by provider + model + scenario so a skill can be beneficial for one model and neutral or harmful for another.
+
+## Composition and interference
+
+Validate and execute `evals/composition-cases.json` with `scripts/composition_eval.py`. Each repeated case runs control/A-only/B-only/A+B against the same hidden graders so two individually useful skills are not assumed to compose cleanly. Comparisons use matched repetitions and a bootstrap interval for combined-vs-best-single performance.
+
+## Model-specific skill effectiveness
+
+After repeated real RED/GREEN runs, use `scripts/skill_effectiveness.py` to summarize paired score delta, bootstrap confidence interval, exact sign-test evidence, pass rates, and workflow-cost signals by provider + model + skill. Strong claims require enough version-matched pairs; old evidence is stale when the skill hash changes. Treat `PROMISING`, `POSSIBLY_HARMFUL`, and `INSUFFICIENT_DATA` honestly instead of rounding them into a conclusion.
+
+## Instruction ablation
+
+Use `scripts/instruction_ablation.py` to create disposable variants that remove one skill section at a time. Keep sections that measurably help or encode a safety invariant; prune instructions that cost context without changing useful behavior.

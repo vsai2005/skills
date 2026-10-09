@@ -19,6 +19,8 @@ Requirements: Python 3.10+ and Git for `diff_guard.py` integration checks.
 python3 -m compileall -q scripts tests
 python3 scripts/generate_manifest.py .
 python3 scripts/validate_repo.py . --warnings-as-errors
+python3 scripts/context_budget.py . --fail-on-budget
+python3 scripts/live_eval.py validate
 python3 -m unittest discover -s tests -v
 python3 scripts/audit_structure.py . \
   --exclude "scripts/audit_structure.py" \
@@ -31,6 +33,7 @@ The manifest must be regenerated after repository files change because validatio
 ## Release smoke test
 
 ```bash
+python3 scripts/pending_tests.py check
 python3 scripts/package_release.py . --output-dir dist
 unzip -t dist/engineering-quality-agent-skills-v$(cat VERSION).zip
 ```
@@ -46,3 +49,7 @@ unzip -t dist/engineering-quality-agent-skills-v$(cat VERSION).zip
 - No provider-specific instruction leaked into provider-neutral core skills without a reason.
 - No check or test was weakened solely to get a green build.
 - `FILE_MANIFEST.txt` was regenerated after the final edits.
+
+## Behavioral evaluation
+
+For skill-behavior changes, add/adjust activation and behavior fixtures and use the RED/GREEN protocol in [docs/live-evaluation.md](docs/live-evaluation.md) when validating against a real agent harness.

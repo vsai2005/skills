@@ -1,0 +1,4 @@
+interface:
+  display_name: "Source-Grounded Development"
+  short_description: "Ground version-sensitive code in current sources"
+  default_prompt: "Use $source-grounded-development to verify the exact dependency version and authoritative source before making version-sensitive implementation decisions."

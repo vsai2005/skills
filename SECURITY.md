@@ -9,3 +9,7 @@ Do not publish exploit details for a newly discovered vulnerability in this repo
 The included scripts are local static-analysis helpers. They do not intentionally execute project source code, install dependencies, or send repository contents over the network.
 
 Review any third-party modifications before running them. Agent skills are instructions: they can influence an AI coding agent's behavior and should be treated as executable policy even when they are plain text.
+
+## Release safety
+
+The release builder treats repository contents as potentially sensitive. In a Git worktree it packages Git-tracked files only. Source-archive fallback and tracked candidates reject symlinks plus common secret-bearing names such as `.env*`, private-key/certificate bundles, credential files, and package-manager auth files. Release generation also stops while required `PENDING_TESTS.md` checks remain unresolved.

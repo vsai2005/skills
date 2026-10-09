@@ -1,0 +1,4 @@
+interface:
+  display_name: "Baseline Compare"
+  short_description: "Separate pre-existing failures from regressions"
+  default_prompt: "Use $baseline-compare to run an equivalent baseline, classify every current failure, and document any baseline reconstruction changes."

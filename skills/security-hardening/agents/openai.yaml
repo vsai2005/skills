@@ -1,0 +1,4 @@
+interface:
+  display_name: "Security Hardening"
+  short_description: "Harden trust boundaries with abuse-case verification"
+  default_prompt: "Use $security-hardening to trace this trust boundary, test realistic abuse cases, and verify the owning security control."

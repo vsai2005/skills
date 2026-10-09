@@ -1,0 +1,82 @@
+[
+  {
+    "id": "debug-plus-grounding",
+    "skills": [
+      "debug-root-cause",
+      "source-grounded-development"
+    ],
+    "fixture": "evals/live-fixtures/debug-classifier",
+    "request": "Fix a reproducible regression whose owning rule also depends on a version-sensitive external API. Use current source facts only where they affect the root cause.",
+    "grader_case": "debug-root-cause-classifier-live"
+  },
+  {
+    "id": "feature-plus-architecture",
+    "skills": [
+      "structure-feature",
+      "guard-architecture"
+    ],
+    "fixture": "evals/live-fixtures/structure-feature",
+    "request": "Add the requested capability without putting transport-specific behavior into the domain/repository boundary.",
+    "grader_case": "structure-feature-account-settings-live"
+  },
+  {
+    "id": "review-plus-verification",
+    "skills": [
+      "independent-review",
+      "verify-change"
+    ],
+    "fixture": "evals/live-fixtures/verify-auth",
+    "request": "Review the final authorization patch independently, then verify completion with fresh evidence without weakening tests.",
+    "grader_case": "verify-test-integrity-live"
+  },
+  {
+    "id": "context-plus-coordinator",
+    "skills": [
+      "context-engineering",
+      "engineering-quality"
+    ],
+    "fixture": "evals/live-fixtures/context-engineering",
+    "request": "Work in this unfamiliar repository. Select only the context and workflow depth needed for the requested change.",
+    "grader_case": "context-engineering-local-rules-live"
+  },
+  {
+    "id": "controlled-plus-human",
+    "skills": [
+      "asd-ste100-writing",
+      "humanizer-writing"
+    ],
+    "fixture": "evals/live-fixtures/asd-ste100-writing",
+    "request": "Rewrite the technical note so terminology and safety instructions stay controlled and precise, then make the prose natural without undoing those constraints.",
+    "grader_case": "asd-ste100-writing-recovery-note-live"
+  },
+  {
+    "id": "tiered-plus-flake",
+    "skills": [
+      "tiered-testing",
+      "flaky-test-triage"
+    ],
+    "fixture": "evals/live-fixtures/flaky-test",
+    "request": "Plan efficient verification for this intermittent test: size repetition sensibly and do not run every heavy check before the flake mechanism is understood.",
+    "grader_case": "flaky-test-triage-shared-resource-live"
+  },
+  {
+    "id": "baseline-plus-debug",
+    "skills": [
+      "baseline-compare",
+      "debug-root-cause"
+    ],
+    "fixture": "evals/live-fixtures/baseline-compare",
+    "request": "The suite was already red before this patch. Attribute baseline failures first, then fix only the actual regression at its root cause.",
+    "grader_case": "baseline-compare-red-suite-live"
+  },
+  {
+    "id": "coordinator-plus-specialists",
+    "skills": [
+      "engineering-quality",
+      "verify-change"
+    ],
+    "fixture": "evals/live-fixtures/engineering-quality",
+    "request": "Coordinate this shared behavior change with proportional rigor and finish with evidence, without loading unrelated specialist workflows.",
+    "grader_case": "engineering-quality-schema-release-live"
+  }
+]

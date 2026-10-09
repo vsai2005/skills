@@ -1,0 +1,4 @@
+interface:
+  display_name: "Humanizer Writing"
+  short_description: "Make prose natural without changing meaning"
+  default_prompt: "Use $humanizer-writing to audit this prose first, choose the smallest useful rewrite intensity, preserve facts and uncertainty, and match my authentic voice sample when I provide one."

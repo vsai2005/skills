@@ -1,0 +1,70 @@
+[
+  {
+    "id": "historical-pytest-11143-numeric-docstring",
+    "skill": "debug-root-cause",
+    "git_fixture": {
+      "repo_url": "https://github.com/pytest-dev/pytest.git",
+      "base_commit": "6995257cf470d2143ad1683824962de4071c0eb7",
+      "source": "SWE-bench_Lite",
+      "source_instance": "pytest-dev__pytest-11143"
+    },
+    "request": "A pytest regression appeared after a recent change: assertion rewriting can crash when the first expression in a test module is a number because that expression is treated like a module docstring. Reproduce the issue, identify the owning rule in assertion rewriting, fix the general cause, and add regression protection. Do not special-case only the literal value from the reproducer.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "historical-hidden-reproducer",
+        "type": "command",
+        "argv": ["python3", "{repo}/evals/graders/historical/grade_pytest_11143.py", "{workspace}"],
+        "timeout_seconds": 180,
+        "weight": 4
+      },
+      {
+        "id": "focused-existing-tests",
+        "type": "command",
+        "argv": ["python3", "-m", "pytest", "testing/test_assertrewrite.py", "-q"],
+        "timeout_seconds": 240,
+        "weight": 2
+      }
+    ],
+    "manual_checks": [
+      "The explanation distinguishes the proximate crash from the incorrect docstring-classification rule.",
+      "The fix generalizes to non-string constant expressions rather than hardcoding one numeric value."
+    ],
+    "expected_change_globs": ["src/_pytest/assertion/**", "testing/test_assertrewrite.py"],
+    "runtime_notes": "Historical external case; requires network access for checkout and a Python environment compatible with this pytest revision."
+  },
+  {
+    "id": "historical-pytest-7373-skipif-cache",
+    "skill": "debug-root-cause",
+    "git_fixture": {
+      "repo_url": "https://github.com/pytest-dev/pytest.git",
+      "base_commit": "7b77fc086aab8b3a8ebc890200371884555eea1e",
+      "source": "SWE-bench_Lite",
+      "source_instance": "pytest-dev__pytest-7373"
+    },
+    "request": "Pytest can reuse a cached result for identical skipif/xfail condition strings even when the same expression is evaluated in different module namespaces. Reproduce the cross-module state leak, identify why the cache key is invalid for dynamic evaluation, fix the owning rule, and add regression coverage without special-casing the sample modules.",
+    "pass_threshold": 1.0,
+    "graders": [
+      {
+        "id": "historical-hidden-reproducer",
+        "type": "command",
+        "argv": ["python3", "{repo}/evals/graders/historical/grade_pytest_7373.py", "{workspace}"],
+        "timeout_seconds": 180,
+        "weight": 4
+      },
+      {
+        "id": "focused-existing-tests",
+        "type": "command",
+        "argv": ["python3", "-m", "pytest", "testing/test_mark.py", "-q"],
+        "timeout_seconds": 240,
+        "weight": 2
+      }
+    ],
+    "manual_checks": [
+      "The root cause identifies cross-namespace caching rather than treating the skipped test as the defect.",
+      "The regression test proves the same condition text can evaluate differently in different namespaces."
+    ],
+    "expected_change_globs": ["src/_pytest/mark/**", "testing/test_mark.py"],
+    "runtime_notes": "Historical external case; requires network access for checkout and a Python environment compatible with this pytest revision."
+  }
+]

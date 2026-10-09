@@ -36,3 +36,7 @@ The repository design was rechecked in October 2026 against current public guida
 - https://github.com/anthropics/claude-plugins-official
 
 Host behavior can evolve. Keep installation documentation versioned and verify platform-specific paths when publishing a release.
+
+## Live evaluation adapters
+
+Core skills remain provider-neutral. Provider-specific behavior is isolated in `scripts/live_eval.py`: Codex runs use current `codex exec --json --full-auto` automation, while Claude Code runs use current non-interactive `-p`/`stream-json` plus a one-skill `--plugin-dir` treatment. These adapters are evaluation tooling, not requirements for using the skills.
