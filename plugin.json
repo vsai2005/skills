@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "engineering-quality",
-  "version": "1.9.0",
-  "description": "Engineering quality workflows with adaptive rigor, security hardening, debugging, testing, writing quality, and version-bound empirical skill/composition benchmarking.",
+  "version": "1.10.0",
+  "description": "Engineering quality workflows with general cross-layer project quality orchestration, adaptive rigor, security hardening, debugging, testing, writing quality, and empirical skill/composition benchmarking.",
   "skills": "./skills/",
   "license": "MIT",
   "keywords": [

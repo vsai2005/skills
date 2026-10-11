@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.10.0 - General cross-layer project quality orchestration
+
+- Added `project-quality-orchestrator` for broad audits, release/freeze readiness, repeated systemic defects, and source-to-consumed-output verification across project types.
+- Added explicit rendered/runtime or final-consumer evidence rules without assuming every project has a browser or UI.
+- Strengthened `independent-review`, `tiered-testing`, and `source-grounded-development` to verify the layer where requirements are actually observable.
+- Routed broad cross-layer work from `engineering-quality` to the orchestrator while preserving specialist-first activation for narrow tasks.
+- Added activation, near-miss, semantic behavior, and executable live-evaluation coverage for the new orchestrator.
+- Updated repository documentation and plugin metadata for the 16-skill release.
+
 ## 1.9.0 - Empirical model evidence and executable composition benchmarks
 
 - Fixed Windows CI portability for temp-path aliasing (8.3 vs long paths) and command identity checks containing Windows backslashes.
