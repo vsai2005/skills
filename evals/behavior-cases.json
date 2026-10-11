@@ -397,5 +397,20 @@
       "Fix redaction/validation at the owning boundary when applicable.",
       "Verify the hostile/error path explicitly."
     ]
+  },
+  {
+    "id": "project-quality-cross-layer",
+    "skills": [
+      "project-quality-orchestrator"
+    ],
+    "fixture": "A project stores canonical profile data, transforms it through a compatibility layer, exposes it through an API, and consumers read the API result. Several consumers show the same incorrect display value although the canonical record is correct.",
+    "request": "Audit the defect end to end, find the shared owning layer, make the smallest general repair, and report what final-consumer evidence is and is not available.",
+    "expected_behaviors": [
+      "Trace canonical source through transformations to the consumed output instead of stopping at source inspection.",
+      "Investigate the shared transformation or delivery owner before patching each consumer.",
+      "Prefer a general repair over repeated instance-specific patches.",
+      "Distinguish source/test evidence from final-consumer or runtime evidence that was not obtained.",
+      "Delegate specialist concerns only when they are relevant rather than loading every skill."
+    ]
   }
 ]

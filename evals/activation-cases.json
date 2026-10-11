@@ -268,5 +268,20 @@
     "id": "security-nearmiss-01",
     "prompt": "Refactor this local pure formatting helper without changing behavior.",
     "expected_primary_skill": "refactor-safely"
+  },
+  {
+    "id": "project-quality-direct-01",
+    "prompt": "Audit this release end to end. The canonical content is transformed into generated JSON, served by an API, and rendered in the browser. Verify that the final user-visible result matches the source and do not stop at source inspection.",
+    "expected_primary_skill": "project-quality-orchestrator"
+  },
+  {
+    "id": "project-quality-direct-02",
+    "prompt": "Several screens show the same wrong label even though their source files differ. Audit the shared generator or projection, repair the owning cause, verify representative rendered outputs, and give me a release-readiness decision.",
+    "expected_primary_skill": "project-quality-orchestrator"
+  },
+  {
+    "id": "project-quality-nearmiss-01",
+    "prompt": "Fix this isolated deterministic parser bug in the local function and add a focused regression test.",
+    "expected_primary_skill": "debug-root-cause"
   }
 ]

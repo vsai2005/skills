@@ -56,3 +56,11 @@ Move to heavier verification when:
 ## 7. Report what was run and what remains
 
 Final reporting must distinguish checks actually completed from deferred checks still listed in `PENDING_TESTS.md`. For completion evidence, pair this skill with `verify-change` when available.
+
+## 8. Test the layer where the requirement is observable
+
+Green source-level tests do not prove correctness after generation, projection, serialization, build, rendering, persistence, or export.
+
+When a requirement is observable only at a later layer, include representative evidence from that layer. Examples include browser/rendered checks for UI behavior, generated-output validation for generators, persisted-state checks for data workflows, and consumer/contract tests for APIs.
+
+Do not add a heavy UI or runtime test when the consumer path does not include that layer.

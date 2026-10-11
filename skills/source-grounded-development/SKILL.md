@@ -45,3 +45,17 @@ Use [references/version-grounding.md](references/version-grounding.md) when vers
 Documentation is evidence about the external system, not proof that the integration works here. Run the repository's relevant tests/build/runtime checks after implementation.
 
 For substantial decisions, capture the dependency, version, source and implementation implication using [assets/source-record.md](assets/source-record.md).
+
+## 6. Trace transformed external behavior to the consumer
+
+When externally grounded behavior is transformed before use, verify the relevant chain rather than stopping at the canonical source.
+
+A useful model is:
+
+```text
+authoritative fact -> local configuration/source -> generated or transformed representation -> runtime consumer
+```
+
+Inspect only layers that actually exist. Pay special attention to generated clients, cached metadata, framework projections, serialization, build-time transforms, and server-to-client payloads because each can make correct source intent produce incorrect consumed behavior.
+
+Treat authoritative documentation as evidence for the external contract, not proof that every local transformation preserved it.

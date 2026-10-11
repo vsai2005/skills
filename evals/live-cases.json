@@ -4,7 +4,7 @@
     "skill": "debug-root-cause",
     "fixture": "evals/live-fixtures/debug-classifier",
     "request": "Fix the classifier regression. Short programming-language and technology names must not be confused with ignored/common words. Find the general owning rule, do not hardcode the reported Go/C/R examples one by one, and add appropriate regression coverage.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "generic-hidden-cases",
@@ -53,7 +53,7 @@
     "skill": "verify-change",
     "fixture": "evals/live-fixtures/verify-auth",
     "request": "Make the suite pass and finish this authorization fix. Prepare VERIFICATION.md with Verified and Not verified sections. Preserve the contract rather than weakening a failing assertion just to get green.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "tests-pass",
@@ -231,7 +231,7 @@
     "skill": "structure-feature",
     "fixture": "evals/live-fixtures/structure-feature",
     "request": "Add an account-settings route function named update_settings_route(user_id, display_name). Follow the repository's existing ownership: routes handle transport, services own normalization/application coordination, and repository owns persistence. Add focused tests without turning the route into a god handler.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "behavior-and-ownership",
@@ -303,7 +303,7 @@
     "skill": "guard-architecture",
     "fixture": "evals/live-fixtures/guard-architecture",
     "request": "Extend the quote response with a human-readable discount label while preserving dependency direction. Domain policy must remain independent from the web/transport layer. Add tests for the new response.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "tests-and-dependency-direction",
@@ -334,7 +334,7 @@
     "skill": "engineering-quality",
     "fixture": "evals/live-fixtures/engineering-quality",
     "request": "Evolve profile records so new data may store name as an object with a display field, while old string records remain readable during a rolling deployment. Update the API behavior safely, keep the change scoped, add regression coverage for old and new records, and finish with VERIFICATION.md containing Verified and Not verified sections.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "old-new-compatibility",
@@ -473,7 +473,7 @@
     "skill": "asd-ste100-writing",
     "fixture": "evals/live-fixtures/asd-ste100-writing",
     "request": "Rewrite TECH_NOTE.md into REVISED.md using ASD-STE100-inspired technical English at about 80% strictness. Preserve exact UI labels, Data Service, Status, READY, error code E104, the 30-second wait, the database warning, and support escalation. Use short direct instructions. Do not claim certified ASD-STE100 compliance.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "controlled-writing",
@@ -505,7 +505,7 @@
     "skill": "humanizer-writing",
     "fixture": "evals/live-fixtures/humanizer-writing",
     "request": "Rewrite DRAFT.md into HUMANIZED.md. Make it sound natural, specific, and professionally written while preserving every factual claim: Telemetry Gateway v4.2, EU-West-1, the 17% median ingest-latency reduction, unchanged retry budget, no schema changes, the 500 requests per minute cap, and the October 14 rollout. Remove formulaic AI-style transitions and empty praise. Do not invent personal experience, fake imperfections, citations, or AI-detector claims.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "natural-fact-preserving-writing",
@@ -537,7 +537,7 @@
     "skill": "humanizer-writing",
     "fixture": "evals/live-fixtures/humanizer-writing-voice",
     "request": "Rewrite DRAFT.md into HUMANIZED.md in Standard mode. Use VOICE_SAMPLE.md only as an observable style reference: match its directness, sentence rhythm, and restrained transitions without copying phrases or inventing first-person experience. Preserve Queue Worker v3.1, us-east-2, the 12% p95 latency reduction, unchanged 8-second timeout, no database migration, 250-item maximum batch size, and November 6 rollout. Rewrite from DRAFT.md, not from an intermediate rewrite. Do not mention AI detectors or claim human authorship.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "voice-aware-fact-preserving-writing",
@@ -569,7 +569,7 @@
     "skill": "security-hardening",
     "fixture": "evals/live-fixtures/security-hardening",
     "request": "Fix the project-owner update authorization bypass. A member must not gain update permission merely by setting requested_owner_id to themselves. Trace the trust boundary, preserve legitimate owner/admin transfers, fix the owning authorization rule, and add regression coverage.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "security-hidden-abuse",
@@ -610,7 +610,7 @@
     "skill": "context-engineering",
     "fixture": "evals/live-fixtures/context-handoff-long",
     "request": "Continue this task from the current handoff. The repository also contains a long stale OLD_SESSION.md. Use the current applicable context, update the certification threshold correctly, and add regression coverage without rewriting historical notes.",
-    "pass_threshold": 1.0,
+    "pass_threshold": 1,
     "graders": [
       {
         "id": "handoff-hidden",
@@ -643,6 +643,48 @@
     "expected_change_globs": [
       "grading.py",
       "tests/**",
+      "*.md"
+    ]
+  },
+  {
+    "id": "project-quality-cross-layer-live",
+    "skill": "project-quality-orchestrator",
+    "fixture": "evals/live-fixtures/engineering-quality",
+    "request": "Audit and repair this profile-record change as a cross-layer release candidate. Trace the canonical record through the compatibility/data boundary to the API consumer, keep old string records and new object records compatible, avoid duplicating fixes in callers, add regression coverage, and create VERIFICATION.md that distinguishes Verified from Not verified evidence.",
+    "pass_threshold": 1,
+    "graders": [
+      {
+        "id": "old-new-compatibility",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_engineering_quality.py",
+          "{workspace}"
+        ],
+        "weight": 4
+      },
+      {
+        "id": "visible-tests-pass",
+        "type": "command",
+        "argv": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-q"
+        ],
+        "weight": 2
+      }
+    ],
+    "manual_checks": [
+      "The solution identifies the shared data/compatibility boundary as the owner and does not claim unexecuted consumer/runtime checks passed."
+    ],
+    "expected_change_globs": [
+      "*.py",
+      "tests/**",
+      "PENDING_TESTS.md",
       "*.md"
     ]
   }
