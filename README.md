@@ -24,6 +24,7 @@ This repository packages a repeatable engineering workflow around those failure 
 | Skill | Use it for | Core outcome |
 | --- | --- | --- |
 | `engineering-quality` | Multi-mode or end-to-end engineering work | Select the smallest useful workflow and coordinate quality gates |
+| `project-quality-orchestrator` | Broad cross-layer audits, release/freeze readiness, repeated systemic defects | Trace canonical source through transformations to the final consumed output and coordinate only the needed specialist skills |
 | `structure-feature` | Building or extending software | Put new code in the right place with clear responsibilities |
 | `debug-root-cause` | Reproducible bugs, regressions, failing tests | Reproduce, form testable hypotheses, use safe runtime evidence, and fix the owning cause instead of the symptom |
 | `refactor-safely` | Cleanup, decomposition, modernization | Improve structure while preserving behavior and contracts |
@@ -90,13 +91,14 @@ Classify the change
   |-- controlled technical prose -> asd-ste100-writing
   |-- natural prose rewrite ------> humanizer-writing
   |-- ready-to-merge check ----> verify-change
+  |-- broad audit/release/freeze -> project-quality-orchestrator
   `-- spans several modes -----> engineering-quality
                                       |
                                       v
                                verify-change gate
 ```
 
-A specialized skill should be preferred when one clearly matches the task. `engineering-quality` exists for work that genuinely spans modes; it is not intended to load the whole pack for every edit.
+A specialized skill should be preferred when one clearly matches the task. `engineering-quality` exists for work that genuinely spans implementation modes; `project-quality-orchestrator` is for broad cross-layer audits and release/freeze work where correctness must be traced to the final consumed artifact. Neither is intended to load the whole pack for every edit.
 
 ## Quick start
 
@@ -124,6 +126,13 @@ python3 scripts/install_skills.py --dest /path/to/skills debug-root-cause verify
 It refuses to overwrite existing skill folders unless `--force` is supplied. See [Using the skills effectively](docs/using-the-skills.md) for invocation and project-guidance patterns.
 
 ## Example requests
+
+```text
+Audit this release with project-quality-orchestrator. Trace the canonical source
+through generated/transformed layers to the final consumed output, investigate
+shared causes for repeated defects, and give a release-readiness decision based
+only on evidence actually obtained.
+```
 
 ```text
 Build an account settings feature in this existing Next.js repo. Use the
@@ -427,6 +436,7 @@ engineering-quality-agent-skills/
 ├── .claude-plugin/plugin.json  # Claude Code plugin manifest
 ├── skills/
 │   ├── engineering-quality/    # SKILL.md + references + reusable assets
+│   ├── project-quality-orchestrator/ # Cross-layer audit + release/freeze orchestration
 │   ├── structure-feature/      # Includes worked feature-structure case study
 │   ├── debug-root-cause/       # Includes bug-fix record + root-cause case study
 │   ├── refactor-safely/        # Includes refactor plan + migration guidance
