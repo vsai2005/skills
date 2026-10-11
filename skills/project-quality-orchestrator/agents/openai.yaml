@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Quality Orchestrator"
+  short_description: "Verify quality from source to consumed output"
+  default_prompt: "Use $project-quality-orchestrator to audit this project across its real transformation and consumer path, delegate only the needed specialist skills, and report evidence honestly."
