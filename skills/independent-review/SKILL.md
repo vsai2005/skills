@@ -53,3 +53,11 @@ Avoid style commentary unless it materially affects maintainability or repositor
 The implementer should address or explicitly disposition important findings, then rerun relevant verification. Treat the review as bound to the reviewed diff; if substantive behavior changes afterward, re-review the affected surface. When available, use `scripts/review_state.py` as described in [references/review-tiers.md](references/review-tiers.md) so stale review approval is detected mechanically. `verify-change` remains the final evidence gate.
 
 For substantial reviews use [assets/review-report.md](assets/review-report.md) and [references/review-scope.md](references/review-scope.md).
+
+## 6. Review the consumed artifact when meaning can change after source
+
+When a requirement is user-facing or passes through generation, projection, serialization, build, rendering, export, or another transformation, inspect the final consumed artifact when feasible.
+
+Examples include rendered UI, generated documentation, exported files, API payloads, persisted records, and runtime output.
+
+Do not approve a user-visible requirement only because the source file looks correct. If runtime or rendered evidence is unavailable, record that limitation instead of treating source inspection as equivalent proof.
