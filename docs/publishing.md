@@ -9,7 +9,9 @@ For local/team use, keep:
 - `.codex-plugin/plugin.json` for Codex plugin packaging;
 - `.claude-plugin/plugin.json` for Claude Code plugin packaging;
 - root `skills/` for auto-discovered bundled skills;
-- root `plugin.json` for portable Agent Plugins-compatible environments.
+- root `plugin.json` for portable Agent Plugins-compatible environments;
+- generated Antigravity plugin output for Antigravity distribution;
+- direct skill directories for GitHub Copilot-compatible locations.
 
 Run the full repository checks and build a release with `scripts/package_release.py`.
 
@@ -38,16 +40,29 @@ In a Git worktree, releases are built from Git-tracked files only. The release b
 A release should satisfy all of the following:
 
 ```bash
+python3 -m compileall -q scripts tests skills
 python3 scripts/generate_manifest.py .
 python3 scripts/validate_repo.py . --warnings-as-errors
+python3 scripts/openai_metadata_check.py .
+python3 scripts/evidence_freshness.py .
+python3 scripts/activation_eval.py validate
 python3 scripts/live_eval.py validate
+python3 scripts/composition_eval.py validate
 python3 -m unittest discover -s tests -v
 python3 scripts/audit_structure.py . \
   --exclude "scripts/audit_structure.py" \
   --exclude "tests/fixtures/audit_structure/**" \
   --fail-on high
 python3 scripts/pending_tests.py check
+python3 scripts/export_standard_evals.py . --output-dir dist/standard-evals
+python3 scripts/package_antigravity.py . --output-dir dist
 python3 scripts/package_release.py . --output-dir dist
 ```
 
 The generated `.sha256` file uses the ZIP basename so `sha256sum -c` remains portable after download.
+
+## Empirical claims
+
+A release may ship with no effectiveness claims. Do not turn green CI into a model-quality claim.
+
+If empirical results are published, add only sanitized aggregate records to `evidence/registry.json` and require `scripts/evidence_freshness.py` to pass. Claims expire when the skill hash changes or the configured evidence age is exceeded.
