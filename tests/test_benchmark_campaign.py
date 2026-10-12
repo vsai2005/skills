@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.benchmark_campaign import analyze_campaign, load_policy, plan_campaign
+from scripts.benchmark_campaign import analyze_campaign, build_parser, load_policy, plan_campaign
 from scripts.eval_provenance import sha256_json, sha256_tree
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +17,11 @@ class BenchmarkCampaignTests(unittest.TestCase):
         self.assertEqual(20, plan["counts"]["historical_arms"])
         self.assertEqual(220, plan["counts"]["composition_arms"])
         self.assertEqual(420, plan["counts"]["total_arms"])
+
+    def test_parser_accepts_antigravity_campaign_provider(self):
+        args = build_parser().parse_args(["plan", "--provider", "antigravity", "--model", "gemini-test"])
+        self.assertEqual("antigravity", args.provider)
+        self.assertEqual(["gemini-test"], args.model)
 
     def test_analysis_publishes_only_strong_version_current_evidence(self):
         policy = load_policy(ROOT / "evals" / "benchmark-policy.json")
