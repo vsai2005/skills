@@ -163,7 +163,7 @@ def _completed_keys(path: Path, campaign_id: str) -> set[tuple[str, str, str, in
 
 
 def run_cases(args: argparse.Namespace, cases: list[dict[str, Any]], root: Path, cases_path: Path) -> int:
-    binary = args.binary or ("codex" if args.provider == "codex" else "claude" if args.provider == "claude" else "")
+    binary = args.binary or ("codex" if args.provider == "codex" else "claude" if args.provider == "claude" else "agy" if args.provider == "antigravity" else "")
     if args.provider != "command" and not args.dry_run and shutil.which(binary) is None:
         print(f"[ERROR] provider binary not found: {binary}", file=sys.stderr)
         return 2
@@ -223,7 +223,7 @@ def main(argv=None) -> int:
     plan_p = sub.add_parser("plan")
     plan_p.add_argument("--cases", type=Path, default=Path("evals/composition-cases.json")); plan_p.add_argument("--case", action="append", default=[]); plan_p.add_argument("--provider", default="codex"); plan_p.add_argument("--model", action="append", default=[]); plan_p.add_argument("--runs", type=int, default=3); plan_p.add_argument("--campaign-id"); plan_p.add_argument("--output", type=Path)
     run_p = sub.add_parser("run")
-    run_p.add_argument("--cases", type=Path, default=Path("evals/composition-cases.json")); run_p.add_argument("--case", action="append", default=[]); run_p.add_argument("--provider", choices=("codex", "claude", "command"), required=True); run_p.add_argument("--binary"); run_p.add_argument("--model", action="append", default=[]); run_p.add_argument("--runs", type=int, default=5); run_p.add_argument("--campaign-id"); run_p.add_argument("--timeout-seconds", type=int, default=900); run_p.add_argument("--max-budget-usd", type=float); run_p.add_argument("--output-dir", type=Path, default=Path(".verification/composition-evals")); run_p.add_argument("--command-json"); run_p.add_argument("--dry-run", action="store_true"); run_p.add_argument("--append", action="store_true"); run_p.add_argument("--resume", action="store_true")
+    run_p.add_argument("--cases", type=Path, default=Path("evals/composition-cases.json")); run_p.add_argument("--case", action="append", default=[]); run_p.add_argument("--provider", choices=("codex", "claude", "antigravity", "command"), required=True); run_p.add_argument("--binary"); run_p.add_argument("--model", action="append", default=[]); run_p.add_argument("--runs", type=int, default=5); run_p.add_argument("--campaign-id"); run_p.add_argument("--timeout-seconds", type=int, default=900); run_p.add_argument("--max-budget-usd", type=float); run_p.add_argument("--output-dir", type=Path, default=Path(".verification/composition-evals")); run_p.add_argument("--command-json"); run_p.add_argument("--dry-run", action="store_true"); run_p.add_argument("--append", action="store_true"); run_p.add_argument("--resume", action="store_true")
     compare = sub.add_parser("compare")
     compare.add_argument("records", type=Path); compare.add_argument("--min-runs", type=int, default=3); compare.add_argument("--confidence", type=float, default=0.95); compare.add_argument("--fail-on-interference", action="store_true"); compare.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
