@@ -1,6 +1,6 @@
 ---
 name: asd-ste100-writing
-description: Draft or rewrite technical prose in clear ASD-STE100-inspired English. Use for procedures, documentation, explanations, prompts, or engineering text needing short, consistent wording. Preserve exact identifiers; do not claim certified compliance.
+description: Draft or rewrite technical prose in clear ASD-STE100-inspired English. Use for procedures, docs, explanations, prompts, or engineering text needing short, consistent wording. Preserve identifiers; do not claim certified compliance.
 ---
 
 # ASD-STE100-Inspired Writing
