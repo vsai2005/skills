@@ -1,0 +1,105 @@
+name: Empirical benchmark credential probe
+
+on:
+  push:
+    branches:
+      - empirical-benchmark-probe
+
+permissions:
+  contents: read
+
+concurrency:
+  group: empirical-benchmark-probe
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Detect configured credentials
+        id: creds
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${OPENAI_API_KEY:-}" ]; then echo "openai=true" >> "$GITHUB_OUTPUT"; else echo "openai=false" >> "$GITHUB_OUTPUT"; fi
+          if [ -n "${ANTHROPIC_API_KEY:-}" ]; then echo "anthropic=true" >> "$GITHUB_OUTPUT"; else echo "anthropic=false" >> "$GITHUB_OUTPUT"; fi
+          if [ -n "${GEMINI_API_KEY:-}" ]; then echo "gemini=true" >> "$GITHUB_OUTPUT"; else echo "gemini=false" >> "$GITHUB_OUTPUT"; fi
+          {
+            echo "## Credential availability"
+            echo ""
+            echo "| Provider | Configured |"
+            echo "| --- | --- |"
+            echo "| OpenAI/Codex | ${{ steps.creds.outputs.openai || 'checking' }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "Credential values are never printed."
+
+      - name: Install and probe Codex
+        if: steps.creds.outputs.openai == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install -g @openai/codex@latest
+          echo "Codex version: $(codex --version)"
+          codex exec --json --full-auto --model gpt-6-sol             "Reply with exactly BENCHMARK_PROBE_OK. Do not inspect files and do not use tools."             > codex-probe.jsonl 2> codex-probe.stderr
+          grep -q "BENCHMARK_PROBE_OK" codex-probe.jsonl
+          echo "CODEX_PROBE=PASS"
+
+      - name: Report missing Codex credential
+        if: steps.creds.outputs.openai != 'true'
+        run: echo "CODEX_PROBE=SKIPPED_NO_OPENAI_API_KEY"
+
+      - name: Install and probe Claude Code
+        if: steps.creds.outputs.anthropic == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
+          echo "Claude version: $(claude --version)"
+          claude -p             --output-format json             --model claude-sonnet-5             --permission-mode dontAsk             --max-turns 1             --max-budget-usd 0.10             "Reply with exactly BENCHMARK_PROBE_OK. Do not inspect files and do not use tools."             > claude-probe.json 2> claude-probe.stderr
+          grep -q "BENCHMARK_PROBE_OK" claude-probe.json
+          echo "CLAUDE_PROBE=PASS"
+
+      - name: Report missing Claude credential
+        if: steps.creds.outputs.anthropic != 'true'
+        run: echo "CLAUDE_PROBE=SKIPPED_NO_ANTHROPIC_API_KEY"
+
+      - name: Install and probe Antigravity
+        if: steps.creds.outputs.gemini == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://antigravity.google/cli/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
+          mkdir -p "$HOME/.gemini/antigravity-cli"
+          printf '%s\n' '{"modelProvider":"gemini"}' > "$HOME/.gemini/antigravity-cli/settings.json"
+          echo "Antigravity version: $(agy --version)"
+          agy -p             "Reply with exactly BENCHMARK_PROBE_OK. Do not inspect files and do not use tools."             --output-format json             --model gemini-3.8-flash-medium             --sandbox             --print-timeout 2m             > antigravity-probe.json 2> antigravity-probe.stderr
+          grep -q "BENCHMARK_PROBE_OK" antigravity-probe.json
+          echo "ANTIGRAVITY_PROBE=PASS"
+
+      - name: Report missing Antigravity credential
+        if: steps.creds.outputs.gemini != 'true'
+        run: echo "ANTIGRAVITY_PROBE=SKIPPED_NO_GEMINI_API_KEY"
+
+      - name: Probe summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Provider probe result"
+            echo ""
+            if [ "${{ steps.creds.outputs.openai }}" = "true" ]; then echo "- Codex credential: configured"; else echo "- Codex credential: not configured"; fi
+            if [ "${{ steps.creds.outputs.anthropic }}" = "true" ]; then echo "- Claude credential: configured"; else echo "- Claude credential: not configured"; fi
+            if [ "${{ steps.creds.outputs.gemini }}" = "true" ]; then echo "- Antigravity credential: configured"; else echo "- Antigravity credential: not configured"; fi
+            echo ""
+            echo "This workflow is a low-cost authentication/model smoke test only. It does not publish effectiveness claims."
+          } >> "$GITHUB_STEP_SUMMARY"
