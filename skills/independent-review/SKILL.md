@@ -1,6 +1,6 @@
 ---
 name: independent-review
-description: Perform a fresh-context second review of meaningful or high-risk changes to catch self-review blind spots. Judge the final diff against the request, contracts, and evidence. Not for ordinary readiness checks.
+description: Perform a fresh-context second review of meaningful or high-risk changes to catch self-review blind spots. Judge the final diff against the request, contracts, and evidence; not for an ordinary readiness check.
 ---
 
 # Independent Review

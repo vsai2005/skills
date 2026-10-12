@@ -1,6 +1,6 @@
 ---
 name: verify-change
-description: Perform final or pre-merge verification of a completed change using actual evidence. Check regressions, test integrity, failure paths, relevant risks, and leftovers. Not for broad source-to-consumer audits.
+description: Perform final or pre-merge verification of a completed software change using actual evidence. Check regressions, test integrity, failure paths, risks, and leftovers. Not for a broad source-to-consumer audit.
 ---
 
 # Verify Change
