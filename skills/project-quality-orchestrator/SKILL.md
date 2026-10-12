@@ -32,7 +32,7 @@ Do not assume every project has a browser, server, database, or build step.
 
 Delegate rather than copy their full rules:
 
-- software implementation across modes -> `engineering-quality`;
+- multi-mode implementation -> `engineering-quality`; do not load it merely because this orchestrator is active;
 - repository context uncertainty -> `context-engineering`;
 - external/version-sensitive facts -> `source-grounded-development`;
 - cheap/heavy verification planning -> `tiered-testing`;
@@ -42,7 +42,7 @@ Delegate rather than copy their full rules:
 - high-risk fresh-context review -> `independent-review`;
 - final evidence gate -> `verify-change`.
 
-Load only the specialists justified by the task. Do not stack the whole pack by default.
+Load only the specialists justified by the current phase. Default to at most 1-2 specialists in a phase. Add another only when a concrete risk, failed check, or required evidence justifies it. Do not preload specialists for possible future work, and do not stack the whole pack by default.
 
 ## 3. Verify source to consumed output
 
@@ -99,7 +99,7 @@ Examples:
 - data pipeline: unit -> transformation/schema -> persisted/output validation;
 - generated artifact: source -> generator -> generated file -> consumer validation.
 
-Use `tiered-testing` for expensive suites and `verify-change` for final evidence accounting.
+Use `tiered-testing` only when test-cost/deferment decisions are material. Use `verify-change` only at the final evidence gate; do not keep either loaded through unrelated implementation phases.
 
 ## 8. Review semantic correctness, not only syntax
 
