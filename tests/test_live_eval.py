@@ -6,6 +6,7 @@ import unittest
 from scripts.live_eval import _arm_order, _run_arm, build_parser, main as live_eval_main
 from scripts.live_eval_graders import grade_case
 from scripts.live_eval_support import (
+    build_antigravity_command,
     build_claude_command,
     build_codex_command,
     load_live_cases,
@@ -60,6 +61,17 @@ class LiveEvalTests(unittest.TestCase):
         self.assertIn("--full-auto", command)
         self.assertIn("--model", command)
         self.assertEqual("fix it", command[-1])
+
+    def test_antigravity_command_uses_headless_streaming_and_sandbox(self):
+        command = build_antigravity_command("agy", "fix it", model="gemini-test")
+        self.assertEqual("agy", command[0])
+        self.assertIn("-p", command)
+        self.assertIn("--output-format", command)
+        self.assertIn("stream-json", command)
+        self.assertIn("--mode=accept-edits", command)
+        self.assertIn("--sandbox", command)
+        self.assertIn("--model", command)
+        self.assertIn("gemini-test", command)
 
     def test_claude_treatment_loads_only_eval_plugin(self):
         command = build_claude_command(
