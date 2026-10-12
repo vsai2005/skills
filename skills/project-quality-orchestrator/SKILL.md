@@ -1,6 +1,6 @@
 ---
 name: project-quality-orchestrator
-description: Coordinate end-to-end quality work for substantial projects when correctness depends on more than source code alone, including generated artifacts, transformed data, APIs, rendered UI, documentation, workflows, tests, security, or release evidence. Use for broad audits, cross-layer changes, release/freeze readiness, or repeated defects that may share a systemic cause. Keep the workflow project-agnostic and delegate specialist work instead of duplicating specialist skills.
+description: Coordinate broad cross-layer audits and release/freeze readiness when correctness must be traced from canonical source through transformations to the final consumed output. Also use for repeated defects suggesting a shared systemic cause. Delegate only necessary specialists.
 ---
 
 # Project Quality Orchestrator
