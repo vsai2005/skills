@@ -1,6 +1,6 @@
 ---
 name: engineering-quality
-description: Coordinate end-to-end software changes that span more than one engineering mode, such as implementing a feature plus debugging regressions, refactoring while changing behavior, or reviewing a broad patch for architecture and verification. Use for multi-phase coding work where scope, architecture, implementation, debugging, refactoring, and final proof must be coordinated. Prefer a more specific skill for a simple single-mode task.
+description: Coordinate software work that genuinely spans multiple engineering modes, such as feature work plus debugging, refactoring, migration, or verification. Prefer a specific skill for single-mode tasks.
 ---
 
 # Engineering Quality
