@@ -184,8 +184,16 @@ def validate_openai_yaml(path: Path, skill_name: str) -> list[Problem]:
         return [Problem("ERROR", path, f"cannot read UTF-8 text: {exc}")]
 
     problems: list[Problem] = []
-    if not text.startswith("interface:\n") and not text.startswith("interface:\r\n"):
-        problems.append(Problem("ERROR", path, "must start with 'interface:'"))
+    first_key = next(
+        (
+            raw.strip()
+            for raw in text.splitlines()
+            if raw.strip() and not raw.lstrip().startswith("#")
+        ),
+        "",
+    )
+    if first_key != "interface:":
+        problems.append(Problem("ERROR", path, "first non-comment key must be 'interface:'"))
 
     values: dict[str, str] = {}
     for raw in text.splitlines():
