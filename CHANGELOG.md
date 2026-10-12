@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.11.0 - Google Antigravity support
+
+- Added first-class installation guidance for Antigravity 2.0, Antigravity CLI, Antigravity IDE, and the Antigravity SDK.
+- Added `scripts/package_antigravity.py` to generate a deterministic Antigravity-native plugin bundle from the canonical `skills/` tree without duplicating skill sources.
+- Kept the existing portable/Codex/Claude manifests unchanged in shape because Antigravity's current plugin schema accepts a smaller, incompatible field set.
+- Added deterministic tests for the Antigravity manifest, full 16-skill bundle coverage, ZIP integrity, and reproducible package hashes.
+- Added an explicit Antigravity packaging step to CI and documented workspace, global, CLI, plugin, and SDK installation paths.
+- Preserved the compact discovery metadata and selective-loading rules from the token-efficiency pass.
+
 ## 1.10.0 - General cross-layer project quality orchestration
 
 - Added `project-quality-orchestrator` for broad audits, release/freeze readiness, repeated systemic defects, and source-to-consumed-output verification across project types.
