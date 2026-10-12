@@ -16,6 +16,10 @@ class CiConfigTests(unittest.TestCase):
         self.assertIn('cancel-in-progress: true', text)
         self.assertIn('activation_eval.py validate', text)
         self.assertIn('--provider antigravity --dry-run', text)
+        self.assertIn('compileall -q scripts tests skills', text)
+        self.assertIn('openai_metadata_check.py .', text)
+        self.assertIn('evidence_freshness.py .', text)
+        self.assertIn('export_standard_evals.py', text)
 
     def test_dependabot_is_actions_only(self):
         text=(ROOT/'.github/dependabot.yml').read_text(encoding='utf-8')
