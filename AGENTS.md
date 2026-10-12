@@ -5,7 +5,8 @@ This repository publishes reusable Agent Skills. Preserve portability across cod
 ## Editing rules
 
 - Keep each `skills/<name>/SKILL.md` focused and compact. Put conditional depth in `references/`.
-- Keep reusable templates in the owning skill's `assets/` directory and link them from `SKILL.md` so selective installs remain complete.
+- Keep reusable templates in the owning skill's `assets/` directory and executable helpers in the owning skill's `scripts/` directory. Skill-relative references must resolve inside that skill so selective installs remain complete.
+- Root `scripts/` entry points may wrap skill-local helpers for repository convenience, but the skill-local copy is canonical.
 - Keep skill frontmatter to `name` and `description` only unless a target host requires otherwise.
 - Use provider-neutral wording in core skill instructions. Product-specific metadata belongs in host-specific manifests or `agents/` metadata.
 - Do not add dependencies to the Python utilities unless a dependency materially improves reliability.
@@ -25,6 +26,7 @@ Use the smallest applicable workflow:
 - high-risk completed change -> `independent-review` before `verify-change`;
 - technical docs/procedures/explanations that need controlled, consistent English -> `asd-ste100-writing`;
 - prose that is accurate but stiff, repetitive, generic, machine-like, or needs authentic voice matching -> `humanizer-writing`;
+- broad source-to-consumer audit, repeated systemic defect, release/freeze readiness -> `project-quality-orchestrator`;
 - final readiness -> `verify-change`.
 
 Do not invoke extra skills for a trivial local edit merely because they exist.
@@ -34,9 +36,12 @@ Do not invoke extra skills for a trivial local edit merely because they exist.
 Run before finishing changes:
 
 ```bash
-python3 -m compileall -q scripts tests
+python3 -m compileall -q scripts tests skills
 python3 scripts/generate_manifest.py .
 python3 scripts/validate_repo.py . --warnings-as-errors
+python3 scripts/openai_metadata_check.py .
+python3 scripts/evidence_freshness.py .
+python3 scripts/activation_eval.py validate
 python3 scripts/context_budget.py . --fail-on-budget
 python3 scripts/portability_check.py . --warnings-as-errors
 python3 scripts/live_eval.py validate
@@ -54,6 +59,8 @@ For release work, also run:
 
 ```bash
 python3 scripts/pending_tests.py check
+python3 scripts/package_antigravity.py . --output-dir dist
+python3 scripts/export_standard_evals.py . --output-dir dist/standard-evals
 python3 scripts/package_release.py . --output-dir dist
 unzip -t dist/engineering-quality-agent-skills-v$(cat VERSION).zip
 ```

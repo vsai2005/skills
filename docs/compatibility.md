@@ -27,6 +27,12 @@ Antigravity's plugin manifest schema is stricter than the repository's portable 
 
 The Antigravity SDK can point `LocalAgentConfig.skills_paths` directly at this repository's `skills/` parent directory. See [Google Antigravity installation](install-antigravity.md).
 
+## GitHub Copilot
+
+GitHub documents project Agent Skills under `.github/skills/`, `.claude/skills/`, or `.agents/skills/`, with personal skills under `~/.copilot/skills/` or `~/.agents/skills/`. The canonical skill tree is therefore structurally compatible with Copilot.
+
+This repository does not yet publish native Copilot activation or RED/GREEN behavior results. See [GitHub Copilot installation](install-github-copilot.md) and [Host support matrix](host-support.md).
+
 ## Other harnesses
 
 A compatible harness needs to expose the skill name/description for discovery and make the corresponding `SKILL.md` plus referenced files available when selected. Host-specific UI metadata can be ignored.
@@ -45,9 +51,13 @@ The repository design was rechecked in October 2026 against current public guida
 - https://antigravity.google/docs/skills
 - https://antigravity.google/docs/plugins
 - https://antigravity.google/docs/sdk/tools/
+- https://github.com/github/docs/blob/main/content/copilot/concepts/agents/about-agent-skills.md
+- https://github.com/microsoft/vscode-docs/blob/main/docs/agent-customization/agent-skills.md
 
 Host behavior can evolve. Keep installation documentation versioned and verify platform-specific paths when publishing a release.
 
 ## Live evaluation adapters
 
-Core skills remain provider-neutral. Provider-specific behavior is isolated in `scripts/live_eval.py`: Codex runs use current `codex exec --json --full-auto` automation, while Claude Code runs use current non-interactive `-p`/`stream-json` plus a one-skill `--plugin-dir` treatment. These adapters are evaluation tooling, not requirements for using the skills.
+Core skills remain provider-neutral. Provider-specific behavior is isolated in evaluation tooling: `scripts/live_eval.py` supports Codex, Claude Code, Antigravity, and custom commands for RED/GREEN behavior runs; `scripts/activation_eval.py` prepares all skills for repeated automatic-selection experiments. These adapters are evaluation tooling, not requirements for using the skills.
+
+See [Host support matrix](host-support.md) for the difference between structural compatibility, packaging, evaluation-adapter availability, and published real-model evidence.

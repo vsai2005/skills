@@ -38,6 +38,8 @@ class AntigravityPackageTests(unittest.TestCase):
             }
             self.assertEqual(source_skills, bundled_skills)
             self.assertEqual(16, len(bundled_skills))
+            self.assertTrue((stage / "skills" / "verify-change" / "scripts" / "evidence_ledger.py").is_file())
+            self.assertTrue((stage / "skills" / "context-engineering" / "scripts" / "repo_context.py").is_file())
             self.assertTrue(zip_path.is_file())
             self.assertTrue(checksum_path.is_file())
 

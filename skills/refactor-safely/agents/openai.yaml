@@ -1,3 +1,4 @@
+# source-description-sha256: 7d636430cd89c118ba977d47584f84751053e1d36742a674b382117f6f24aa2f
 interface:
   display_name: "Refactor Safely"
   short_description: "Improve structure while preserving behavior"

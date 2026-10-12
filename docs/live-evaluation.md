@@ -1,8 +1,8 @@
 # Live Skill Evaluation Protocol
 
-v1.9.0 adds version-bound campaign provenance, alternating control/treatment order, resumable repeated runs, confidence-qualified effectiveness evidence, and executable composition experiments. Historical debugging cases remain separate from the default local suite.
+The live-eval system uses version-bound campaign provenance, alternating control/treatment order, resumable repeated runs, confidence-qualified effectiveness evidence, and executable composition experiments. Historical debugging cases remain separate from the default local suite.
 
-Static validation proves that skill files, metadata, scripts, fixtures, and release artifacts are internally consistent. It does **not** prove that a coding model follows a skill reliably. v1.2.0 introduced an executable RED/GREEN harness for that second problem; v1.3.0 added model-separated runs and workflow-friction evidence so quality gains can be weighed against scope, churn, latency, tokens, and cost.
+Static validation proves that skill files, metadata, scripts, fixtures, and release artifacts are internally consistent. It does **not** prove that a coding model follows a skill reliably. Live runs keep provider/model results separate and record workflow-friction evidence so quality gains can be weighed against scope, churn, latency, tokens, and cost.
 
 ## What the harness measures
 
@@ -68,7 +68,7 @@ python3 scripts/live_eval.py run \
 
 The runner does **not** modify the user's global `$CODEX_HOME`. For treatment runs it mounts a read-only copy of the target skill inside the disposable fixture and adds a short instruction to read that exact `SKILL.md`. Control runs receive only the original task.
 
-This measures whether the skill instructions improve behavior while avoiding global-install side effects. It does **not** claim to measure Codex's native automatic skill-discovery/activation rate. Use `evals/activation-cases.json` or a separately prepared disposable Codex installation when native activation itself is the property under test.
+This measures whether the skill instructions improve behavior while avoiding global-install side effects. It does **not** claim to measure Codex's native automatic skill-discovery/activation rate. Use `scripts/activation_eval.py` for that separate property.
 
 ## Run with Claude Code
 
@@ -85,6 +85,20 @@ python3 scripts/live_eval.py run \
 Treatment runs build an isolated temporary plugin containing only the target skill and load it with `--plugin-dir`. Control runs use `--disable-slash-commands`.
 
 A user's other Claude configuration may still affect a session. For high-stakes benchmarking, run in a dedicated account/config/environment and record the Claude Code version/model with the artifacts.
+
+## Run with Google Antigravity
+
+Antigravity CLI supports headless prompts with streaming JSON. The runner installs the treatment skill into the disposable workspace's `.agents/skills/` directory and runs the workspace in sandboxed accept-edits mode:
+
+```bash
+python3 scripts/live_eval.py run \
+  --provider antigravity \
+  --model <model> \
+  --runs 3 \
+  --output-dir .verification/live-evals
+```
+
+The adapter does not pass `--dangerously-skip-permissions`. Provider-side commands that require additional permission may be soft-denied; deterministic graders still run outside the agent afterward. Record the `agy` version/model with every empirical result.
 
 ## Run another harness
 
@@ -184,6 +198,8 @@ The runner's defaults were checked against current public documentation:
 - OpenAI skills guidance: https://developers.openai.com/plugins/build/skills
 - Claude Code CLI reference (`-p`, `stream-json`, `--plugin-dir`, `--disable-slash-commands`): https://code.claude.com/docs/en/cli-reference
 - Claude Code plugin skill structure/testing: https://github.com/anthropics/claude-code/tree/main/plugins/plugin-dev
+- Antigravity headless CLI / streaming JSON: https://www.antigravity.google/docs/cli/headless/
+- Antigravity Agent Skills locations: https://www.antigravity.google/docs/skills?tab=ide
 
 Provider CLIs evolve. Keep adapters small, version the observed provider binary in every run record, and update tests/docs when an upstream interface changes.
 
@@ -222,8 +238,12 @@ Validation is offline and requires a credential-free GitHub HTTPS URL plus an ex
 
 After live runs, `scripts/skill_effectiveness.py` can build provider/model/skill evidence labels. `scripts/composition_eval.py` plans four-arm interaction tests so stacked skills are evaluated rather than assumed to help. See `docs/skill-effectiveness.md` and `docs/composition-evaluation.md`.
 
-## v1.9 empirical campaign provenance
+## Empirical campaign provenance
 
 Every new run record carries a campaign ID, skill hash(es), case hash, suite hash, repository version/commit, provider CLI version, explicit model, and runtime metadata. Use a stable `--campaign-id --resume` to continue interrupted paid runs.
 
 By default repeated arms alternate order (`control -> treatment`, then `treatment -> control`) to reduce simple time/order bias. Use `scripts/benchmark_campaign.py` for full repeated campaigns and `scripts/skill_effectiveness.py` for confidence-qualified evidence. See [Empirical Benchmark Campaigns](empirical-benchmarking.md).
+
+## Automatic activation is a separate benchmark
+
+Use `scripts/activation_eval.py` when the question is whether the host selected the right skill from all discovery descriptions. The activation suite has eight positive prompts per skill and true negatives. Keep activation accuracy separate from behavior quality: a skill can be excellent when explicitly loaded but trigger unreliably, or trigger correctly but execute poorly.

@@ -22,6 +22,18 @@ NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", re.DOTALL)
 MD_LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 OPENAI_FIELD_RE = re.compile(r'^\s{2}(display_name|short_description|default_prompt):\s+"(.*)"\s*$')
+RESOURCE_PATH_RE = re.compile(
+    r'(?<![A-Za-z0-9_.-])((?:scripts|references|assets)/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*)'
+)
+SPEC_FRONTMATTER_FIELDS = {
+    "name",
+    "description",
+    "license",
+    "compatibility",
+    "metadata",
+    "allowed-tools",
+}
+REPOSITORY_FRONTMATTER_FIELDS = {"name", "description"}
 
 
 def parse_minimal_frontmatter(skill_md: Path) -> tuple[dict[str, str] | None, list[Problem]]:
@@ -40,6 +52,11 @@ def parse_minimal_frontmatter(skill_md: Path) -> tuple[dict[str, str] | None, li
         line = raw.strip()
         if not line or line.startswith("#"):
             continue
+        # Nested YAML belongs to an optional top-level field such as metadata.
+        # The repository itself does not use nested frontmatter, but the public
+        # Agent Skills specification permits it.
+        if raw[:1].isspace():
+            continue
         if ":" not in raw:
             problems.append(Problem("ERROR", skill_md, f"invalid frontmatter line {lineno}"))
             continue
@@ -47,18 +64,28 @@ def parse_minimal_frontmatter(skill_md: Path) -> tuple[dict[str, str] | None, li
         key = key.strip()
         value = value.strip()
         if not value:
+            if key == "metadata":
+                data[key] = "<mapping>"
+                continue
             problems.append(Problem("ERROR", skill_md, f"frontmatter field {key!r} is empty"))
             continue
         if value.startswith(('"', "'")) and value.endswith(value[0]) and len(value) >= 2:
             value = value[1:-1]
         data[key] = value
 
-    # Deliberately stricter than the open spec for maximum cross-host portability.
-    allowed = {"name", "description"}
-    extra = sorted(set(data) - allowed)
-    missing = sorted(allowed - set(data))
-    if extra:
-        problems.append(Problem("ERROR", skill_md, f"unsupported frontmatter field(s): {', '.join(extra)}"))
+    # First validate against the public Agent Skills field set. Repository
+    # policy is applied separately in validate_skill so spec conformance and
+    # local portability policy do not get conflated.
+    unsupported = sorted(set(data) - SPEC_FRONTMATTER_FIELDS)
+    missing = sorted({"name", "description"} - set(data))
+    if unsupported:
+        problems.append(
+            Problem(
+                "ERROR",
+                skill_md,
+                f"field(s) not supported by the Agent Skills spec: {', '.join(unsupported)}",
+            )
+        )
     if missing:
         problems.append(Problem("ERROR", skill_md, f"missing required field(s): {', '.join(missing)}"))
     return data, problems
@@ -87,6 +114,34 @@ def resolve_local_markdown_link(path: Path, target: str, root: Path) -> Path | N
     except ValueError:
         return None
     return candidate
+
+
+def validate_skill_resource_paths(skill_dir: Path) -> list[Problem]:
+    """Require explicit skill-relative resource references to resolve locally."""
+    problems: list[Problem] = []
+    source_files = [skill_dir / "SKILL.md"]
+    for folder_name in ("references", "assets"):
+        folder = skill_dir / folder_name
+        if folder.is_dir():
+            source_files.extend(p for p in folder.rglob("*.md") if p.is_file())
+
+    for source in source_files:
+        try:
+            text = source.read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            problems.append(Problem("ERROR", source, f"cannot read UTF-8 text: {exc}"))
+            continue
+        for raw in sorted(set(RESOURCE_PATH_RE.findall(text))):
+            candidate = skill_dir / raw
+            if not candidate.is_file():
+                problems.append(
+                    Problem(
+                        "ERROR",
+                        source,
+                        f"skill-relative resource does not exist: {raw}",
+                    )
+                )
+    return problems
 
 
 def validate_skill_reachability(skill_dir: Path) -> list[Problem]:
@@ -142,8 +197,16 @@ def validate_openai_yaml(path: Path, skill_name: str) -> list[Problem]:
         return [Problem("ERROR", path, f"cannot read UTF-8 text: {exc}")]
 
     problems: list[Problem] = []
-    if not text.startswith("interface:\n") and not text.startswith("interface:\r\n"):
-        problems.append(Problem("ERROR", path, "must start with 'interface:'"))
+    first_key = next(
+        (
+            raw.strip()
+            for raw in text.splitlines()
+            if raw.strip() and not raw.lstrip().startswith("#")
+        ),
+        "",
+    )
+    if first_key != "interface:":
+        problems.append(Problem("ERROR", path, "first non-comment key must be 'interface:'"))
 
     values: dict[str, str] = {}
     for raw in text.splitlines():
@@ -174,6 +237,17 @@ def validate_skill(skill_dir: Path) -> list[Problem]:
     name = data.get("name", "").strip()
     description = data.get("description", "").strip()
 
+    policy_extra = sorted(set(data) - REPOSITORY_FRONTMATTER_FIELDS)
+    if policy_extra:
+        problems.append(
+            Problem(
+                "WARN",
+                skill_md,
+                "repository portability policy keeps skill frontmatter to name/description; "
+                f"found: {', '.join(policy_extra)}",
+            )
+        )
+
     if not name:
         problems.append(Problem("ERROR", skill_md, "name must not be empty"))
     elif len(name) > 64:
@@ -200,6 +274,7 @@ def validate_skill(skill_dir: Path) -> list[Problem]:
     else:
         problems.extend(validate_openai_yaml(openai_yaml, name))
     problems.extend(validate_skill_reachability(skill_dir))
+    problems.extend(validate_skill_resource_paths(skill_dir))
     return problems
 
 

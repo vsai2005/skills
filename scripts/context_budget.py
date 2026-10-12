@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", re.DOTALL)
-RESOURCE_DIRS = ("references", "assets")
+RESOURCE_DIRS = ("references", "assets", "scripts")
 
 @dataclass(frozen=True)
 class SkillBudget:
@@ -38,7 +38,13 @@ def _resources(skill_dir: Path)->tuple[int,int,int]:
     files=[]
     for folder in RESOURCE_DIRS:
         p=skill_dir/folder
-        if p.is_dir(): files.extend(x for x in p.rglob("*") if x.is_file())
+        if p.is_dir():
+            files.extend(
+                x for x in p.rglob("*")
+                if x.is_file()
+                and "__pycache__" not in x.parts
+                and x.suffix.lower() not in {".pyc", ".pyo"}
+            )
     total=0; chars=0
     for p in files:
         data=p.read_bytes(); total += len(data)

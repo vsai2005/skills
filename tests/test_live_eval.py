@@ -1,11 +1,14 @@
 from pathlib import Path
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 
 from scripts.live_eval import _arm_order, _run_arm, build_parser, main as live_eval_main
 from scripts.live_eval_graders import grade_case
 from scripts.live_eval_support import (
+    build_antigravity_command,
     build_claude_command,
     build_codex_command,
     load_live_cases,
@@ -60,6 +63,47 @@ class LiveEvalTests(unittest.TestCase):
         self.assertIn("--full-auto", command)
         self.assertIn("--model", command)
         self.assertEqual("fix it", command[-1])
+
+    def test_antigravity_command_uses_headless_streaming_and_sandbox(self):
+        command = build_antigravity_command("agy", "fix it", model="gemini-test")
+        self.assertEqual("agy", command[0])
+        self.assertIn("-p", command)
+        self.assertIn("--output-format", command)
+        self.assertIn("stream-json", command)
+        self.assertIn("--mode=accept-edits", command)
+        self.assertIn("--sandbox", command)
+        self.assertIn("--model", command)
+        self.assertIn("gemini-test", command)
+
+    def test_antigravity_dry_run_works_when_live_eval_is_executed_as_script(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "live_eval.py"),
+                    "run",
+                    "--provider",
+                    "antigravity",
+                    "--dry-run",
+                    "--runs",
+                    "1",
+                    "--case",
+                    "project-quality-cross-layer-live",
+                    "--output-dir",
+                    tmp,
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(0, result.returncode, result.stderr or result.stdout)
+            records = [
+                json.loads(line)
+                for line in (Path(tmp) / "antigravity-runs.jsonl").read_text(encoding="utf-8").splitlines()
+            ]
+            self.assertEqual(2, len(records))
+            self.assertTrue(all(item["status"] == "planned" for item in records))
 
     def test_claude_treatment_loads_only_eval_plugin(self):
         command = build_claude_command(

@@ -1,3 +1,4 @@
+# source-description-sha256: 3ae204ded298de89c72eaf3bfac118fbe4f35805656d23f586665b655f13ed80
 interface:
   display_name: "Independent Review"
   short_description: "Fresh-context review for meaningful code changes"

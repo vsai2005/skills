@@ -283,5 +283,410 @@
     "id": "project-quality-nearmiss-01",
     "prompt": "Fix this isolated deterministic parser bug in the local function and add a focused regression test.",
     "expected_primary_skill": "debug-root-cause"
+  },
+  {
+    "id": "build-owner-02",
+    "prompt": "Add an invoice export endpoint. First follow the existing service/repository boundaries instead of putting parsing, policy, and persistence into the route.",
+    "expected_primary_skill": "structure-feature"
+  },
+  {
+    "id": "build-pattern-03",
+    "prompt": "Implement passwordless login support in this existing app. Reuse the current feature structure and keep transport details out of domain logic.",
+    "expected_primary_skill": "structure-feature"
+  },
+  {
+    "id": "build-proportional-04",
+    "prompt": "Add a small notification-preference capability without introducing a new architecture layer unless the repository actually needs one.",
+    "expected_primary_skill": "structure-feature"
+  },
+  {
+    "id": "build-placement-05",
+    "prompt": "We need a CSV import feature. Inspect nearby features and decide where validation, orchestration, and persistence belong before writing code.",
+    "expected_primary_skill": "structure-feature"
+  },
+  {
+    "id": "build-reuse-06",
+    "prompt": "Extend the existing billing module with refunds. Reuse established abstractions and avoid duplicating provider translation logic.",
+    "expected_primary_skill": "structure-feature"
+  },
+  {
+    "id": "debug-causal-02",
+    "prompt": "A date parser returns the wrong timezone only for offsets with minutes. Reproduce it, identify the incorrect rule, and protect the fix with a regression test.",
+    "expected_primary_skill": "debug-root-cause"
+  },
+  {
+    "id": "debug-shared-owner-03",
+    "prompt": "Three screens started showing the same malformed currency label after one utility change. Find the shared cause instead of patching each screen.",
+    "expected_primary_skill": "debug-root-cause"
+  },
+  {
+    "id": "debug-runtime-04",
+    "prompt": "This API sometimes returns 200 with an empty body after the refactor. Use evidence to isolate the failing path before changing code.",
+    "expected_primary_skill": "debug-root-cause"
+  },
+  {
+    "id": "debug-performance-05",
+    "prompt": "The same report became 4x slower after yesterday's change. Measure the regression, find the dominant cost, and verify the improvement.",
+    "expected_primary_skill": "debug-root-cause"
+  },
+  {
+    "id": "flake-order-02",
+    "prompt": "This test fails only when another module runs first. Measure the pattern and isolate shared state rather than adding retries.",
+    "expected_primary_skill": "flaky-test-triage"
+  },
+  {
+    "id": "flake-parallel-03",
+    "prompt": "CI fails about 1 in 20 times only with parallel workers. Reproduce the relevant environment and investigate contention.",
+    "expected_primary_skill": "flaky-test-triage"
+  },
+  {
+    "id": "flake-timeout-04",
+    "prompt": "A developer doubled a sleep to make this intermittent browser test pass. Find the nondeterministic cause instead.",
+    "expected_primary_skill": "flaky-test-triage"
+  },
+  {
+    "id": "refactor-module-02",
+    "prompt": "Break this oversized service into clearer responsibilities without changing its public methods or persisted data.",
+    "expected_primary_skill": "refactor-safely"
+  },
+  {
+    "id": "refactor-duplication-03",
+    "prompt": "Consolidate these duplicated validation branches while preserving all current edge-case behavior.",
+    "expected_primary_skill": "refactor-safely"
+  },
+  {
+    "id": "refactor-modernize-04",
+    "prompt": "Modernize this legacy adapter to the current internal pattern, but keep the external API and outputs unchanged.",
+    "expected_primary_skill": "refactor-safely"
+  },
+  {
+    "id": "arch-layer-02",
+    "prompt": "Check whether this proposed import makes the domain layer depend on HTTP infrastructure and suggest the correct ownership boundary.",
+    "expected_primary_skill": "guard-architecture"
+  },
+  {
+    "id": "arch-schema-03",
+    "prompt": "We are changing a message contract used by independently deployed consumers. Review compatibility and rollout risk.",
+    "expected_primary_skill": "guard-architecture"
+  },
+  {
+    "id": "arch-persistence-04",
+    "prompt": "Review this change that moves transaction logic from the repository into controllers. I am worried ownership is drifting.",
+    "expected_primary_skill": "guard-architecture"
+  },
+  {
+    "id": "arch-provider-05",
+    "prompt": "A provider-specific type is leaking through our public service API. Review the boundary and blast radius.",
+    "expected_primary_skill": "guard-architecture"
+  },
+  {
+    "id": "arch-cycle-06",
+    "prompt": "This refactor introduces package A -> B -> C -> A. Review the dependency direction before we merge it.",
+    "expected_primary_skill": "guard-architecture"
+  },
+  {
+    "id": "tiered-cost-02",
+    "prompt": "Unit checks take seconds, integration takes minutes, and browser tests take 40 minutes. Plan what runs during editing versus before merge.",
+    "expected_primary_skill": "tiered-testing"
+  },
+  {
+    "id": "tiered-shared-02",
+    "prompt": "I changed a shared serializer used by eight modules. Choose focused checks now and the smallest representative consumer tests before the final suite.",
+    "expected_primary_skill": "tiered-testing"
+  },
+  {
+    "id": "tiered-defer-03",
+    "prompt": "The device integration lab is offline today. Record the required deferred verification so it cannot be forgotten before release.",
+    "expected_primary_skill": "tiered-testing"
+  },
+  {
+    "id": "tiered-pr-04",
+    "prompt": "Design a fast PR verification ladder for this change without pretending the expensive nightly suite is unnecessary.",
+    "expected_primary_skill": "tiered-testing"
+  },
+  {
+    "id": "tiered-risk-05",
+    "prompt": "A small edit touches a common authorization helper. Decide which cheap checks are insufficient and which broader checks should run early.",
+    "expected_primary_skill": "tiered-testing"
+  },
+  {
+    "id": "baseline-parent-02",
+    "prompt": "My branch has six failures, but main was already red. Prove which failures are new using an equivalent baseline run.",
+    "expected_primary_skill": "baseline-compare"
+  },
+  {
+    "id": "baseline-signature-03",
+    "prompt": "The same test name fails on main and my branch with different error messages. Classify whether my change introduced a regression.",
+    "expected_primary_skill": "baseline-compare"
+  },
+  {
+    "id": "baseline-ci-04",
+    "prompt": "CI has longstanding failures. Compare the candidate against the parent commit instead of assuming every red test is mine.",
+    "expected_primary_skill": "baseline-compare"
+  },
+  {
+    "id": "baseline-env-05",
+    "prompt": "Separate old from new failures, but document any environment differences if the baseline cannot be reproduced exactly.",
+    "expected_primary_skill": "baseline-compare"
+  },
+  {
+    "id": "verify-final-02",
+    "prompt": "The implementation is done. Give me a final readiness report based only on checks actually run against the current diff.",
+    "expected_primary_skill": "verify-change"
+  },
+  {
+    "id": "verify-stale-03",
+    "prompt": "Tests passed before I edited production code again. Decide what evidence is stale before saying this is ready to merge.",
+    "expected_primary_skill": "verify-change"
+  },
+  {
+    "id": "verify-integrity-04",
+    "prompt": "Review the completed patch for weakened assertions, skipped checks, leftover debug code, and unverified failure paths.",
+    "expected_primary_skill": "verify-change"
+  },
+  {
+    "id": "quality-multimode-02",
+    "prompt": "This change adds an API, migrates stored data, removes an old path, and needs final verification. Coordinate the phases without loading every workflow at once.",
+    "expected_primary_skill": "engineering-quality"
+  },
+  {
+    "id": "quality-feature-debug-03",
+    "prompt": "Build the new import flow, fix the existing parser bug it exposes, and keep the scope controlled across both kinds of work.",
+    "expected_primary_skill": "engineering-quality"
+  },
+  {
+    "id": "quality-migration-04",
+    "prompt": "Coordinate this compatibility migration from old to new payload shapes with implementation, cleanup, and evidence gates.",
+    "expected_primary_skill": "engineering-quality"
+  },
+  {
+    "id": "quality-crossphase-05",
+    "prompt": "This task mixes feature work, architecture cleanup, and verification. Use proportional rigor and keep each phase focused.",
+    "expected_primary_skill": "engineering-quality"
+  },
+  {
+    "id": "quality-risk-06",
+    "prompt": "Coordinate a medium-risk change across service, persistence, and tests, escalating only if the actual diff reveals broader risk.",
+    "expected_primary_skill": "engineering-quality"
+  },
+  {
+    "id": "context-large-02",
+    "prompt": "This repository is huge and unfamiliar. Find the smallest set of instructions, owner files, nearby precedent, and tests needed before changing the profile flow.",
+    "expected_primary_skill": "context-engineering"
+  },
+  {
+    "id": "context-monorepo-03",
+    "prompt": "I need to edit one package in this monorepo. Identify the applicable local guidance and strong precedent without reading unrelated packages.",
+    "expected_primary_skill": "context-engineering"
+  },
+  {
+    "id": "context-stale-04",
+    "prompt": "Ignore assumptions from the old chat and rebuild the minimum current repository context needed for this task.",
+    "expected_primary_skill": "context-engineering"
+  },
+  {
+    "id": "context-generated-05",
+    "prompt": "Prepare context for a change but avoid generated trees and vendored code unless they are actual owners of the behavior.",
+    "expected_primary_skill": "context-engineering"
+  },
+  {
+    "id": "context-precedent-06",
+    "prompt": "Before implementing this endpoint, locate one good existing analogue, its tests, and the governing project instructions.",
+    "expected_primary_skill": "context-engineering"
+  },
+  {
+    "id": "context-handoff-07",
+    "prompt": "Prepare a compact handoff for another agent that preserves goal, scope, decisions, changed files, evidence, and remaining work without dumping conversation history.",
+    "expected_primary_skill": "context-engineering"
+  },
+  {
+    "id": "context-stop-08",
+    "prompt": "Gather repository context only until ownership, constraints, and verification commands are clear; do not scan the whole codebase.",
+    "expected_primary_skill": "context-engineering"
+  },
+  {
+    "id": "source-sdk-02",
+    "prompt": "This project pins an older SDK and current examples online use a different API. Verify the exact local version and authoritative versioned docs before coding.",
+    "expected_primary_skill": "source-grounded-development"
+  },
+  {
+    "id": "source-framework-03",
+    "prompt": "Implement this framework integration, but first confirm the behavior in official docs for the version declared by the project.",
+    "expected_primary_skill": "source-grounded-development"
+  },
+  {
+    "id": "source-cloud-04",
+    "prompt": "A cloud provider changed this configuration recently. Ground the implementation in current official documentation and then verify it locally.",
+    "expected_primary_skill": "source-grounded-development"
+  },
+  {
+    "id": "source-db-05",
+    "prompt": "The migration API differs between database client versions. Detect our installed version and use primary documentation for that version.",
+    "expected_primary_skill": "source-grounded-development"
+  },
+  {
+    "id": "source-auth-06",
+    "prompt": "Do not rely on memory for this authentication library option; verify the exact release and official contract before changing code.",
+    "expected_primary_skill": "source-grounded-development"
+  },
+  {
+    "id": "source-deprecated-07",
+    "prompt": "Current tutorials use a method that may be deprecated in our dependency version. Check authoritative sources before choosing an API.",
+    "expected_primary_skill": "source-grounded-development"
+  },
+  {
+    "id": "source-contract-08",
+    "prompt": "An external service's response schema is version-sensitive. Confirm the current documented contract and trace it through our local adapter.",
+    "expected_primary_skill": "source-grounded-development"
+  },
+  {
+    "id": "review-auth-02",
+    "prompt": "The auth patch is finished and tests pass. Review the final diff from a fresh context and look for permission bypasses the implementer may have missed.",
+    "expected_primary_skill": "independent-review"
+  },
+  {
+    "id": "review-migration-03",
+    "prompt": "Perform a separate final review of this data migration against the request, contracts, and evidence rather than trusting the implementation notes.",
+    "expected_primary_skill": "independent-review"
+  },
+  {
+    "id": "review-public-api-04",
+    "prompt": "This public API change is complete. Give it an independent second review for compatibility and high-consequence mistakes.",
+    "expected_primary_skill": "independent-review"
+  },
+  {
+    "id": "review-architecture-05",
+    "prompt": "Before final verification, independently review this shared architecture change without relying on the author's reasoning narrative.",
+    "expected_primary_skill": "independent-review"
+  },
+  {
+    "id": "review-payment-06",
+    "prompt": "A payment-state change is ready. Do a fresh-context high-risk review and rank findings by consequence and likelihood.",
+    "expected_primary_skill": "independent-review"
+  },
+  {
+    "id": "review-security-07",
+    "prompt": "Targeted security tests pass, but I want a separate reviewer to inspect the final diff and evidence for blind spots.",
+    "expected_primary_skill": "independent-review"
+  },
+  {
+    "id": "review-diff-bound-08",
+    "prompt": "Review this exact candidate independently and make clear that any substantive follow-up edit invalidates the approval.",
+    "expected_primary_skill": "independent-review"
+  },
+  {
+    "id": "asd-procedure-02",
+    "prompt": "Rewrite this maintenance procedure with short direct sentences, stable terminology, and exact commands preserved.",
+    "expected_primary_skill": "asd-ste100-writing"
+  },
+  {
+    "id": "asd-troubleshoot-03",
+    "prompt": "Make this troubleshooting guide controlled and easy to follow without changing UI labels, error codes, timings, or warnings.",
+    "expected_primary_skill": "asd-ste100-writing"
+  },
+  {
+    "id": "asd-release-04",
+    "prompt": "Rewrite these technical release instructions in clear controlled English while keeping identifiers and constraints exact.",
+    "expected_primary_skill": "asd-ste100-writing"
+  },
+  {
+    "id": "asd-api-05",
+    "prompt": "Simplify this API operation guide: one term per concept, direct verbs, clear conditions, and no claim of certified compliance.",
+    "expected_primary_skill": "asd-ste100-writing"
+  },
+  {
+    "id": "asd-safety-06",
+    "prompt": "Improve this safety-sensitive technical note using ASD-STE100-inspired clarity but preserve every warning and numeric limit.",
+    "expected_primary_skill": "asd-ste100-writing"
+  },
+  {
+    "id": "humanizer-light-02",
+    "prompt": "This update is accurate but sounds templated and repetitive. Make it natural with the smallest edits and keep every fact unchanged.",
+    "expected_primary_skill": "humanizer-writing"
+  },
+  {
+    "id": "humanizer-voice-03",
+    "prompt": "Rewrite this release note to match the supplied authentic writing sample's observable style without inventing personality or experience.",
+    "expected_primary_skill": "humanizer-writing"
+  },
+  {
+    "id": "humanizer-long-04",
+    "prompt": "Make this multi-section report read naturally while keeping terminology, claim strength, and cross-section continuity consistent.",
+    "expected_primary_skill": "humanizer-writing"
+  },
+  {
+    "id": "security-authz-02",
+    "prompt": "A request lets callers provide both current_owner_id and new_owner_id. Harden authorization so future state cannot authorize itself.",
+    "expected_primary_skill": "security-hardening"
+  },
+  {
+    "id": "security-upload-03",
+    "prompt": "Review this file upload path for traversal, content validation, storage boundaries, and realistic abuse cases.",
+    "expected_primary_skill": "security-hardening"
+  },
+  {
+    "id": "security-command-04",
+    "prompt": "User-controlled text reaches a shell command builder. Harden the trust boundary and test hostile input.",
+    "expected_primary_skill": "security-hardening"
+  },
+  {
+    "id": "security-secret-05",
+    "prompt": "This diagnostic path logs provider responses that may contain tokens. Fix redaction at the owning boundary and verify the hostile path.",
+    "expected_primary_skill": "security-hardening"
+  },
+  {
+    "id": "security-deserialize-06",
+    "prompt": "Untrusted serialized input is decoded before validation. Review and harden that boundary with abuse-case tests.",
+    "expected_primary_skill": "security-hardening"
+  },
+  {
+    "id": "security-network-07",
+    "prompt": "A user-supplied URL is fetched server-side. Harden the network trust boundary and test internal-address abuse.",
+    "expected_primary_skill": "security-hardening"
+  },
+  {
+    "id": "project-quality-release-02",
+    "prompt": "Audit this release across canonical configuration, generated artifacts, API delivery, and the final consumer. Give a release decision based on evidence actually obtained.",
+    "expected_primary_skill": "project-quality-orchestrator"
+  },
+  {
+    "id": "project-quality-repeat-03",
+    "prompt": "The same wrong field appears in five consumers although the source record is correct. Trace the shared transformation path and fix the common owner.",
+    "expected_primary_skill": "project-quality-orchestrator"
+  },
+  {
+    "id": "project-quality-generated-04",
+    "prompt": "Source Markdown is correct but the published generated document is wrong. Audit source, generation, export, and final consumed artifact before declaring it fixed.",
+    "expected_primary_skill": "project-quality-orchestrator"
+  },
+  {
+    "id": "project-quality-ui-05",
+    "prompt": "The database and API look correct but users still see the wrong value. Trace the full source-to-rendered path and identify the first incorrect layer.",
+    "expected_primary_skill": "project-quality-orchestrator"
+  },
+  {
+    "id": "project-quality-freeze-06",
+    "prompt": "Run a freeze-readiness audit for this multi-layer release, including transformed artifacts, representative runtime evidence, deferred checks, and remaining risks.",
+    "expected_primary_skill": "project-quality-orchestrator"
+  },
+  {
+    "id": "project-quality-data-07",
+    "prompt": "A data pipeline's canonical input is right but downstream reports disagree. Trace transformations and consumed outputs instead of patching each report.",
+    "expected_primary_skill": "project-quality-orchestrator"
+  },
+  {
+    "id": "none-knowledge-08",
+    "prompt": "Explain the difference between a stack and a queue with a simple example.",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "none-brainstorm-09",
+    "prompt": "Give me five names for a small developer newsletter.",
+    "expected_primary_skill": "none"
+  },
+  {
+    "id": "none-translate-10",
+    "prompt": "Translate 'The server is ready' into Spanish.",
+    "expected_primary_skill": "none"
   }
 ]

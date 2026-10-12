@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
-"""Evaluate workflow retry/review/scope signals and recommend a reset when iteration is thrashing."""
+"""Compatibility wrapper for the canonical skill-local helper.
+
+Canonical implementation: skills/engineering-quality/scripts/workflow_budget.py
+"""
+
 from __future__ import annotations
-import argparse, json
 
-DEFAULTS={'L0':(1,1,150,3),'L1':(2,1,350,6),'L2':(3,2,800,12),'L3':(3,2,1500,20),'L4':(4,3,3000,35)}
+import importlib.util
+import sys
+from pathlib import Path
 
-def assess(level:str,attempts:int,same_failure:int,review_cycles:int,churn:int,files:int)->list[str]:
-    max_attempts,max_reviews,max_churn,max_files=DEFAULTS[level]; out=[]
-    if same_failure>=2: out.append('same failure repeated twice: stop patching and rebuild the hypothesis')
-    if attempts>max_attempts: out.append(f'implementation attempts {attempts} exceed {level} reset threshold {max_attempts}')
-    if review_cycles>max_reviews: out.append(f'review cycles {review_cycles} exceed {level} reset threshold {max_reviews}')
-    if churn>max_churn or files>max_files: out.append(f'diff scope ({files} files/{churn} churn) exceeds the default {level} review signal ({max_files}/{max_churn})')
-    return out
+_TARGET = Path(__file__).resolve().parents[1] / "skills/engineering-quality/scripts/workflow_budget.py"
+_SPEC = importlib.util.spec_from_file_location("_skill_workflow_budget", _TARGET)
+if _SPEC is None or _SPEC.loader is None:
+    raise ImportError(f"cannot load skill helper: {_TARGET}")
+_MODULE = importlib.util.module_from_spec(_SPEC)
+sys.modules[_SPEC.name] = _MODULE
+_SPEC.loader.exec_module(_MODULE)
 
-def main(argv=None)->int:
-    p=argparse.ArgumentParser(description='Check workflow thrash/revision signals.'); p.add_argument('--level',choices=DEFAULTS,default='L1'); p.add_argument('--attempts',type=int,default=1); p.add_argument('--same-failure',type=int,default=0); p.add_argument('--review-cycles',type=int,default=0); p.add_argument('--churn',type=int,default=0); p.add_argument('--files',type=int,default=0); p.add_argument('--json',action='store_true'); p.add_argument('--fail-on-reset',action='store_true'); a=p.parse_args(argv)
-    signals=assess(a.level,a.attempts,a.same_failure,a.review_cycles,a.churn,a.files)
-    if a.json: print(json.dumps({'level':a.level,'signals':signals,'reset_required':bool(signals)},indent=2))
-    else:
-        print(f"Workflow budget: {a.level}")
-        print('Reset signals: none' if not signals else 'Reset signals:\n'+'\n'.join('  - '+x for x in signals))
-    return 1 if a.fail_on_reset and signals else 0
-if __name__=='__main__': raise SystemExit(main())
+for _name in dir(_MODULE):
+    if not _name.startswith("__"):
+        globals()[_name] = getattr(_MODULE, _name)
+
+if __name__ == "__main__":
+    raise SystemExit(_MODULE.main())

@@ -2,7 +2,13 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
   pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -28,9 +34,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile Python
-        run: python -m compileall -q scripts tests
+        run: python -m compileall -q scripts tests skills
       - name: Validate repository
         run: python scripts/validate_repo.py . --warnings-as-errors
+      - name: Check OpenAI metadata freshness
+        run: python scripts/openai_metadata_check.py .
+      - name: Check published evidence freshness
+        run: python scripts/evidence_freshness.py .
+      - name: Export standard Agent Skills evals
+        run: python scripts/export_standard_evals.py . --output-dir .ci-standard-evals
       - name: Check release manifest
         run: python scripts/generate_manifest.py . --check
       - name: Check pending release tests
@@ -39,8 +51,17 @@ jobs:
         run: python scripts/context_budget.py . --fail-on-budget
       - name: Check portability
         run: python scripts/portability_check.py . --warnings-as-errors
+      - name: Validate activation evals
+        run: python scripts/activation_eval.py validate
+      - name: Dry-run native activation adapters
+        run: >-
+          python scripts/activation_eval.py run --provider codex --dry-run --runs 1 --case debug-direct-01 --output-dir .ci-activation/codex
+          && python scripts/activation_eval.py run --provider claude --dry-run --runs 1 --case debug-direct-01 --output-dir .ci-activation/claude
+          && python scripts/activation_eval.py run --provider antigravity --dry-run --runs 1 --case debug-direct-01 --output-dir .ci-activation/antigravity
       - name: Validate live behavior evals
         run: python scripts/live_eval.py validate
+      - name: Dry-run Antigravity live adapter
+        run: python scripts/live_eval.py run --provider antigravity --dry-run --runs 1 --case project-quality-cross-layer-live --output-dir .ci-live-antigravity
       - name: Validate historical debug evals
         run: python scripts/live_eval.py validate --cases evals/historical-debug-cases.json
       - name: Validate composition evals

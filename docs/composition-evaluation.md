@@ -26,7 +26,7 @@ python3 scripts/composition_eval.py run \
   --output-dir .verification/composition-evals
 ```
 
-Claude Code and the custom command provider are supported too. `--case` selects a focused interaction. A stable `--campaign-id --resume` avoids repeating completed arms after interruption.
+Claude Code, Google Antigravity, and the custom command provider are supported too. The suite also includes coordinator interaction cases for `project-quality-orchestrator` with `engineering-quality`, `verify-change`, and `security-hardening` so orchestration overhead is measured instead of assumed safe. `--case` selects a focused interaction. A stable `--campaign-id --resume` avoids repeating completed arms after interruption.
 
 ## Compare completed arms
 

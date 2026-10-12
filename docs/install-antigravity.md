@@ -80,11 +80,22 @@ Antigravity indexes skill names and descriptions first and reads full instructio
 
 The orchestrators also instruct the agent to load only the smallest useful specialist set. Installing all 16 skills does not mean all 16 `SKILL.md` files should be loaded for every task.
 
-## Optional repository utilities
+## Skill-local helpers and repository utilities
 
-The core skills do not require the repository-level Python utilities to function. Some skills mention helpers such as `scripts/evidence_ledger.py` or `scripts/context_budget.py` when those helpers are available.
+Helpers that a skill explicitly names now travel inside that skill's own `scripts/` directory, so selective installs and the generated Antigravity plugin remain self-contained.
 
-Direct skill installation and the generated Antigravity plugin intentionally package the skill directories, not the full repository utility suite. Clone the repository when you specifically want to run those optional utilities.
+The repository also includes repo-wide validation, benchmarking, packaging, and compatibility commands under the root `scripts/` directory. Clone the repository when you want those development/release utilities.
+
+## Live evaluation
+
+The repository can run Antigravity as a real RED/GREEN provider and can separately benchmark automatic skill selection:
+
+```bash
+python3 scripts/live_eval.py run --provider antigravity --model MODEL --runs 3
+python3 scripts/activation_eval.py run --provider antigravity --model MODEL --runs 5
+```
+
+Real runs are opt-in and require a configured `agy` CLI.
 
 ## Verification
 

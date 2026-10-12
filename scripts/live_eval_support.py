@@ -241,6 +241,22 @@ def build_codex_command(binary: str, prompt: str, model: str | None = None) -> l
     return argv
 
 
+def build_antigravity_command(binary: str, prompt: str, model: str | None = None) -> list[str]:
+    """Build a headless Antigravity CLI invocation for disposable eval workspaces."""
+    argv = [
+        binary,
+        "-p",
+        prompt,
+        "--output-format",
+        "stream-json",
+        "--mode=accept-edits",
+        "--sandbox",
+    ]
+    if model:
+        argv += ["--model", model]
+    return argv
+
+
 def build_claude_command(
     binary: str,
     prompt: str,

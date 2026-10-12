@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented here.
 
+## 1.12.0 - Portability, activation evidence, and cross-host hardening
+
+- Made script-backed skills self-contained by colocating canonical helpers under each owning skill's `scripts/` directory while preserving root-level compatibility entry points.
+- Hardened repository validation so explicit skill-relative `scripts/`, `references/`, and `assets/` paths must resolve locally; separated public Agent Skills field conformance from the repository's stricter two-field frontmatter policy.
+- Expanded automatic activation coverage to 138 labeled prompts: eight positive cases for every bundled skill plus ten true negatives, with a new repeatable activation benchmark harness for Codex, Claude Code, Antigravity, and custom commands.
+- Added Google Antigravity as a first-class RED/GREEN, composition, and empirical-campaign provider instead of limiting support to packaging.
+- Expanded composition evaluation from 8 to 11 cases, including `project-quality-orchestrator` interactions with `engineering-quality`, `verify-change`, and `security-hardening`.
+- Added version-bound empirical evidence publication and expiry controls. Public claims must be strong/current, name an explicit model, match the current skill hash, and remain within the configured freshness window. No effectiveness claims are fabricated from CI.
+- Bound each `agents/openai.yaml` file to the current skill discovery-description hash so presentation metadata cannot silently drift.
+- Added export of standard per-skill `evals/evals.json` development artifacts without placing evaluation answer sheets inside runtime skill folders.
+- Added a machine-readable host support matrix and GitHub Copilot installation guidance that distinguishes documented structural compatibility from empirical verification.
+- Reduced CI noise by running feature validation through pull requests, reserving push CI for `main`, and cancelling stale in-progress runs.
+- Extended context-budget accounting to include skill-local scripts and compiled those helpers on every supported CI platform.
+- Fixed custom-command benchmark analysis so command-provider campaigns are analyzed instead of being ignored.
+
 ## 1.11.0 - Google Antigravity support
 
 - Added first-class installation guidance for Antigravity 2.0, Antigravity CLI, Antigravity IDE, and the Antigravity SDK.

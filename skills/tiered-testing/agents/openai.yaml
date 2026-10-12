@@ -1,3 +1,4 @@
+# source-description-sha256: ee17cb092aec2c09a291a2b780881186e2b801fb475a8610df2f7aebfa010ae6
 interface:
   display_name: "Tiered Testing"
   short_description: "Stage cheap and heavy checks without losing evidence"
