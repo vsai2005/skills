@@ -34,9 +34,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile Python
-        run: python -m compileall -q scripts tests
+        run: python -m compileall -q scripts tests skills
       - name: Validate repository
         run: python scripts/validate_repo.py . --warnings-as-errors
+      - name: Check OpenAI metadata freshness
+        run: python scripts/openai_metadata_check.py .
+      - name: Check published evidence freshness
+        run: python scripts/evidence_freshness.py .
+      - name: Export standard Agent Skills evals
+        run: python scripts/export_standard_evals.py . --output-dir .ci-standard-evals
       - name: Check release manifest
         run: python scripts/generate_manifest.py . --check
       - name: Check pending release tests
