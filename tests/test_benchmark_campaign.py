@@ -15,8 +15,8 @@ class BenchmarkCampaignTests(unittest.TestCase):
         plan = plan_campaign(ROOT, policy, provider="codex", models=["m"], runs=5, profile_name="full", cid="c1")
         self.assertEqual(180, plan["counts"]["local_arms"])
         self.assertEqual(20, plan["counts"]["historical_arms"])
-        self.assertEqual(160, plan["counts"]["composition_arms"])
-        self.assertEqual(360, plan["counts"]["total_arms"])
+        self.assertEqual(220, plan["counts"]["composition_arms"])
+        self.assertEqual(420, plan["counts"]["total_arms"])
 
     def test_analysis_publishes_only_strong_version_current_evidence(self):
         policy = load_policy(ROOT / "evals" / "benchmark-policy.json")
