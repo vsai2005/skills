@@ -13,10 +13,10 @@ class BenchmarkCampaignTests(unittest.TestCase):
     def test_full_plan_counts_all_empirical_arms(self):
         policy = load_policy(ROOT / "evals" / "benchmark-policy.json")
         plan = plan_campaign(ROOT, policy, provider="codex", models=["m"], runs=5, profile_name="full", cid="c1")
-        self.assertEqual(180, plan["counts"]["local_arms"])
+        self.assertEqual(190, plan["counts"]["local_arms"])
         self.assertEqual(20, plan["counts"]["historical_arms"])
-        self.assertEqual(220, plan["counts"]["composition_arms"])
-        self.assertEqual(420, plan["counts"]["total_arms"])
+        self.assertEqual(240, plan["counts"]["composition_arms"])
+        self.assertEqual(450, plan["counts"]["total_arms"])
 
     def test_parser_accepts_antigravity_campaign_provider(self):
         args = build_parser().parse_args(["plan", "--provider", "antigravity", "--model", "gemini-test"])
