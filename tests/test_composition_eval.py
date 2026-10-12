@@ -22,6 +22,18 @@ class CompositionEvalTests(unittest.TestCase):
             combined=next(row for row in rows if row['arm']=='combined')
             self.assertEqual(['debug-root-cause','source-grounded-development'],combined['enabled_skills'])
 
+    def test_antigravity_dry_run_executes_four_arm_matrix(self):
+        import json, tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            code=composition_main(['run','--provider','antigravity','--model','m','--runs','1','--case','project-quality-plus-verification','--campaign-id','ag','--output-dir',tmp,'--dry-run'])
+            self.assertEqual(0,code)
+            path=Path(tmp)/'antigravity-composition-runs.jsonl'
+            rows=[json.loads(line) for line in path.read_text(encoding='utf-8').splitlines()]
+            self.assertEqual(4,len(rows))
+            self.assertTrue(all(row['provider']=='antigravity' for row in rows))
+            combined=next(row for row in rows if row['arm']=='combined')
+            self.assertEqual(['project-quality-orchestrator','verify-change'],combined['enabled_skills'])
+
     def test_compare_detects_interference(self):
         import json, tempfile
         with tempfile.TemporaryDirectory() as tmp:
