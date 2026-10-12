@@ -59,4 +59,6 @@ When relevant, also exercise:
 - RTL direction;
 - supported light/dark themes;
 - high-contrast/forced-color mode;
-- software-keyboard overlap on mobile forms/dialogs.
+- system text scaling or Dynamic Type on native platforms;
+- software-keyboard overlap and safe areas on mobile forms/dialogs;
+- orientation/device-size changes when the product supports them.
