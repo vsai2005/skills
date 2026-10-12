@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "hosts": [
+    {
+      "id": "openai-codex",
+      "structural_support": "verified",
+      "packaging": "verified",
+      "activation_adapter": true,
+      "behavior_adapter": true,
+      "published_empirical_claims": false,
+      "notes": "Canonical Agent Skills plus Codex plugin metadata. Local activation benchmarking uses workspace skills; managed/cloud discovery can differ by product version."
+    },
+    {
+      "id": "claude-code",
+      "structural_support": "verified",
+      "packaging": "verified",
+      "activation_adapter": true,
+      "behavior_adapter": true,
+      "published_empirical_claims": false,
+      "notes": "Canonical Agent Skills plus Claude plugin packaging."
+    },
+    {
+      "id": "google-antigravity",
+      "structural_support": "verified",
+      "packaging": "verified",
+      "activation_adapter": true,
+      "behavior_adapter": true,
+      "published_empirical_claims": false,
+      "notes": "Workspace .agents/skills support, strict generated plugin package, and headless agy live-eval adapter."
+    },
+    {
+      "id": "github-copilot",
+      "structural_support": "documented-compatible",
+      "packaging": "direct-skill-install",
+      "activation_adapter": false,
+      "behavior_adapter": false,
+      "published_empirical_claims": false,
+      "notes": "GitHub Copilot documents .github/skills, .claude/skills, .agents/skills and personal skill locations; this repository has not yet run native Copilot activation/behavior campaigns."
+    }
+  ]
+}
