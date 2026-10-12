@@ -1,7 +1,7 @@
 {
   "name": "engineering-quality",
   "version": "1.12.0",
-  "description": "Engineering quality workflows with general cross-layer project quality orchestration, adaptive rigor, security hardening, debugging, testing, writing quality, and empirical skill/composition benchmarking.",
+  "description": "Engineering quality workflows with cross-layer orchestration, adaptive rigor, UI/UX quality, security hardening, debugging, testing, writing quality, and empirical skill/composition benchmarking.",
   "skills": "./skills/",
   "license": "MIT",
   "keywords": [
@@ -16,6 +16,7 @@
     "natural-writing",
     "humanized-writing",
     "security-hardening",
+    "ui-ux-quality",
     "skill-evaluation",
     "portability",
     "antigravity",
