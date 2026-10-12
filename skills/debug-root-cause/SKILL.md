@@ -1,6 +1,6 @@
 ---
 name: debug-root-cause
-description: Fix reproducible bugs, regressions, crashes, wrong outputs, or stable failing tests by finding the owning cause and adding regression protection. Use flaky-test-triage first for nondeterministic failures.
+description: Fix reproducible bugs, regressions, crashes, wrong outputs, or stable failing tests by finding the owning cause and adding regression protection. Use flaky-test-triage for nondeterministic failures.
 ---
 
 # Debug Root Cause

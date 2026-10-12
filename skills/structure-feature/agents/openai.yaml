@@ -1,4 +1,4 @@
-# source-description-sha256: ec39caf9df797f74487ccd63f7812c333cacf84a2a49ea68b6954b3a113b681f
+# source-description-sha256: 2f32743e4b85f6099e820af3d6e0add008944da15d639b18f934033f4a21ce8c
 interface:
   display_name: "Structure Feature"
   short_description: "Build features with clear ownership and boundaries"
