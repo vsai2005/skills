@@ -169,6 +169,34 @@ Review repeated patterns across the touched surface:
 
 A repeated inconsistency may indicate a shared component or token problem. Fix the shared owner when that is the real cause.
 
+### Avoid generic generated-looking sameness
+
+Do not optimize only for "modern" or "clean." A polished UI can still feel generic when its structure, content, visual language, and motion could be swapped into many unrelated products.
+
+When the brief asks for premium, expressive, distinctive, cinematic, or non-template design:
+
+- define a product-specific visual direction before adding effects;
+- use composition, typography, imagery, and real product content to create identity;
+- reserve one or two signature moments instead of making every element compete;
+- do not treat gradients, glass, rounded cards, oversized type, custom cursors, or 3D as automatic quality;
+- do not fabricate product data, logos, testimonials, awards, or capabilities to make a screen look complete.
+
+Use [references/premium-visual-direction.md](references/premium-visual-direction.md) for substantial expressive work.
+
+### Treat motion and 3D as a system
+
+When animation, sliding interactions, page transitions, scroll storytelling, or 3D are material:
+
+- choose the smallest capable motion technology;
+- give sliding interactions a coherent spatial model;
+- prefer continuity/shared-element motion over repetitive decorative fade-ups;
+- require reduced-motion behavior and a usable static/fallback state;
+- treat smooth-scroll replacement as opt-in, not a premium default;
+- require 3D to communicate a product/spatial idea and degrade gracefully;
+- include animation/3D performance in the UX review.
+
+Use [references/motion-3d.md](references/motion-3d.md) for the detailed selection and verification rules.
+
 ## 10. Inspect the rendered result
 
 When UI/UX is the requirement, source inspection is insufficient.
