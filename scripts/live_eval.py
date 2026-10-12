@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run live RED/GREEN skill evaluations through Codex, Claude Code, or a custom command.
+"""Run live RED/GREEN skill evaluations through Codex, Claude Code, Antigravity, or a custom command.
 
 Every arm gets a fresh disposable copy of the same fixture. Raw provider output,
 normalized trace text, repository changes, deterministic grader results, and
@@ -23,6 +23,8 @@ try:
     from scripts.eval_provenance import repo_git_head, repo_version, runtime_metadata, sha256_file, sha256_json, sha256_tree
     from scripts.live_eval_graders import grade_case
     from scripts.live_eval_support import (
+        build_antigravity_command,
+        build_antigravity_command,
         build_claude_command,
         build_codex_command,
         command_version,
@@ -141,6 +143,13 @@ def _provider_invocation(
             binary, prompt, plugin_dir=plugin_dir, control=control, model=model, max_budget_usd=max_budget_usd
         )
         return argv, None, "disabled-skills" if control else "native-plugin", prompt
+
+    if provider == "antigravity":
+        if enabled_skills:
+            for skill_name, skill_dir in enabled_skills:
+                copy_skill_readonly(skill_dir, workspace / ".agents" / "skills" / skill_name)
+        strategy = "no-skill" if control else "native-workspace-skills"
+        return build_antigravity_command(binary, prompt, model=model), None, strategy, prompt
 
     final_prompt = prompt
     strategy = "no-skill"
@@ -335,7 +344,7 @@ def run_command(args: argparse.Namespace, repo: Path, cases_path: Path) -> int:
     except ValueError as exc:
         print(f"[ERROR] {exc}", file=sys.stderr)
         return 2
-    binary = args.binary or ("codex" if args.provider == "codex" else "claude" if args.provider == "claude" else "")
+    binary = args.binary or ("codex" if args.provider == "codex" else "claude" if args.provider == "claude" else "agy" if args.provider == "antigravity" else "")
     if args.provider != "command" and not args.dry_run and shutil.which(binary) is None:
         print(f"[ERROR] provider binary not found: {binary}", file=sys.stderr)
         return 2
@@ -393,8 +402,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     run = sub.add_parser("run", help="Execute control/treatment model runs")
     run.add_argument("--cases", type=Path, default=Path("evals/live-cases.json"))
-    run.add_argument("--provider", choices=("codex", "claude", "command"), required=True)
-    run.add_argument("--binary", default=None, help="Override codex/claude executable path")
+    run.add_argument("--provider", choices=("codex", "claude", "antigravity", "command"), required=True)
+    run.add_argument("--binary", default=None, help="Override codex/claude/agy executable path")
     run.add_argument("--model", action="append", default=[], help="Model to evaluate; repeat to build a model matrix")
     run.add_argument("--runs", type=int, default=3)
     run.add_argument("--case", action="append", default=[], help="Run only this case ID; repeat as needed")
