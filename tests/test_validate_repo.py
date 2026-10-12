@@ -59,6 +59,9 @@ class ValidateRepoTests(unittest.TestCase):
     def test_missing_skill_local_script_fails_validation(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = copy_repo(tmp)
+            git_dir = root / ".git"
+            if git_dir.exists():
+                shutil.rmtree(git_dir)
             helper = root / "skills" / "verify-change" / "scripts" / "evidence_ledger.py"
             helper.unlink()
             refresh_manifest(root)
