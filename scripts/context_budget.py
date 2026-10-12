@@ -87,8 +87,8 @@ def violations(b:list[SkillBudget],*,max_total_discovery_chars:int,max_descripti
 def main(argv:list[str]|None=None)->int:
     p=argparse.ArgumentParser(description="Measure skill discovery/core/resource context budgets.")
     p.add_argument("root",nargs="?",default=".",type=Path)
-    p.add_argument("--max-total-discovery-chars",type=int,default=7000)
-    p.add_argument("--max-description-chars",type=int,default=600)
+    p.add_argument("--max-total-discovery-chars",type=int,default=4500)
+    p.add_argument("--max-description-chars",type=int,default=320)
     p.add_argument("--max-skill-lines",type=int,default=500)
     p.add_argument("--max-resource-bytes",type=int,default=50000)
     p.add_argument("--max-total-resource-bytes",type=int,default=300000)
