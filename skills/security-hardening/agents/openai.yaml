@@ -1,4 +1,4 @@
-# source-description-sha256: b0f093b21597d38beb523ba0a6e6e1f03adc0c7ecddf86c65f4477912c43bdb6
+# source-description-sha256: 4da84770fe873e789c35e23ec92b0c6571b5d79803068f8d75843b4ec4479446
 interface:
   display_name: "Security Hardening"
   short_description: "Harden trust boundaries with abuse-case verification"
