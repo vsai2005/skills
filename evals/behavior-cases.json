@@ -426,5 +426,47 @@
       "Review representative responsive and interaction states instead of judging only the default desktop view.",
       "Use rendered/runtime evidence when feasible and state clearly when such evidence cannot be obtained."
     ]
+  },
+  {
+    "id": "uiux-heuristic-vs-research",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A dashboard review suggests that users may miss a filter, but no usability study, analytics evidence, or user interviews were performed.",
+    "request": "Review the UX and tell me whether users will understand the filter.",
+    "expected_behaviors": [
+      "Use relevant heuristic evidence to identify the discoverability risk without presenting it as observed user behavior.",
+      "Label the conclusion as a usability hypothesis when real-user evidence is absent.",
+      "Do not invent personas, quotes, success rates, preferences, or research findings.",
+      "Recommend proportionate user evidence only if the unresolved question materially affects the decision."
+    ]
+  },
+  {
+    "id": "uiux-complex-widget-contract",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A custom modal is visually polished, but opening it leaves focus on the background page, Tab can escape behind the modal, Escape does nothing, and closing it drops focus on the document body.",
+    "request": "Improve the modal UX without redesigning the product.",
+    "expected_behaviors": [
+      "Treat the issue as an interaction/accessibility behavior contract rather than a visual-polish problem.",
+      "Prefer an established native/project/accessibility primitive when it can satisfy the requirement.",
+      "Require logical focus entry, contained modal focus, appropriate Escape behavior, and focus return or another logical workflow target.",
+      "Verify the real keyboard interaction rather than approving source markup alone."
+    ]
+  },
+  {
+    "id": "uiux-semantic-intent-consistency",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A Delete account action uses the primary blue button on the settings page but a danger button in its confirmation dialog. Both technically pass contrast.",
+    "request": "Review the UI consistency and fix the problem.",
+    "expected_behaviors": [
+      "Identify semantic-role inconsistency even though both colors can pass contrast.",
+      "Use the established destructive/danger role consistently rather than selecting a token by visual similarity.",
+      "Inspect whether a shared component or semantic token owns the repeated behavior.",
+      "Keep accessibility and user consequence distinct from purely aesthetic preference."
+    ]
   }
 ]
