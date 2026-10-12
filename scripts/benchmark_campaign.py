@@ -91,7 +91,7 @@ def plan_campaign(root: Path, policy: dict[str, Any], *, provider: str, models: 
 
 def analyze_campaign(root: Path, out_dir: Path, policy: dict[str, Any]) -> dict[str, Any]:
     record_paths = []
-    for relative in ("local/codex-runs.jsonl", "local/claude-runs.jsonl", "local/antigravity-runs.jsonl", "historical/codex-runs.jsonl", "historical/claude-runs.jsonl", "historical/antigravity-runs.jsonl"):
+    for relative in ("local/codex-runs.jsonl", "local/claude-runs.jsonl", "local/antigravity-runs.jsonl", "local/command-runs.jsonl", "historical/codex-runs.jsonl", "historical/claude-runs.jsonl", "historical/antigravity-runs.jsonl", "historical/command-runs.jsonl"):
         path = out_dir / relative
         if path.is_file():
             record_paths.append(path)
@@ -115,7 +115,7 @@ def analyze_campaign(root: Path, out_dir: Path, policy: dict[str, Any]) -> dict[
     (out_dir / "effectiveness-registry-strong.json").write_text(json.dumps(strong, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     composition_outputs = []
-    for provider in ("codex", "claude", "antigravity"):
+    for provider in ("codex", "claude", "antigravity", "command"):
         path = out_dir / "composition" / f"{provider}-composition-runs.jsonl"
         if path.is_file():
             result = compare_records(path, min_runs=max(3, int(policy["minimum_pairs_for_claim"])), confidence=float(policy["confidence"]))
