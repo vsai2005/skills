@@ -1,6 +1,6 @@
 ---
 name: source-grounded-development
-description: Ground implementation decisions in authoritative current sources when correctness depends on a changing external API, framework, SDK, cloud service, database, authentication library, deployment tool, or package version. Use when training-memory knowledge may be stale or version-sensitive. Skip for purely local business logic, algorithms, renames, or refactors whose behavior is fully defined inside the repository.
+description: Use authoritative current sources when implementation depends on a version-sensitive external API, framework, SDK, service, database, auth library, deployment tool, or package. Skip behavior fully defined inside the repository.
 ---
 
 # Source-Grounded Development
