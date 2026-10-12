@@ -110,7 +110,13 @@ For web interfaces with reflow risk, include zoom/text-resize behavior and reali
 
 ## 7. Treat accessibility as a quality baseline
 
-For web interfaces, use WCAG 2.2 AA as the default reference target when applicable, while following stricter project or legal requirements when provided.
+Apply the accessibility model of the actual platform.
+
+- Web: use WCAG 2.2 AA as the default reference target when applicable, plus established web interaction patterns.
+- Apple platforms: prefer native SwiftUI/UIKit semantics and controls, and check VoiceOver, Dynamic Type, focus, and platform modality.
+- Android: prefer platform/Compose semantics and controls, and check TalkBack, text scaling, touch target guidance, keyboard/D-pad focus when relevant, and platform conventions.
+
+Do not transplant web-only ARIA roles or keyboard models into native interfaces. Follow stricter project, platform, or legal requirements when provided.
 
 At minimum inspect:
 
@@ -125,7 +131,7 @@ At minimum inspect:
 - motion/reduced-motion behavior when motion is used;
 - screen-reader-relevant state changes when applicable.
 
-Use [references/accessibility.md](references/accessibility.md) for the focused pass.
+Use [references/accessibility.md](references/accessibility.md) for the focused pass and platform-specific scope.
 
 Automated accessibility tooling is useful evidence, but it does not prove usability or full conformance. For complex widgets, verify the expected keyboard and focus model against established platform/WAI-ARIA patterns rather than inventing interactions.
 
