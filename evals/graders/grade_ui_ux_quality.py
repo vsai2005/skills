@@ -15,18 +15,25 @@ checks.append((
     and bool(re.search(r'<input[^>]+id=["\']email["\']', html, re.I)),
     "email input needs a persistent associated label",
 ))
+
+focus_match = re.search(r":focus(?:-visible)?[^{}]*\{([^}]*)\}", css, re.I | re.S)
+focus_body = focus_match.group(1).lower() if focus_match else ""
+custom_focus = (
+    bool(re.search(r"outline\s*:\s*(?!none|0)[^;]+", focus_body))
+    or "box-shadow" in focus_body
+    or bool(re.search(r"border(?:-color)?\s*:", focus_body))
+)
+outline_removed = bool(re.search(r"outline\s*:\s*(?:none|0)(?:\s*;|\s*$)", css, re.I | re.M))
 checks.append((
-    "outline: none" not in css.lower() and "outline:none" not in css.lower(),
-    "focus must not be globally removed",
+    bool(focus_match) and (not outline_removed or custom_focus),
+    "visible focus styling is missing or focus is removed without a replacement",
 ))
+
 checks.append((
-    ":focus-visible" in css or ":focus" in css,
-    "explicit visible focus styling is missing",
-))
-checks.append((
-    bool(re.search(r"min-height\s*:\s*(?:4[4-9]|[5-9]\d|\d{3,})px", css, re.I)),
+    bool(re.search(r"(?:min-height|height)\s*:\s*(?:4[4-9]|[5-9]\d|\d{3,})px\b", css, re.I)),
     "interactive targets need a usable minimum height",
 ))
+
 checks.append((
     "width: 720px" not in css.lower()
     and (
@@ -37,7 +44,7 @@ checks.append((
     "fixed checkout width still risks narrow-screen overflow",
 ))
 checks.append((
-    "role=\"alert\"" in html.lower()
+    'role="alert"' in html.lower()
     or "role='alert'" in html.lower()
     or "aria-live=" in html.lower(),
     "error/status state is not exposed accessibly",
