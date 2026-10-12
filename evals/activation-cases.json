@@ -728,5 +728,25 @@
     "id": "uiux-polish-08",
     "prompt": "Polish this existing interface using its current design system. Keep the product identity, improve hierarchy and interaction clarity, and check narrow and wide layouts before calling it done.",
     "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-heuristic-09",
+    "prompt": "Do a usability review of this workflow using established heuristics such as system status, user control, recognition over recall, consistency, and error prevention. Do not pretend a heuristic review is user research.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-widget-10",
+    "prompt": "This custom modal looks fine visually but I am worried about keyboard and focus behavior. Review the interaction contract, focus entry/trap/return, Escape behavior, labels, and the rendered experience.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-resilience-11",
+    "prompt": "Audit this responsive form for 320px reflow, 200% zoom, long translated labels, RTL support, sticky-focus overlap, and mobile keyboard problems without inventing arbitrary new breakpoints.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-semantic-12",
+    "prompt": "The same destructive action is red on one screen and styled like the primary action on another. Review the design-system semantic intent and fix the shared owner instead of matching colors by eye.",
+    "expected_primary_skill": "ui-ux-quality"
   }
 ]
