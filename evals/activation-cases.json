@@ -688,5 +688,45 @@
     "id": "none-translate-10",
     "prompt": "Translate 'The server is ready' into Spanish.",
     "expected_primary_skill": "none"
+  },
+  {
+    "id": "uiux-audit-01",
+    "prompt": "Audit this dashboard UI for hierarchy, usability, responsive behavior, accessibility, and consistency. Inspect the rendered result rather than only the React source.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-form-02",
+    "prompt": "This checkout form technically works, but users get confused by labels, validation, loading, and error recovery. Review and improve the UX without redesigning the whole product.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-mobile-03",
+    "prompt": "The desktop page looks fine but the mobile layout overflows, clips actions, and the dialog is awkward on narrow screens. Fix the responsive UX and verify representative widths.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-accessibility-04",
+    "prompt": "Review this interface for keyboard navigation, visible focus, labels, target sizing, contrast, and error handling, then prioritize the accessibility problems that affect the task.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-states-05",
+    "prompt": "Improve the loading, empty, success, permission-denied, and server-error states for this user flow so people always know what happened and how to recover.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-consistency-06",
+    "prompt": "Several screens use different spacing, button hierarchy, and empty-state patterns for the same actions. Find the shared design-system owner and make the experience consistent.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-rendered-07",
+    "prompt": "Review these rendered screens and tell me what blocks or confuses the primary user task. Preserve the existing brand and prioritize fixes by user impact, not personal taste.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-polish-08",
+    "prompt": "Polish this existing interface using its current design system. Keep the product identity, improve hierarchy and interaction clarity, and check narrow and wide layouts before calling it done.",
+    "expected_primary_skill": "ui-ux-quality"
   }
 ]
