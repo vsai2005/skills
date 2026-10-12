@@ -11,6 +11,21 @@ Use this reference for a broad product-interface review. Apply only sections rel
 - Is important status visible without forcing the user to infer it?
 - Is dense information progressively disclosed when possible?
 
+## Usability heuristics
+
+Use the detailed [usability and design-system review](usability-design-system.md) when needed. For a quick pass, ask:
+
+- Does the interface communicate current system status?
+- Does it use the user's language and familiar concepts?
+- Can users cancel, go back, undo, or recover where appropriate?
+- Does it follow established conventions instead of creating new ones without reason?
+- Does it prevent likely mistakes before showing an error?
+- Does it expose choices/context so users recognize rather than memorize?
+- Does it provide efficient repeated use where the product needs it?
+- Is the screen focused on information needed for the task?
+
+Do not claim these questions substitute for observing real users.
+
 ## Navigation and orientation
 
 - Is the current location understandable?
@@ -63,7 +78,7 @@ At representative narrow and wide sizes, check:
 - control ordering;
 - visibility of primary actions.
 
-## Consistency
+## Consistency and semantic intent
 
 Compare equivalent components for:
 
@@ -75,7 +90,10 @@ Compare equivalent components for:
 - radius/elevation;
 - color semantics;
 - loading/empty/error patterns;
-- terminology.
+- terminology;
+- semantic role of primary, secondary, destructive, warning, success, selected, and disabled states.
+
+A token or component that merely looks similar is not automatically the correct semantic choice.
 
 When several screens share the same defect, inspect the shared component/token/template before patching each instance.
 
@@ -88,6 +106,23 @@ When several screens share the same defect, inspect the shared component/token/t
 - Retry behavior does not create duplicate value-changing actions.
 - Success messages do not claim completion before the operation is actually committed.
 
+## Content and internationalization resilience
+
+When relevant, check:
+
+- long labels and translated-string expansion;
+- numbers, dates, and text direction;
+- RTL layout and directional icons;
+- 200% zoom/text growth;
+- light/dark or multi-brand themes;
+- high-contrast/forced-color behavior where supported.
+
 ## Evidence
 
-Prefer rendered/browser evidence for user-facing claims. Record which viewport, state, input method, and interaction path were actually checked.
+Prefer rendered/browser evidence for user-facing claims. Record which viewport, state, input method, interaction path, theme, and content stress case were actually checked.
+
+Distinguish:
+- **observed defect** from rendered/runtime evidence;
+- **standards violation** from a cited rule or project contract;
+- **usability hypothesis** that still needs user evidence;
+- **aesthetic preference** that should not be reported as a defect.
