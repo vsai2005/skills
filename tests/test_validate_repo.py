@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def copy_repo(tmp: str) -> Path:
     dest = Path(tmp) / "repo"
-    shutil.copytree(ROOT, dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    shutil.copytree(ROOT, dest, ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc"))
     return dest
 
 
@@ -59,9 +59,6 @@ class ValidateRepoTests(unittest.TestCase):
     def test_missing_skill_local_script_fails_validation(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = copy_repo(tmp)
-            git_dir = root / ".git"
-            if git_dir.exists():
-                shutil.rmtree(git_dir)
             helper = root / "skills" / "verify-change" / "scripts" / "evidence_ledger.py"
             helper.unlink()
             refresh_manifest(root)
