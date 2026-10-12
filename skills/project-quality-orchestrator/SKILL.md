@@ -1,6 +1,6 @@
 ---
 name: project-quality-orchestrator
-description: Coordinate broad cross-layer audits and release/freeze readiness when correctness must be traced from canonical source through transformations to the final consumed output. Also use for repeated defects suggesting a shared systemic cause. Not for an ordinary final-diff readiness check.
+description: Coordinate broad cross-layer audits, release/freeze readiness, or repeated systemic defects where correctness must be traced to the final consumed output. Not for ordinary final-diff readiness.
 ---
 
 # Project Quality Orchestrator

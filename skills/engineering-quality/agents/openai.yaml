@@ -1,4 +1,4 @@
-# source-description-sha256: f9ddef25ab7abed9099d96c37920e9a95582cf63d48b7f9f7e9b7ada8b4131f7
+# source-description-sha256: 42ccd87b9bb3f06e3808d0ebc8d37797fcf021e0c9b9d6554bf4938112670d63
 interface:
   display_name: "Engineering Quality"
   short_description: "Coordinate clean, verifiable software changes"
