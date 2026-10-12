@@ -714,7 +714,9 @@
     ],
     "manual_checks": [
       "The changes preserve the existing visual identity instead of replacing it with an unrelated redesign.",
-      "The review prioritizes task usability and accessibility over decorative polish."
+      "The review prioritizes task usability and accessibility over decorative polish.",
+      "The review distinguishes observed/runtime evidence from usability hypotheses and does not invent user research.",
+      "The review does not hide blocking usability or accessibility defects behind a single numeric design score."
     ],
     "expected_change_globs": [
       "*.html",
