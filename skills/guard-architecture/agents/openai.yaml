@@ -1,4 +1,4 @@
-# source-description-sha256: b744d098afc9aeffd49cfcc91d7a4ea8911d05e7356aa38f31ceeb9d71d4aa17
+# source-description-sha256: fc0818b28a8f133111ae21f508f19b4172172edc6f9eec057c09a4b960d50495
 interface:
   display_name: "Guard Architecture"
   short_description: "Protect boundaries, dependencies, and blast radius"
