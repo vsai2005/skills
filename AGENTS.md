@@ -1,67 +1,60 @@
 # Repository Agent Guidance
 
-This repository publishes reusable Agent Skills. Preserve portability across coding-agent hosts.
+This repo publishes reusable Agent Skills. Preserve portability across coding-agent hosts.
 
 ## Editing rules
 
-- Keep each `skills/<name>/SKILL.md` focused and compact. Put conditional depth in `references/`.
-- Keep reusable templates in the owning skill's `assets/` directory and executable helpers in the owning skill's `scripts/` directory. Skill-relative references must resolve inside that skill so selective installs remain complete.
-- Root `scripts/` entry points may wrap skill-local helpers for repository convenience, but the skill-local copy is canonical.
-- Keep skill frontmatter to `name` and `description` only unless a target host requires otherwise.
-- Use provider-neutral wording in core skill instructions. Product-specific metadata belongs in host-specific manifests or `agents/` metadata.
-- Do not add dependencies to the Python utilities unless a dependency materially improves reliability.
-- Treat thresholds in scanners as heuristics, not universal engineering laws.
-- Add or update tests when changing scripts, metadata rules, eval schemas, or repository validation behavior.
-- Keep `VERSION` and all plugin manifest versions aligned.
+- Keep `skills/<name>/SKILL.md` compact; put conditional depth in `references/`.
+- Keep templates/assets/scripts with their owning skill so selective installs remain complete.
+- Root `scripts/` may wrap skill-local helpers; the skill-local copy is canonical.
+- Keep frontmatter to `name` and `description` unless a host requires more.
+- Keep core skill wording provider-neutral; host metadata belongs in manifests or `agents/`.
+- Add dependencies only when they materially improve reliability.
+- Treat scanner thresholds as heuristics.
+- Update tests for changed scripts, metadata rules, eval schemas, or validation behavior.
+- Keep `VERSION` and plugin manifest versions aligned.
 
 ## Conditional skill router
 
 Use the smallest applicable workflow:
 
-- unfamiliar/large repository or stale/noisy context -> `context-engineering`;
-- version-sensitive framework/SDK/cloud/database behavior -> `source-grounded-development`;
+- unfamiliar/large repo or stale context -> `context-engineering`;
+- version-sensitive external behavior -> `source-grounded-development`;
 - shared/public contract or architecture boundary -> `guard-architecture`;
 - intermittent test -> `flaky-test-triage`; already-red baseline -> `baseline-compare`;
-- auth/authz/secrets/untrusted command-file-network/value boundary -> `security-hardening`;
+- auth/secrets/untrusted command-file-network/value boundary -> `security-hardening`;
 - high-risk completed change -> `independent-review` before `verify-change`;
-- technical docs/procedures/explanations that need controlled, consistent English -> `asd-ste100-writing`;
-- prose that is accurate but stiff, repetitive, generic, machine-like, or needs authentic voice matching -> `humanizer-writing`;
-- broad source-to-consumer audit, repeated systemic defect, release/freeze readiness -> `project-quality-orchestrator`;
+- controlled technical prose -> `asd-ste100-writing`;
+- stiff/generic but accurate prose -> `humanizer-writing`;
+- broad source-to-consumer audit, systemic defect, release/freeze readiness -> `project-quality-orchestrator`;
 - final readiness -> `verify-change`.
 
-Do not invoke extra skills for a trivial local edit merely because they exist.
+Do not add skills to a trivial task merely because they exist.
 
 ## Verification policy
 
-Run the **smallest check set that can falsify the changed requirement**, then broaden when risk or evidence requires it. Do not run the complete repository gate after every local edit.
+Run the **smallest checks that can falsify the changed requirement**. Broaden after a failed focused check, shared/high-risk edit, or unexpected side effect.
 
-Use these defaults:
+- docs -> affected content; repo/manifest only if those contracts changed;
+- skill metadata/description -> repo validation + metadata freshness + context budget + activation validation;
+- skill body/reference/asset -> repo validation + context budget + affected tests/evals;
+- Python helper -> compile + targeted tests; full suite for shared helpers/infrastructure;
+- eval infrastructure -> affected eval validation + targeted tests; broaden for common schemas/runners;
+- security/public contract/packaging/release/broad orchestration -> escalate by blast radius.
 
-- **Docs/Markdown only:** validate the affected content and run repository/manifest checks only when the changed files participate in those contracts.
-- **Skill description or metadata:** run repository validation, OpenAI metadata freshness, context budget, and activation validation.
-- **Skill body/reference/asset:** run repository validation, context budget, and the affected deterministic tests/evals. Broaden when routing, shared schemas, or several skills changed.
-- **Python helper/script:** compile the changed module and run its targeted unit tests. Run the full unit suite when shared test/eval infrastructure or common helpers changed.
-- **Eval schema/runner:** validate the affected eval family and run targeted tests. Broaden to all eval validators when common eval infrastructure changed.
-- **Security, public contracts, packaging, release, or broad orchestration changes:** escalate verification according to blast radius and use the appropriate specialist skill.
-
-A failed focused check, a shared-code edit, or an unexpected side effect is a reason to broaden verification. A green focused check is not proof of a consumer layer that was never exercised.
+Do not run the full repository gate after every local edit. PR CI is the comprehensive deterministic backstop across supported OS/Python lanes.
 
 ### Output discipline
 
-Keep successful verification output concise so logs do not become model context.
+Keep green output concise:
+- full suite: `python3 -m unittest discover -s tests`;
+- on failure, rerun the failing test/module with `-v`;
+- preserve failing IDs, relevant traceback, exit status, and the full-log/artifact path;
+- do not feed complete green logs to the model when a summary is enough.
 
-- Prefer quiet/default test output for green runs.
-- For the full Python unit suite, use `python3 -m unittest discover -s tests`. If it fails, rerun the failing module/test with `-v` for diagnosis.
-- Preserve failing test IDs, relevant tracebacks, and command exit status.
-- Do not feed complete green logs back into the model when a summary is enough.
-- When a tool can write a large log/artifact to disk, keep the full evidence there and return a compact summary plus the path.
-- Do not truncate evidence needed to diagnose a failure.
+## Release gate
 
-## Pull request and release gate
-
-Pull-request CI remains the comprehensive deterministic backstop across supported Python/OS lanes. A local task does not need to duplicate the whole CI matrix unless CI is unavailable or the failure is being reproduced locally.
-
-Before merge/release, require the relevant CI checks to pass. For release work, also run or confirm:
+Before merge/release, require relevant PR CI to pass. For release work, also run or confirm:
 
 ```bash
 python3 scripts/pending_tests.py check
@@ -71,4 +64,4 @@ python3 scripts/package_release.py . --output-dir dist
 unzip -t dist/engineering-quality-agent-skills-v$(cat VERSION).zip
 ```
 
-Do not weaken checks just to make CI pass. Fix the underlying issue or document a justified exception. If a required check is intentionally delegated to PR CI, report that explicitly instead of claiming it was run locally.
+Do not weaken checks to make CI pass. If a required check is delegated to PR CI, say so instead of claiming it ran locally.
