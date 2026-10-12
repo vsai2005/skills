@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|\Z)", re.DOTALL)
-RESOURCE_DIRS = ("references", "assets")
+RESOURCE_DIRS = ("references", "assets", "scripts")
 
 @dataclass(frozen=True)
 class SkillBudget:
