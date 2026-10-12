@@ -1,6 +1,6 @@
 ---
 name: refactor-safely
-description: Refactor, simplify, split, reorganize, modernize, or remove duplication from existing code while preserving intended behavior and public contracts. Use for cleanup of large files, tangled responsibilities, legacy modules, duplicated logic, dependency cleanup, naming/structure improvements, or migrations where structural change is primary and behavior should remain stable unless explicitly requested.
+description: Refactor, simplify, split, modernize, or deduplicate existing code while preserving intended behavior and public contracts. Use when structural improvement is primary and behavior should remain stable unless explicitly changed.
 ---
 
 # Refactor Safely
