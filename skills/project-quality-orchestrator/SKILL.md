@@ -37,6 +37,7 @@ Delegate rather than copy their full rules:
 - external/version-sensitive facts -> `source-grounded-development`;
 - cheap/heavy verification planning -> `tiered-testing`;
 - security/trust boundaries -> `security-hardening`;
+- user-facing UI/UX quality -> `ui-ux-quality`;
 - clear technical prose -> `asd-ste100-writing`;
 - natural fact-preserving prose -> `humanizer-writing`;
 - high-risk fresh-context review -> `independent-review`;
@@ -64,6 +65,8 @@ A source-level test does not prove a rendered or transformed artifact is correct
 ## 4. Prefer rendered or runtime truth for user-facing behavior
 
 When the requirement concerns layout, wording, interaction, accessibility, visual hierarchy, generated content, or another user-visible property, inspect the real rendered/runtime result when feasible.
+
+For a substantial interface-quality review, delegate the UI-specific judgment to `ui-ux-quality` instead of expanding this orchestrator into a design checklist.
 
 Use screenshots, browser/e2e checks, accessibility inspection, exported artifacts, or equivalent evidence appropriate to the product.
 
