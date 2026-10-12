@@ -8,6 +8,9 @@ All notable changes to this project will be documented here.
 - Added progressive-disclosure UI/UX review, accessibility, and state/responsive references rather than expanding the always-loaded orchestrators.
 - Routed substantial UI/UX work from `engineering-quality` and `project-quality-orchestrator` to the dedicated specialist only when justified.
 - Added eight activation cases, semantic behavior coverage, an executable live fixture/grader, and a targeted `ui-ux-quality` + `verify-change` composition case.
+- Expanded the UI/UX specialist after benchmarking W3C/WAI, Nielsen Norman Group, GOV.UK, USWDS, Radix, React Spectrum/React Aria, Base UI, Primer, Figma guidance, community feedback, and a dedicated external UI/UX agent-skill repository.
+- Added selective Nielsen-style heuristic review, semantic token/component intent, accessible-primitives-first guidance, interaction-truth checks, 320px/200% zoom and localization/RTL resilience, dialog/composite focus behavior, visual-regression reuse, and a strict distinction between heuristic hypotheses and real-user research.
+- Added provenance notes and avoided importing a heavyweight mandatory browser-gate stack or universal aesthetic scoring system.
 
 ## 1.12.0 - Portability, activation evidence, and cross-host hardening
 
