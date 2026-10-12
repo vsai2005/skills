@@ -40,7 +40,7 @@ This repository packages a repeatable engineering workflow around those failure 
 | `asd-ste100-writing` | Technical procedures, explanations, release notes, reviews, and user-facing engineering prose | Write clear ASD-STE100-inspired controlled English while preserving exact technical meaning |
 | `humanizer-writing` | Prose that is correct but stiff, repetitive, generic, or machine-like | Make writing natural, specific, and professional without inventing facts or a fake author voice |
 
-The skills are intentionally separate. Loading every rule for every task creates noisy context and can make agents less effective. v1.9.0 uses adaptive rigor (L0-L4) plus FAST/BALANCED/THOROUGH pace so a trivial edit does not inherit the workflow cost of a migration or security change. Detailed material is stored under each skill's `references/` directory and should be read only when the task needs it.
+The skills are intentionally separate. Loading every rule for every task creates noisy context and can make agents less effective. The pack uses adaptive rigor (L0-L4) plus FAST/BALANCED/THOROUGH pace so a trivial edit does not inherit the workflow cost of a migration or security change. Detailed material lives under each skill's `references/`, `scripts/`, and `assets/` directories and should be loaded only when the task needs it.
 
 
 ### Debugging depth and self-calibrating workflow
@@ -49,7 +49,7 @@ The skills are intentionally separate. Loading every rule for every task creates
 
 The live-eval system also supports pinned external Git fixtures. `evals/historical-debug-cases.json` starts with two real pytest regressions from SWE-bench Lite metadata; their hidden reproducers are separate from the model prompt. Normal repository CI validates these cases without network access, while intentional live runs fetch the exact historical base commit.
 
-v1.9.0 adds version-bound empirical benchmark campaigns on top of the v1.8.0 self-calibration work. Repeated control/treatment runs now carry exact skill/case hashes, campaign identity, provider/model provenance, balanced arm ordering, resumable execution, bootstrap confidence intervals, and executable four-arm composition tests. The goal is to remove workflow that no longer helps stronger models instead of accumulating process forever.
+The empirical benchmark system uses version-bound control/treatment campaigns with exact skill/case hashes, provider/model provenance, balanced arm ordering, resumable execution, bootstrap confidence intervals, executable composition tests, activation benchmarking, and evidence-expiry checks. The goal is to remove workflow that no longer helps stronger models instead of accumulating process forever.
 
 ## What makes this different from a style guide
 
@@ -115,6 +115,10 @@ The repository also includes `.claude-plugin/plugin.json`. Claude Code plugins a
 Antigravity 2.0, Antigravity CLI, Antigravity IDE, and the Antigravity SDK can use the same canonical `skills/` tree. Install the folders directly into Antigravity's skill locations, point the SDK at `skills/`, or generate a strict Antigravity plugin bundle with `scripts/package_antigravity.py`.
 
 See [Google Antigravity installation](docs/install-antigravity.md).
+
+### Use with GitHub Copilot
+
+GitHub Copilot documents Agent Skills in `.github/skills/`, `.claude/skills/`, and `.agents/skills/`, plus personal skill locations. This repository is structurally compatible, but native Copilot activation/behavior benchmarks are not yet published. See [GitHub Copilot installation](docs/install-github-copilot.md) and the [host support matrix](docs/host-support.md).
 
 ### Use with another Agent Skills compatible harness
 
@@ -376,11 +380,12 @@ Validate the executable live suite without credentials:
 python3 scripts/live_eval.py validate
 ```
 
-Run repeated control/treatment pairs through real Codex or Claude Code:
+Run repeated control/treatment pairs through real Codex, Claude Code, or Google Antigravity:
 
 ```bash
 python3 scripts/live_eval.py run --provider codex --runs 3
 python3 scripts/live_eval.py run --provider claude --runs 3 --max-budget-usd 2
+python3 scripts/live_eval.py run --provider antigravity --runs 3
 ```
 
 Then compare paired deterministic scores:
@@ -389,9 +394,44 @@ Then compare paired deterministic scores:
 python3 scripts/eval_report.py .verification/live-evals/codex-runs.jsonl --fail-on-regression
 ```
 
-The bundled `evals/live-cases.json` suite covers every skill and adds focused extra scenarios where needed, with disposable fixtures, hidden deterministic graders, raw trace retention, changed-file evidence, timing, and best-effort token/cost extraction. Codex treatment runs use a prompt-mounted read-only skill copy so the evaluator never mutates the user's global `$CODEX_HOME`; Claude treatment runs use an isolated native plugin with `--plugin-dir`, while control runs disable skills. See [Live Skill Evaluation Protocol](docs/live-evaluation.md).
+The bundled `evals/live-cases.json` suite covers every skill and adds focused extra scenarios where needed, with disposable fixtures, hidden deterministic graders, raw trace retention, changed-file evidence, timing, and best-effort token/cost extraction. Codex treatment runs use a prompt-mounted read-only skill copy; Claude uses an isolated plugin; Antigravity uses native workspace skills under `.agents/skills/`. See [Live Skill Evaluation Protocol](docs/live-evaluation.md).
+
+### Automatic activation benchmarking
+
+```bash
+python3 scripts/activation_eval.py validate
+python3 scripts/activation_eval.py run --provider codex --model MODEL --runs 5
+python3 scripts/activation_eval.py run --provider claude --model MODEL --runs 5
+python3 scripts/activation_eval.py run --provider antigravity --model MODEL --runs 5
+```
+
+The activation suite contains at least eight positive prompts per skill plus true negatives. Real runs are opt-in because selection can be nondeterministic and consumes provider tokens. Trace-based detection is reported as `unknown` rather than fabricated when a host does not expose skill loading.
 
 For teams with their own harness, `scripts/eval_matrix.py` still emits a provider-neutral JSONL control/treatment plan.
+
+### Check published empirical evidence freshness
+
+```bash
+python3 scripts/evidence_freshness.py .
+```
+
+Published real-model claims are bound to exact skill hashes and expire after the configured age. The registry currently makes no universal effectiveness claim merely because CI is green.
+
+### Check OpenAI metadata freshness
+
+```bash
+python3 scripts/openai_metadata_check.py .
+```
+
+Each `agents/openai.yaml` is bound to the current discovery-description hash so activation metadata cannot silently drift.
+
+### Export standard Agent Skills eval files
+
+```bash
+python3 scripts/export_standard_evals.py . --output-dir dist/standard-evals
+```
+
+This generates per-skill `evals/evals.json`-compatible development artifacts outside the runtime skill tree.
 
 ### Generate and verify the release manifest
 
@@ -465,7 +505,9 @@ engineering-quality-agent-skills/
 │   ├── security-hardening/     # Trust boundaries + abuse-case verification
 │   ├── asd-ste100-writing/     # Controlled technical English
 │   └── humanizer-writing/      # Natural, fact-preserving prose
-├── scripts/                    # Validation, release, evidence, eval, portability helpers
+├── compatibility/              # Machine-readable host support status
+├── evidence/                   # Version-bound published empirical claims
+├── scripts/                    # Repo-level validation/eval helpers + compatibility wrappers
 ├── tests/                      # Utility/metadata/release/eval regression tests
 ├── evals/                      # Activation, semantic behavior, live fixtures + graders
 ├── examples/project-guidance/ # Example repository-specific AGENTS.md
@@ -476,7 +518,7 @@ engineering-quality-agent-skills/
 
 The structure follows current Agent Skills conventions: a skill is a folder with `SKILL.md`, with optional `references/`, `scripts/`, and assets. The descriptions are written to carry activation intent, while the bodies remain focused and use progressive disclosure. Provider-specific presentation metadata is kept separate from the core workflow.
 
-See [Design principles](docs/design-principles.md), [Compatibility](docs/compatibility.md), [Google Antigravity installation](docs/install-antigravity.md), [Context Budget](docs/context-budget.md), [Skill Effectiveness](docs/skill-effectiveness.md), [Composition Evaluation](docs/composition-evaluation.md), [Portability](docs/portability.md), and [Live Skill Evaluation Protocol](docs/live-evaluation.md) for the rationale and evaluation model used by this repository. See [Publishing and distribution](docs/publishing.md) before preparing a public marketplace/directory submission.
+See [Design principles](docs/design-principles.md), [Compatibility](docs/compatibility.md), [Host support matrix](docs/host-support.md), [Google Antigravity installation](docs/install-antigravity.md), [GitHub Copilot installation](docs/install-github-copilot.md), [Context Budget](docs/context-budget.md), [Standard eval export](docs/standard-eval-export.md), [Skill Effectiveness](docs/skill-effectiveness.md), [Composition Evaluation](docs/composition-evaluation.md), [Portability](docs/portability.md), and [Live Skill Evaluation Protocol](docs/live-evaluation.md) for the rationale and evaluation model used by this repository. See [Publishing and distribution](docs/publishing.md) before preparing a public marketplace/directory submission.
 
 ## Contributing
 
