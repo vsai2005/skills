@@ -13,7 +13,7 @@ class StandardEvalExportTests(unittest.TestCase):
     def test_exports_one_file_per_skill(self):
         with tempfile.TemporaryDirectory() as tmp:
             written = export_cases(ROOT, Path(tmp) / "out")
-            self.assertEqual(16, len(written))
+            self.assertEqual(17, len(written))
             for path in written:
                 data = json.loads(path.read_text(encoding="utf-8"))
                 self.assertIn("skill_name", data)
