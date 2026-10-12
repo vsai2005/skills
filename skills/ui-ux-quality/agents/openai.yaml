@@ -1,0 +1,5 @@
+# source-description-sha256: 5f83a5bb9f9eccef8682aded5ba785b62473efd3b89be3911a66a493fc56b055
+interface:
+  display_name: "UI/UX Quality"
+  short_description: "Audit rendered usability, states, and accessibility"
+  default_prompt: "Use $ui-ux-quality to review this interface from the user's task through responsive states, accessibility, consistency, and rendered evidence, then prioritize fixes by user impact."

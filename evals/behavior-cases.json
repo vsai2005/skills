@@ -412,5 +412,145 @@
       "Distinguish source/test evidence from final-consumer or runtime evidence that was not obtained.",
       "Delegate specialist concerns only when they are relevant rather than loading every skill."
     ]
+  },
+  {
+    "id": "uiux-rendered-product-quality",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "An existing checkout page uses the product's established colors and components, but the form has no persistent email label, keyboard focus is removed, controls are too small, a fixed card width overflows on narrow screens, and error/loading states are unclear.",
+    "request": "Improve the UI/UX without replacing the brand or architecture. Verify the experience as a user-facing interface, not only as source code.",
+    "expected_behaviors": [
+      "Preserve the existing product identity and shared design conventions unless a concrete usability or accessibility defect requires change.",
+      "Fix hierarchy and task-blocking interaction problems before cosmetic polish, including labels, focus, target sizing, responsive overflow, and state feedback.",
+      "Review representative responsive and interaction states instead of judging only the default desktop view.",
+      "Use rendered/runtime evidence when feasible and state clearly when such evidence cannot be obtained."
+    ]
+  },
+  {
+    "id": "uiux-heuristic-vs-research",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A dashboard review suggests that users may miss a filter, but no usability study, analytics evidence, or user interviews were performed.",
+    "request": "Review the UX and tell me whether users will understand the filter.",
+    "expected_behaviors": [
+      "Use relevant heuristic evidence to identify the discoverability risk without presenting it as observed user behavior.",
+      "Label the conclusion as a usability hypothesis when real-user evidence is absent.",
+      "Do not invent personas, quotes, success rates, preferences, or research findings.",
+      "Recommend proportionate user evidence only if the unresolved question materially affects the decision."
+    ]
+  },
+  {
+    "id": "uiux-complex-widget-contract",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A custom modal is visually polished, but opening it leaves focus on the background page, Tab can escape behind the modal, Escape does nothing, and closing it drops focus on the document body.",
+    "request": "Improve the modal UX without redesigning the product.",
+    "expected_behaviors": [
+      "Treat the issue as an interaction/accessibility behavior contract rather than a visual-polish problem.",
+      "Prefer an established native/project/accessibility primitive when it can satisfy the requirement.",
+      "Require logical focus entry, contained modal focus, appropriate Escape behavior, and focus return or another logical workflow target.",
+      "Verify the real keyboard interaction rather than approving source markup alone."
+    ]
+  },
+  {
+    "id": "uiux-semantic-intent-consistency",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A Delete account action uses the primary blue button on the settings page but a danger button in its confirmation dialog. Both technically pass contrast.",
+    "request": "Review the UI consistency and fix the problem.",
+    "expected_behaviors": [
+      "Identify semantic-role inconsistency even though both colors can pass contrast.",
+      "Use the established destructive/danger role consistently rather than selecting a token by visual similarity.",
+      "Inspect whether a shared component or semantic token owns the repeated behavior.",
+      "Keep accessibility and user consequence distinct from purely aesthetic preference."
+    ]
+  },
+  {
+    "id": "uiux-platform-native-accessibility",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A team is reviewing equivalent settings flows in a web app, SwiftUI app, and Jetpack Compose app. A reviewer proposes using the same ARIA roles, CSS target-size numbers, and browser keyboard rules on all three.",
+    "request": "Review the accessibility approach and define the correct cross-platform UI/UX checks.",
+    "expected_behaviors": [
+      "Select the accessibility and interaction model of each actual platform instead of applying web ARIA rules universally.",
+      "Use WCAG/APG for web implementation questions, Apple native semantics/VoiceOver/Dynamic Type for Apple UI, and Android semantics/TalkBack/platform touch and focus guidance for Android.",
+      "Keep platform-specific target-size and keyboard guidance distinct rather than presenting one number or key model as universal.",
+      "Still preserve the shared product-level goals: understandable labels, operability, recovery, semantic action roles, and adaptive layout."
+    ]
+  },
+  {
+    "id": "uiux-premium-not-maximal",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A B2B settings and billing product asks to look more premium. The current proposal adds a WebGL orb, smooth-scroll replacement, custom cursor, glowing borders, and parallax to every section.",
+    "request": "Improve the premium feel and decide which effects should stay.",
+    "expected_behaviors": [
+      "Do not equate premium quality with maximum animation, 3D, glow, or custom interaction.",
+      "Define a product-appropriate visual direction and keep routine settings/billing tasks calm and predictable.",
+      "Keep only effects with a clear product, hierarchy, continuity, or brand purpose.",
+      "Prefer typography, composition, authentic content, semantic design-system quality, and a small number of signature moments before heavy effects."
+    ]
+  },
+  {
+    "id": "uiux-anti-ai-specificity",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A marketing page has a centered generic hero, two vague CTA buttons, three identical feature cards, fake analytics numbers, six glass panels, and the same fade-up animation for every section.",
+    "request": "Make this stop looking AI-generated.",
+    "expected_behaviors": [
+      "Diagnose generic structure, fake/interchangeable content, repetition, unresolved product meaning, and unvaried motion rather than banning one color or component primitive.",
+      "Create a product-specific visual/content direction and vary composition where the information hierarchy supports it.",
+      "Do not fabricate replacement metrics, testimonials, logos, awards, or product capabilities.",
+      "Use originality tests such as substitution, repetition, and purpose instead of adding arbitrary novelty."
+    ]
+  },
+  {
+    "id": "uiux-motion-engine-selection",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A React application needs button feedback, an expanding card-to-detail transition, one complex scroll-driven product story, and an optional 3D product model. No animation packages are installed.",
+    "request": "Choose the motion approach and avoid unnecessary dependencies.",
+    "expected_behaviors": [
+      "Use CSS/native primitives for simple feedback when sufficient.",
+      "Prefer Motion or an equivalent React-lifecycle-aware approach for component/layout/shared-element motion when it materially simplifies the React interaction.",
+      "Use GSAP/ScrollTrigger only for the complex timeline/scroll choreography layer when justified, and prevent two engines from controlling the same element/property.",
+      "Use Three.js/R3F only for the actual 3D requirement and preserve a usable fallback."
+    ]
+  },
+  {
+    "id": "uiux-3d-performance-fallback",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A React Three Fiber hero renders continuously at high DPR with large textures, many repeated meshes, heavy postprocessing, and no fallback. It looks smooth on the developer's high-end laptop.",
+    "request": "Make this production-ready without losing the premium 3D concept.",
+    "expected_behaviors": [
+      "Treat 3D GPU/battery/runtime cost as a UX requirement and verify representative weaker devices.",
+      "Use relevant techniques such as on-demand rendering where applicable, resource reuse, instancing, LOD, progressive/lazy assets, and adaptive quality rather than only code micro-optimizations.",
+      "Provide reduced-motion, low-capability/mobile, and failed/unsupported-render fallbacks that still communicate the product.",
+      "Do not make the core task depend exclusively on the WebGL scene."
+    ]
+  },
+  {
+    "id": "uiux-scroll-native-behavior",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A portfolio uses custom smooth scrolling and pinned horizontal sections. Mouse scrolling looks cinematic, but PageDown/Home/End, anchor navigation, reduced-motion mode, and some Windows laptops behave poorly.",
+    "request": "Keep the cinematic storytelling but fix the UX.",
+    "expected_behaviors": [
+      "Treat custom smooth scrolling/scroll hijacking as opt-in and preserve or restore native-feeling keyboard, anchor, and navigation behavior.",
+      "Keep scroll choreography only where the narrative benefits from it rather than applying it globally.",
+      "Verify reduced motion, touch/mobile, ordinary Windows/lower-power hardware, and fallback behavior.",
+      "Prefer removing the custom scroller over preserving it when it cannot meet the interaction and performance contract."
+    ]
   }
 ]

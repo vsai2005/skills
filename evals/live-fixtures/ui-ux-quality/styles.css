@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f1e8;
+  color: #1f2933;
+}
+
+.checkout-card {
+  width: 720px;
+  margin: 64px auto;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #d8d1c4;
+  border-radius: 12px;
+}
+
+.eyebrow {
+  letter-spacing: 0.08em;
+  font-size: 12px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 12px 0 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+}
+
+button {
+  height: 22px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+.primary {
+  background: #315c48;
+  color: #ffffff;
+}
+
+.secondary {
+  background: #ece8df;
+  color: #1f2933;
+}
+
+.error {
+  color: #a61b1b;
+}

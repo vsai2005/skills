@@ -688,5 +688,105 @@
     "id": "none-translate-10",
     "prompt": "Translate 'The server is ready' into Spanish.",
     "expected_primary_skill": "none"
+  },
+  {
+    "id": "uiux-audit-01",
+    "prompt": "Audit this dashboard UI for hierarchy, usability, responsive behavior, accessibility, and consistency. Inspect the rendered result rather than only the React source.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-form-02",
+    "prompt": "This checkout form technically works, but users get confused by labels, validation, loading, and error recovery. Review and improve the UX without redesigning the whole product.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-mobile-03",
+    "prompt": "The desktop page looks fine but the mobile layout overflows, clips actions, and the dialog is awkward on narrow screens. Fix the responsive UX and verify representative widths.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-accessibility-04",
+    "prompt": "Review this interface for keyboard navigation, visible focus, labels, target sizing, contrast, and error handling, then prioritize the accessibility problems that affect the task.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-states-05",
+    "prompt": "Improve the loading, empty, success, permission-denied, and server-error states for this user flow so people always know what happened and how to recover.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-consistency-06",
+    "prompt": "Several screens use different spacing, button hierarchy, and empty-state patterns for the same actions. Find the shared design-system owner and make the experience consistent.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-rendered-07",
+    "prompt": "Review these rendered screens and tell me what blocks or confuses the primary user task. Preserve the existing brand and prioritize fixes by user impact, not personal taste.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-polish-08",
+    "prompt": "Polish this existing interface using its current design system. Keep the product identity, improve hierarchy and interaction clarity, and check narrow and wide layouts before calling it done.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-heuristic-09",
+    "prompt": "Do a usability review of this workflow using established heuristics such as system status, user control, recognition over recall, consistency, and error prevention. Do not pretend a heuristic review is user research.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-widget-10",
+    "prompt": "This custom modal looks fine visually but I am worried about keyboard and focus behavior. Review the interaction contract, focus entry/trap/return, Escape behavior, labels, and the rendered experience.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-resilience-11",
+    "prompt": "Audit this responsive form for 320px reflow, 200% zoom, long translated labels, RTL support, sticky-focus overlap, and mobile keyboard problems without inventing arbitrary new breakpoints.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-semantic-12",
+    "prompt": "The same destructive action is red on one screen and styled like the primary action on another. Review the design-system semantic intent and fix the shared owner instead of matching colors by eye.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-ios-native-13",
+    "prompt": "Audit this SwiftUI settings screen for VoiceOver labels, Dynamic Type, focus after a sheet closes, destructive-action clarity, and native interaction conventions. Do not apply web ARIA rules to it.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-android-native-14",
+    "prompt": "Review this Jetpack Compose flow for TalkBack semantics, text scaling, 48dp touch-target guidance, keyboard/D-pad focus where relevant, and software-keyboard overlap. Keep the review Android-native, not web-centric.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-premium-15",
+    "prompt": "Make this landing page feel genuinely premium and brand-specific instead of like an AI-generated SaaS template. Improve composition, typography, imagery, and a few signature interactions without adding random effects everywhere.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-motion-16",
+    "prompt": "Design a polished motion system for this React product: shared-element transitions, sliding panels, route continuity, and reduced-motion behavior. Pick the lightest suitable animation tools.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-3d-17",
+    "prompt": "Add an interactive 3D product viewer to this ecommerce product page. It must load progressively, work on weaker mobile devices, support reduced motion, and have a useful non-WebGL fallback.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-scroll-story-18",
+    "prompt": "Turn this product story into an immersive scroll-led experience with pinned stages and visual transitions, but preserve native-feeling scrolling, keyboard access, mobile usability, and performance.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-anti-slop-19",
+    "prompt": "Audit this AI-generated-looking page: generic gradient hero, identical card grids, fake metrics, repeated fade-up animations, and vague copy. Make it product-specific rather than just changing the colors.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-sliding-20",
+    "prompt": "Improve the drawer, bottom sheet, carousel, and master-detail transitions so the directions and dismiss behavior form one coherent spatial model instead of unrelated slide animations.",
+    "expected_primary_skill": "ui-ux-quality"
   }
 ]

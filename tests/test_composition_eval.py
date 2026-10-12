@@ -5,7 +5,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class CompositionEvalTests(unittest.TestCase):
     def test_cases_validate_and_plan_four_arms(self):
         cases=load_cases(ROOT/'evals/composition-cases.json',ROOT)
-        self.assertEqual(11,len(cases))
+        self.assertEqual(12,len(cases))
         rows=plan(cases[:1],'codex',['m1'],2)
         self.assertEqual(8,len(rows))
         self.assertEqual(set(ARMS),{r['arm'] for r in rows})

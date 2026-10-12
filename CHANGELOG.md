@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented here.
 
+## Unreleased
+
+- Added `ui-ux-quality`, a selective user-facing interface workflow for hierarchy, interaction states, responsive behavior, accessibility, design-system consistency, and rendered/runtime evidence.
+- Added progressive-disclosure UI/UX review, accessibility, and state/responsive references rather than expanding the always-loaded orchestrators.
+- Routed substantial UI/UX work from `engineering-quality` and `project-quality-orchestrator` to the dedicated specialist only when justified.
+- Added eight activation cases, semantic behavior coverage, an executable live fixture/grader, and a targeted `ui-ux-quality` + `verify-change` composition case.
+- Expanded the UI/UX specialist after benchmarking W3C/WAI, Nielsen Norman Group, GOV.UK, USWDS, Radix, React Spectrum/React Aria, Base UI, Primer, Figma guidance, community feedback, and a dedicated external UI/UX agent-skill repository.
+- Added selective Nielsen-style heuristic review, semantic token/component intent, accessible-primitives-first guidance, interaction-truth checks, 320px/200% zoom and localization/RTL resilience, dialog/composite focus behavior, visual-regression reuse, and a strict distinction between heuristic hypotheses and real-user research.
+- Added provenance notes and avoided importing a heavyweight mandatory browser-gate stack or universal aesthetic scoring system.
+- Added premium visual-direction guidance to prevent generic generated-looking sameness through product-specific composition, typography, authentic assets, signature moments, and substitution/repetition/purpose tests instead of brittle bans on individual trends.
+- Added a motion/3D decision hierarchy: no motion → CSS/native → Motion for React component/layout continuity → GSAP for advanced choreography/scroll timelines → Three.js/R3F for actual 3D.
+- Added spatial rules for sliding panels/drawers/carousels, shared-element continuity, scroll-story constraints, reduced-motion behavior, low-capability/failed-render fallbacks, and 3D GPU/battery/performance review.
+- Benchmarked Motion, official GSAP skills, Three.js, React Three Fiber, Lenis, specialist motion-skill repos, current animation tutorials, and community reviews; retained native scrolling and lighter motion as the defaults rather than copying an Awwwards-style stack everywhere.
+- Added six premium/motion activation cases and five behavior cases covering anti-template specificity, restraint, engine selection, 3D performance/fallbacks, and scroll-native behavior.
+
 ## 1.12.0 - Portability, activation evidence, and cross-host hardening
 
 - Made script-backed skills self-contained by colocating canonical helpers under each owning skill's `scripts/` directory while preserving root-level compatibility entry points.

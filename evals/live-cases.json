@@ -687,5 +687,41 @@
       "PENDING_TESTS.md",
       "*.md"
     ]
+  },
+  {
+    "id": "ui-ux-quality-checkout-live",
+    "skill": "ui-ux-quality",
+    "fixture": "evals/live-fixtures/ui-ux-quality",
+    "request": "Audit and improve this checkout UI without replacing its brand direction. Fix the narrow-screen overflow, persistent email labeling, keyboard focus visibility, usable control sizing, and accessible status/error feedback. Consider the important interaction states and write UX_REVIEW.md explaining what you checked, what you changed, and any rendered/runtime verification you could not perform.",
+    "pass_threshold": 1,
+    "graders": [
+      {
+        "id": "ui-ux-quality-contract",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_ui_ux_quality.py",
+          "{workspace}"
+        ],
+        "weight": 5
+      },
+      {
+        "id": "meaningful-change",
+        "type": "changed_files_min",
+        "count": 2,
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "The changes preserve the existing visual identity instead of replacing it with an unrelated redesign.",
+      "The review prioritizes task usability and accessibility over decorative polish.",
+      "The review distinguishes observed/runtime evidence from usability hypotheses and does not invent user research.",
+      "The review does not hide blocking usability or accessibility defects behind a single numeric design score."
+    ],
+    "expected_change_globs": [
+      "*.html",
+      "*.css",
+      "*.md"
+    ]
   }
 ]
