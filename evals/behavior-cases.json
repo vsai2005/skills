@@ -468,5 +468,19 @@
       "Inspect whether a shared component or semantic token owns the repeated behavior.",
       "Keep accessibility and user consequence distinct from purely aesthetic preference."
     ]
+  },
+  {
+    "id": "uiux-platform-native-accessibility",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "A team is reviewing equivalent settings flows in a web app, SwiftUI app, and Jetpack Compose app. A reviewer proposes using the same ARIA roles, CSS target-size numbers, and browser keyboard rules on all three.",
+    "request": "Review the accessibility approach and define the correct cross-platform UI/UX checks.",
+    "expected_behaviors": [
+      "Select the accessibility and interaction model of each actual platform instead of applying web ARIA rules universally.",
+      "Use WCAG/APG for web implementation questions, Apple native semantics/VoiceOver/Dynamic Type for Apple UI, and Android semantics/TalkBack/platform touch and focus guidance for Android.",
+      "Keep platform-specific target-size and keyboard guidance distinct rather than presenting one number or key model as universal.",
+      "Still preserve the shared product-level goals: understandable labels, operability, recovery, semantic action roles, and adaptive layout."
+    ]
   }
 ]
