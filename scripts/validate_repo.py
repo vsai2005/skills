@@ -51,6 +51,9 @@ def parse_minimal_frontmatter(skill_md: Path) -> tuple[dict[str, str] | None, li
         key = key.strip()
         value = value.strip()
         if not value:
+            if key == "metadata":
+                data[key] = "<mapping>"
+                continue
             problems.append(Problem("ERROR", skill_md, f"frontmatter field {key!r} is empty"))
             continue
         if value.startswith(('"', "'")) and value.endswith(value[0]) and len(value) >= 2:
