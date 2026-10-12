@@ -1,4 +1,4 @@
-# source-description-sha256: 589660080d18c5845f2f8e779f8a3389ebceb2f24c8f0ac9960f34137584a2b8
+# source-description-sha256: 197946382179c44dc3a13f8ca094fc941da5198c84bf6182a9e964694b73935b
 interface:
   display_name: "Project Quality Orchestrator"
   short_description: "Verify quality from source to consumed output"

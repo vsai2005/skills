@@ -1,6 +1,6 @@
 ---
 name: engineering-quality
-description: Coordinate multi-mode software work spanning implementation, debugging, refactoring, migration, or verification. Prefer a specific skill for single-mode work; use project-quality-orchestrator for broad audits.
+description: Coordinate software work spanning multiple engineering modes such as implementation, debugging, refactoring, migration, or verification. Prefer a specific skill for single-mode work; use project-quality-orchestrator for broad audits.
 ---
 
 # Engineering Quality
