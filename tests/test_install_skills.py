@@ -26,6 +26,14 @@ class InstallSkillsTests(unittest.TestCase):
             self.assertTrue((dest / "debug-root-cause" / "references" / "case-study-classifier-root-cause.md").is_file())
             self.assertTrue((dest / "debug-root-cause" / "assets" / "bug-fix-record.md").is_file())
 
+    def test_installed_skill_keeps_its_local_helper_scripts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "skills"
+            install(ROOT / "skills", dest, ["verify-change", "context-engineering"])
+            self.assertTrue((dest / "verify-change" / "scripts" / "evidence_ledger.py").is_file())
+            self.assertTrue((dest / "context-engineering" / "scripts" / "repo_context.py").is_file())
+            self.assertTrue((dest / "context-engineering" / "scripts" / "session_handoff.py").is_file())
+
     def test_refuses_overwrite_without_force(self):
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp) / "skills"
