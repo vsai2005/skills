@@ -37,6 +37,7 @@ This repository packages a repeatable engineering workflow around those failure 
 | `source-grounded-development` | Version-sensitive external APIs/frameworks | Ground decisions in the exact local version and authoritative sources |
 | `independent-review` | High-risk/fresh-context second review | Catch self-review blind spots before final verification |
 | `security-hardening` | Auth, secrets, untrusted input, command/file/network/value boundaries | Trace trust boundaries, test abuse cases, and repair the owning security control |
+| `ui-ux-quality` | UI/UX audits, responsive/accessibility review, user-facing polish | Improve hierarchy, states, consistency, accessibility, and rendered usability without replacing product identity |
 | `asd-ste100-writing` | Technical procedures, explanations, release notes, reviews, and user-facing engineering prose | Write clear ASD-STE100-inspired controlled English while preserving exact technical meaning |
 | `humanizer-writing` | Prose that is correct but stiff, repetitive, generic, or machine-like | Make writing natural, specific, and professional without inventing facts or a fake author voice |
 
@@ -87,6 +88,7 @@ Classify the change
   |-- context uncertainty ------> context-engineering
   |-- changing external API ---> source-grounded-development
   |-- security/trust boundary --> security-hardening
+  |-- UI/UX quality -----------> ui-ux-quality
   |-- high-risk second review --> independent-review
   |-- controlled technical prose -> asd-ste100-writing
   |-- natural prose rewrite ------> humanizer-writing
@@ -503,6 +505,7 @@ engineering-quality-agent-skills/
 │   ├── source-grounded-development/ # Exact-version external grounding
 │   ├── independent-review/     # Fresh, state-bound review
 │   ├── security-hardening/     # Trust boundaries + abuse-case verification
+│   ├── ui-ux-quality/          # Rendered usability + responsive/accessibility quality
 │   ├── asd-ste100-writing/     # Controlled technical English
 │   └── humanizer-writing/      # Natural, fact-preserving prose
 ├── compatibility/              # Machine-readable host support status
