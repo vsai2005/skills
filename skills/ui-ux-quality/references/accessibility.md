@@ -7,6 +7,8 @@ Useful primary sources:
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
 - [WAI Easy Checks](https://www.w3.org/WAI/test-evaluate/preliminary/)
 - [WAI Forms Tutorial](https://www.w3.org/WAI/tutorials/forms/)
+- [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+- [W3C Evaluating Web Accessibility](https://www.w3.org/WAI/test-evaluate/)
 
 ## Structure and names
 
@@ -31,7 +33,8 @@ Check:
 - focus order follows the task;
 - focus is visible;
 - sticky overlays do not hide the focused element;
-- dialogs manage entry/exit focus appropriately;
+- dialogs manage entry/exit focus appropriately, keep focus within modal context, and restore it logically on close;
+- composite widgets use the expected arrow-key/Tab model rather than making every internal item a separate Tab stop;
 - keyboard users can dismiss or leave temporary UI;
 - hover-only actions have keyboard/focus equivalents.
 
@@ -41,7 +44,8 @@ Check:
 
 - text and meaningful UI contrast;
 - meaning is not conveyed by color alone;
-- text remains usable when zoomed;
+- text remains usable at 200% browser zoom when applicable;
+- content reflows without loss around the WCAG-relevant narrow width when applicable;
 - content does not become unusable because of horizontal scrolling at common zoom/narrow widths;
 - pointer targets have adequate size or spacing;
 - focus styling is perceivable.
@@ -74,6 +78,30 @@ When motion/animation is used:
 - avoid unnecessary flashing or movement;
 - do not make essential understanding depend on animation alone.
 
+## Additional WCAG 2.2 risk checks
+
+When the feature touches these areas, also inspect:
+
+- dragging has an equivalent non-drag interaction where required;
+- authentication does not block password managers, paste, or other accessible completion methods;
+- multi-step data entry does not unnecessarily require users to enter the same information again;
+- help mechanisms remain consistently placed when the criterion applies;
+- focused content is not obscured by sticky or overlay UI.
+
+Use the exact current WCAG text for conformance decisions rather than relying on a shortened checklist.
+
+## Verification depth
+
+For meaningful changes, scale evidence with risk:
+
+1. source/semantic inspection;
+2. automated checks already available in the project;
+3. keyboard-only task completion;
+4. zoom/reflow and focus-obscuring checks;
+5. screen-reader or other assistive-technology walkthrough for complex/high-impact flows.
+
+Design-system component accessibility does not prove the assembled page or workflow is accessible.
+
 ## Tooling limits
 
 Automated scanners can catch some markup, contrast, naming, and rule violations. They do not establish:
@@ -85,4 +113,4 @@ Automated scanners can catch some markup, contrast, naming, and rule violations.
 - correct focus behavior in every dynamic interaction;
 - full WCAG conformance.
 
-Combine automated checks with keyboard and rendered/runtime inspection.
+Combine automated checks with knowledgeable human evaluation. W3C notes that no evaluation tool alone can determine whether a site meets accessibility standards. For high-impact flows, include assistive-technology testing when practical.
