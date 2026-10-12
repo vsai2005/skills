@@ -1,6 +1,6 @@
 ---
 name: flaky-test-triage
-description: Investigate intermittent or nondeterministic tests by measuring repetition failures and isolating order, contention, timing, or state causes. Use for flaky CI or tests that pass on rerun; do not treat longer timeouts as a root-cause fix.
+description: Investigate intermittent tests by measuring failures and isolating order, contention, timing, or state causes. Use for flaky CI or tests that pass on rerun; do not mask causes with longer timeouts.
 ---
 
 # Flaky Test Triage
