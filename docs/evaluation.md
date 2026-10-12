@@ -9,7 +9,7 @@ Test both.
 
 ## Activation evaluation
 
-Use `evals/activation-cases.json`. Each case records the expected primary skill or `none`.
+Use `evals/activation-cases.json`. Each case records the expected primary skill or `none`. The release gate requires at least eight positive cases per skill and at least eight true-negative `none` cases.
 
 Cover multiple forms, not only explicit skill names:
 
@@ -23,6 +23,15 @@ Cover multiple forms, not only explicit skill names:
 
 When a skill triggers too broadly or too narrowly, improve the frontmatter `description` before adding more body instructions. Discovery happens before the body is loaded.
 
+Validate definitions and adapter wiring without model spend:
+
+```bash
+python3 scripts/activation_eval.py validate
+python3 scripts/activation_eval.py run --provider codex --dry-run --runs 1 --case debug-direct-01
+```
+
+For empirical activation rates, run repeated real-provider campaigns with `--provider codex`, `claude`, or `antigravity`. The harness records trace-observed skill loads when the host exposes them and reports detection as unknown rather than guessing when it does not.
+
 ## Behavior evaluation
 
 Use `evals/behavior-cases.json` for machine-readable scenarios and `evals/behavior-cases.md` for the human scoring form. Run them against disposable repositories/fixtures and score outcomes such as:
@@ -35,7 +44,7 @@ Use `evals/behavior-cases.json` for machine-readable scenarios and `evals/behavi
 - Did a refactor keep public behavior/contracts stable?
 - Did final reporting distinguish verified from unverified checks?
 
-Repository CI validates activation, semantic behavior, and executable live-eval definitions without spending model tokens. `evals/live-cases.json` adds disposable repository fixtures and deterministic graders for every bundled skill. Live Codex/Claude runs remain explicit because they require credentials, sandboxing, and spend limits.
+Repository CI validates activation definitions, provider-adapter dry runs, semantic behavior, and executable live-eval definitions without spending model tokens. `evals/live-cases.json` adds disposable repository fixtures and deterministic graders for every bundled skill. Real Codex/Claude/Antigravity runs remain explicit because they require credentials, local host configuration, sandboxing, and spend limits.
 
 ## Variance
 
@@ -54,7 +63,7 @@ This is the skill equivalent of adding a regression test before fixing code.
 
 ## RED/GREEN live-model evaluation
 
-For important skill changes, use the executable A/B protocol in [Live Skill Evaluation Protocol](live-evaluation.md). `scripts/live_eval.py` runs real Codex or Claude Code control/treatment pairs, retains raw traces plus deterministic grading artifacts, alternates arm order across repetitions, and binds results to exact campaign/skill/case hashes. `scripts/eval_matrix.py` remains available for teams with a separate harness.
+For important skill changes, use the executable A/B protocol in [Live Skill Evaluation Protocol](live-evaluation.md). `scripts/live_eval.py` runs real Codex, Claude Code, or Antigravity control/treatment pairs, retains raw traces plus deterministic grading artifacts, alternates arm order across repetitions, and binds results to exact campaign/skill/case hashes. `scripts/eval_matrix.py` remains available for teams with a separate harness.
 
 For publishable empirical evidence, use [Empirical Benchmark Campaigns](empirical-benchmarking.md). A campaign requires repeated paired runs and an explicit model; CI validates the engine but never calls paid models.
 
@@ -75,3 +84,21 @@ After repeated real RED/GREEN runs, use `scripts/skill_effectiveness.py` to summ
 ## Instruction ablation
 
 Use `scripts/instruction_ablation.py` to create disposable variants that remove one skill section at a time. Keep sections that measurably help or encode a safety invariant; prune instructions that cost context without changing useful behavior.
+
+## Published evidence and expiry
+
+The benchmark machinery is not itself evidence that a skill helps. Publish only sanitized real-model aggregate claims in `evidence/registry.json`. Every claim is bound to the exact skill-tree SHA-256, host/model identity, paired-run count, and test date.
+
+```bash
+python3 scripts/evidence_freshness.py .
+```
+
+The default freshness window is 90 days. Skill changes invalidate prior claims immediately.
+
+## Standard eval interoperability
+
+The canonical suites remain centralized so runtime skills do not contain evaluation answer sheets. Export Agent Skills `evals/evals.json`-compatible development artifacts when another tool needs them:
+
+```bash
+python3 scripts/export_standard_evals.py . --output-dir dist/standard-evals
+```
