@@ -54,6 +54,7 @@ Typical routing:
 - Version-sensitive external API/framework behavior: apply `source-grounded-development`.
 - High-risk/fresh-context second review: apply `independent-review`.
 - Auth, authorization, secrets, untrusted input, command/file/network boundaries, value transfer, or other attacker-controlled trust boundaries: apply `security-hardening`.
+- User-facing interface quality where hierarchy, interaction states, responsive behavior, accessibility, consistency, or rendered evidence are the primary concern: apply `ui-ux-quality`.
 - Technical prose that needs clear controlled English: apply `asd-ste100-writing` to the prose only, not to code identifiers or quoted contracts.
 - Prose that is accurate but stiff, repetitive, generic, or machine-like: apply `humanizer-writing`; for technical procedures, use it after `asd-ste100-writing` and do not undo controlled terminology or safety wording.
 - Final readiness or pre-merge evidence: apply the `verify-change` workflow.
