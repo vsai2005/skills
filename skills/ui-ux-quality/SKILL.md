@@ -236,3 +236,5 @@ location -> evidence -> user impact -> owning cause -> smallest correct repair -
 Do not label a personal aesthetic preference as a defect unless it violates an explicit product goal, design system, accessibility requirement, or measurable usability need.
 
 Do not turn a heuristic review into invented user research, and do not hide a blocking defect behind an overall numeric UI score. Use scores only when the user explicitly asks for comparative scoring, and keep the underlying evidence and severe findings visible.
+
+For the external standards/design-system rationale behind this workflow, load [references/research-basis.md](references/research-basis.md) only when provenance or methodology comparison is relevant.
