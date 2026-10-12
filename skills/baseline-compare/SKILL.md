@@ -1,6 +1,6 @@
 ---
 name: baseline-compare
-description: Compare failing tests or checks against a clean baseline so every current failure is classified as pre-existing or regression. Use when a repository already has red tests, an environment is noisy, a broad change exposes unrelated failures, or a reviewer needs proof that new failures were not introduced. Prefer an isolated git worktree baseline and document every manual baseline reconstruction change.
+description: Classify current failing tests or checks as pre-existing or regressions by comparing against a clean baseline. Use when the repository was already red or failure attribution is uncertain.
 ---
 
 # Baseline Compare

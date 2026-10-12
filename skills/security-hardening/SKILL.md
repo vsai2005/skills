@@ -1,6 +1,6 @@
 ---
 name: security-hardening
-description: Review or implement security-sensitive software changes involving authentication, authorization, sessions, untrusted input, command/file/network boundaries, secrets, uploads, deserialization, persistence, value transfer, dependency/supply-chain changes, or other trust boundaries. Use when attacker-controlled data or privilege crosses a boundary and the change needs abuse-case-driven verification rather than a generic code review.
+description: Handle security-sensitive changes across auth, permissions, untrusted input, secrets, command/file/network boundaries, uploads, persistence, value transfer, or dependencies. Use abuse-case-driven verification at trust boundaries.
 ---
 
 # Security Hardening

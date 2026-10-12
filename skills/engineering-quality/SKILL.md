@@ -1,6 +1,6 @@
 ---
 name: engineering-quality
-description: Coordinate end-to-end software changes that span more than one engineering mode, such as implementing a feature plus debugging regressions, refactoring while changing behavior, or reviewing a broad patch for architecture and verification. Use for multi-phase coding work where scope, architecture, implementation, debugging, refactoring, and final proof must be coordinated. Prefer a more specific skill for a simple single-mode task.
+description: Coordinate software work that genuinely spans multiple engineering modes, such as feature work plus debugging, refactoring, migration, or verification. Prefer a specific skill for single-mode tasks; use project-quality-orchestrator for broad source-to-consumer audits.
 ---
 
 # Engineering Quality
@@ -57,9 +57,9 @@ Typical routing:
 - Technical prose that needs clear controlled English: apply `asd-ste100-writing` to the prose only, not to code identifiers or quoted contracts.
 - Prose that is accurate but stiff, repetitive, generic, or machine-like: apply `humanizer-writing`; for technical procedures, use it after `asd-ste100-writing` and do not undo controlled terminology or safety wording.
 - Final readiness or pre-merge evidence: apply the `verify-change` workflow.
-- Cross-layer project audit, release/freeze readiness, or correctness that must be traced from canonical source through transformations to the final consumed artifact: apply `project-quality-orchestrator`.
+- Cross-layer audit or release/freeze work whose main problem is source-to-consumer correctness: hand off to `project-quality-orchestrator` rather than running both orchestration workflows in parallel.
 
-When the host exposes those skills separately, explicitly consult the selected skill's `SKILL.md` and only the references needed for that phase. When it does not, use [references/mode-selection.md](references/mode-selection.md) as the fallback summary. Do not assume another skill was loaded merely because its name is mentioned here.
+When the host exposes those skills separately, consult only the selected skill for the current phase and only the references needed now. Default to one specialist; use two only when the phase genuinely spans both concerns. Do not preload later-phase skills. When it does not, use [references/mode-selection.md](references/mode-selection.md) as the fallback summary. Do not assume another skill was loaded merely because its name is mentioned here.
 
 Do not turn a narrow task into a broad rewrite merely because several skills are available.
 

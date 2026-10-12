@@ -1,6 +1,6 @@
 ---
 name: independent-review
-description: Perform a fresh-context review of a meaningful software change after implementation, especially for shared/high-blast-radius code, authentication/security, public contracts, migrations, large refactors, architecture changes, or explicit review requests. Use to reduce self-review blind spots by judging the final diff against the original request, repository constraints, and verification evidence without relying on the implementer's reasoning narrative.
+description: Perform a fresh-context second review of meaningful or high-risk software changes to catch self-review blind spots. Judge the final diff against the request, constraints, contracts, and actual evidence. Use when independence is specifically useful, not for an ordinary readiness check.
 ---
 
 # Independent Review

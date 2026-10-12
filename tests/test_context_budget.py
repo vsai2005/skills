@@ -17,8 +17,8 @@ class ContextBudgetTests(unittest.TestCase):
             [],
             violations(
                 budgets,
-                max_total_discovery_chars=7000,
-                max_description_chars=600,
+                max_total_discovery_chars=4500,
+                max_description_chars=320,
                 max_skill_lines=500,
                 max_resource_bytes=50000,
                 max_total_resource_bytes=300000,

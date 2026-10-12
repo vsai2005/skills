@@ -10,11 +10,13 @@ python3 scripts/context_budget.py . --fail-on-budget
 
 The default guardrails are intentionally simple:
 
-- total bundled discovery metadata: at most 7,000 characters;
-- one skill description: at most 600 characters;
+- total bundled discovery metadata: at most 4,500 characters;
+- one skill description: at most 320 characters;
 - one `SKILL.md`: at most 500 lines;
 - one skill's progressive-disclosure resources: at most 50 KB;
 - all bundled references/assets together: at most 300 KB.
+
+The tighter discovery limits protect the always-visible context budget: skill descriptions should identify activation boundaries, while workflow detail belongs in the selectively loaded skill body or references.
 
 These are repository guardrails, not universal laws. A future change can revise them deliberately with evidence, but should not silently increase always-visible context.
 

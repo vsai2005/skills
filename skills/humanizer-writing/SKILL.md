@@ -1,6 +1,6 @@
 ---
 name: humanizer-writing
-description: Improve prose that is accurate but stiff, repetitive, generic, or machine-like by preserving meaning, matching the author's real voice, and changing only what needs improvement. Use for emails, reports, release notes, posts, explanations, and other prose. Do not fabricate personal experience, fake errors, citations, or claims of human authorship, and do not optimize for AI-detector evasion.
+description: Improve accurate prose that is stiff, repetitive, generic, or machine-like while preserving meaning and authentic voice. Do not invent experience, errors, citations, or human authorship, and do not optimize for detector evasion.
 ---
 
 # Humanizer Writing

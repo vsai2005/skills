@@ -1,6 +1,6 @@
 ---
 name: guard-architecture
-description: Review or guide architecture-sensitive software changes involving module/package boundaries, shared domain rules, dependency direction, public APIs, persistence models, providers, plugins, auth boundaries, concurrency, or broad blast radius. Use when a change risks architecture drift, circular dependencies, misplaced ownership, compatibility breakage, or cross-cutting technical debt.
+description: Review architecture-sensitive changes involving boundaries, shared rules, dependency direction, public APIs, persistence, providers, concurrency, or broad blast radius. Use when ownership, compatibility, or architecture drift is at risk.
 ---
 
 # Guard Architecture

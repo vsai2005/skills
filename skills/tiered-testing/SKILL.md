@@ -1,6 +1,6 @@
 ---
 name: tiered-testing
-description: Plan and execute software verification in cheap and heavy tiers so fast checks run continuously while expensive suites are scheduled deliberately. Use when a change needs a test strategy, when shared code increases blast radius, when heavy checks cannot run immediately, or when deferred verification must be tracked in PENDING_TESTS.md without silently being forgotten.
+description: Plan verification in cheap and heavy tiers so fast checks run early and expensive suites run deliberately. Use when test scope, shared-code blast radius, or deferred verification needs explicit handling.
 ---
 
 # Tiered Testing

@@ -1,6 +1,6 @@
 ---
 name: asd-ste100-writing
-description: Rewrite or draft technical prose in a clear ASD-STE100-inspired controlled-English style for documentation, procedures, explanations, release notes, review comments, prompts, and user-facing engineering text. Use when clarity, consistency, short sentences, direct instructions, and stable terminology matter. Preserve exact code/API identifiers and do not claim certified ASD-STE100 compliance.
+description: Draft or rewrite technical prose in clear ASD-STE100-inspired English. Use for procedures, documentation, explanations, prompts, or engineering text needing short, consistent wording. Preserve exact identifiers; do not claim certified compliance.
 ---
 
 # ASD-STE100-Inspired Writing
