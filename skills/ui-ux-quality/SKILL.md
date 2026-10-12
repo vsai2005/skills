@@ -20,6 +20,8 @@ Identify:
 
 Do not redesign the product identity merely because another style is fashionable.
 
+Separate **observed evidence** from **usability hypotheses**. A heuristic review can identify likely risks, but it cannot replace real-user evidence when the question is what users notice, understand, prefer, or successfully complete.
+
 ## 2. Inspect the existing product system first
 
 Before proposing visual changes, inspect the real local conventions:
@@ -33,9 +35,9 @@ Before proposing visual changes, inspect the real local conventions:
 - responsive behavior;
 - accessibility utilities.
 
-Prefer a coherent existing system over introducing a second visual language.
+Prefer a coherent existing system over introducing a second visual language. Choose components and tokens by semantic intent, not by whichever visual value looks close enough. Prefer native semantics or an established accessible primitive before creating a custom widget.
 
-Use [references/review-checklist.md](references/review-checklist.md) for a detailed audit when the task is broad.
+Use [references/review-checklist.md](references/review-checklist.md) for a detailed audit when the task is broad. Use [references/usability-design-system.md](references/usability-design-system.md) when usability heuristics, semantic token roles, component behavior contracts, or research uncertainty are material.
 
 ## 3. Check hierarchy and comprehension
 
@@ -52,6 +54,8 @@ Review:
 - whether status, risk, and destructive actions are visually distinct.
 
 Fix hierarchy before polishing shadows, gradients, or micro-animation.
+
+For broader usability reviews, apply relevant established heuristics such as system-status visibility, match to user language, user control, consistency, error prevention, recognition over recall, and error recovery. Do not force a finding for every heuristic.
 
 ## 4. Review the complete interaction state model
 
@@ -102,12 +106,15 @@ Look for:
 
 Do not invent new breakpoints when the existing system already defines them unless evidence shows they are insufficient.
 
+For web interfaces with reflow risk, include zoom/text-resize behavior and realistic content expansion when feasible. Check localization or RTL behavior when the product supports those contexts instead of treating English left-to-right content as the universal case.
+
 ## 7. Treat accessibility as a quality baseline
 
 For web interfaces, use WCAG 2.2 AA as the default reference target when applicable, while following stricter project or legal requirements when provided.
 
 At minimum inspect:
 
+- whether native/project primitives can own the interaction before custom widget code;
 - semantic structure and accessible names;
 - keyboard reachability and logical focus order;
 - visible, unobscured focus;
@@ -120,7 +127,7 @@ At minimum inspect:
 
 Use [references/accessibility.md](references/accessibility.md) for the focused pass.
 
-Automated accessibility tooling is useful evidence, but it does not prove usability or full conformance.
+Automated accessibility tooling is useful evidence, but it does not prove usability or full conformance. For complex widgets, verify the expected keyboard and focus model against established platform/WAI-ARIA patterns rather than inventing interactions.
 
 ## 8. Review interaction quality
 
@@ -136,6 +143,8 @@ Check that the interface:
 - preserves user context after errors or retries.
 
 Prefer predictable behavior over clever interaction.
+
+Also verify **interaction truth**: visual state, accessibility state, application state, and the actual user-visible outcome should agree. A pressed/sorted/selected control that does not change the represented product state is still broken.
 
 ## 9. Preserve visual consistency
 
@@ -160,12 +169,16 @@ When UI/UX is the requirement, source inspection is insufficient.
 
 When feasible, inspect the real interface with browser/runtime evidence such as:
 
-- screenshots at representative viewport sizes;
+- screenshots at representative viewport sizes and relevant themes/states;
 - keyboard navigation;
 - browser/e2e flows;
 - accessibility tree or semantic inspection;
 - real loading/error/empty states;
-- interaction with actual shared components.
+- interaction with actual shared components;
+- zoom/reflow and content-stress checks when layout resilience is in scope;
+- existing visual-regression/component-story evidence when the repository already provides it.
+
+Use [references/rendered-verification.md](references/rendered-verification.md) to select evidence depth without installing unnecessary tooling.
 
 If runtime evidence is unavailable, state that limitation instead of presenting code review as visual proof.
 
@@ -221,3 +234,5 @@ location -> evidence -> user impact -> owning cause -> smallest correct repair -
 ```
 
 Do not label a personal aesthetic preference as a defect unless it violates an explicit product goal, design system, accessibility requirement, or measurable usability need.
+
+Do not turn a heuristic review into invented user research, and do not hide a blocking defect behind an overall numeric UI score. Use scores only when the user explicitly asks for comparative scoring, and keep the underlying evidence and severe findings visible.
