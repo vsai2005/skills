@@ -9,6 +9,14 @@ class CiConfigTests(unittest.TestCase):
         self.assertIn('actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97',text)
         self.assertNotIn('actions/checkout@v',text)
         self.assertNotIn('actions/setup-python@v',text)
+    def test_ci_limits_pushes_to_main_and_cancels_stale_runs(self):
+        text=(ROOT/'.github/workflows/ci.yml').read_text(encoding='utf-8')
+        self.assertIn('branches:\n      - main', text)
+        self.assertIn('pull_request:', text)
+        self.assertIn('cancel-in-progress: true', text)
+        self.assertIn('activation_eval.py validate', text)
+        self.assertIn('--provider antigravity --dry-run', text)
+
     def test_dependabot_is_actions_only(self):
         text=(ROOT/'.github/dependabot.yml').read_text(encoding='utf-8')
         self.assertIn('package-ecosystem: "github-actions"',text)
