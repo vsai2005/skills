@@ -412,5 +412,19 @@
       "Distinguish source/test evidence from final-consumer or runtime evidence that was not obtained.",
       "Delegate specialist concerns only when they are relevant rather than loading every skill."
     ]
+  },
+  {
+    "id": "uiux-rendered-product-quality",
+    "skills": [
+      "ui-ux-quality"
+    ],
+    "fixture": "An existing checkout page uses the product's established colors and components, but the form has no persistent email label, keyboard focus is removed, controls are too small, a fixed card width overflows on narrow screens, and error/loading states are unclear.",
+    "request": "Improve the UI/UX without replacing the brand or architecture. Verify the experience as a user-facing interface, not only as source code.",
+    "expected_behaviors": [
+      "Preserve the existing product identity and shared design conventions unless a concrete usability or accessibility defect requires change.",
+      "Fix hierarchy and task-blocking interaction problems before cosmetic polish, including labels, focus, target sizing, responsive overflow, and state feedback.",
+      "Review representative responsive and interaction states instead of judging only the default desktop view.",
+      "Use rendered/runtime evidence when feasible and state clearly when such evidence cannot be obtained."
+    ]
   }
 ]
