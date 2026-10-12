@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented here.
 
+## Unreleased
+
+- Added `ui-ux-quality`, a selective user-facing interface workflow for hierarchy, interaction states, responsive behavior, accessibility, design-system consistency, and rendered/runtime evidence.
+- Added progressive-disclosure UI/UX review, accessibility, and state/responsive references rather than expanding the always-loaded orchestrators.
+- Routed substantial UI/UX work from `engineering-quality` and `project-quality-orchestrator` to the dedicated specialist only when justified.
+- Added eight activation cases, semantic behavior coverage, an executable live fixture/grader, and a targeted `ui-ux-quality` + `verify-change` composition case.
+
 ## 1.12.0 - Portability, activation evidence, and cross-host hardening
 
 - Made script-backed skills self-contained by colocating canonical helpers under each owning skill's `scripts/` directory while preserving root-level compatibility entry points.
