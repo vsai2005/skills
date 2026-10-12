@@ -110,6 +110,12 @@ The repository includes a portable `plugin.json` plus `.codex-plugin/plugin.json
 
 The repository also includes `.claude-plugin/plugin.json`. Claude Code plugins auto-discover skill folders under `skills/` when the plugin is installed/enabled. See [Claude Code installation](docs/install-claude-code.md).
 
+### Use with Google Antigravity
+
+Antigravity 2.0, Antigravity CLI, Antigravity IDE, and the Antigravity SDK can use the same canonical `skills/` tree. Install the folders directly into Antigravity's skill locations, point the SDK at `skills/`, or generate a strict Antigravity plugin bundle with `scripts/package_antigravity.py`.
+
+See [Google Antigravity installation](docs/install-antigravity.md).
+
 ### Use with another Agent Skills compatible harness
 
 Expose one or more folders under `skills/` as Agent Skills. Each skill has standard `SKILL.md` metadata and keeps host-specific UI configuration outside its core instructions.
@@ -396,6 +402,14 @@ python3 scripts/generate_manifest.py . --check
 
 `FILE_MANIFEST.txt` stores SHA-256 and byte size for every release file except the manifest itself and transient VCS/cache files.
 
+### Build a Google Antigravity plugin bundle
+
+```bash
+python3 scripts/package_antigravity.py . --output-dir dist
+```
+
+Creates an Antigravity-native plugin directory plus deterministic ZIP and checksum from the canonical `skills/` tree. The generated `plugin.json` uses Google's strict Antigravity schema without changing the repository's Codex/Claude/portable manifests.
+
 ### Build a deterministic release
 
 ```bash
@@ -462,7 +476,7 @@ engineering-quality-agent-skills/
 
 The structure follows current Agent Skills conventions: a skill is a folder with `SKILL.md`, with optional `references/`, `scripts/`, and assets. The descriptions are written to carry activation intent, while the bodies remain focused and use progressive disclosure. Provider-specific presentation metadata is kept separate from the core workflow.
 
-See [Design principles](docs/design-principles.md), [Compatibility](docs/compatibility.md), [Context Budget](docs/context-budget.md), [Skill Effectiveness](docs/skill-effectiveness.md), [Composition Evaluation](docs/composition-evaluation.md), [Portability](docs/portability.md), and [Live Skill Evaluation Protocol](docs/live-evaluation.md) for the rationale and evaluation model used by this repository. See [Publishing and distribution](docs/publishing.md) before preparing a public marketplace/directory submission.
+See [Design principles](docs/design-principles.md), [Compatibility](docs/compatibility.md), [Google Antigravity installation](docs/install-antigravity.md), [Context Budget](docs/context-budget.md), [Skill Effectiveness](docs/skill-effectiveness.md), [Composition Evaluation](docs/composition-evaluation.md), [Portability](docs/portability.md), and [Live Skill Evaluation Protocol](docs/live-evaluation.md) for the rationale and evaluation model used by this repository. See [Publishing and distribution](docs/publishing.md) before preparing a public marketplace/directory submission.
 
 ## Contributing
 
