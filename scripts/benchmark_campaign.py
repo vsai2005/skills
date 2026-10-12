@@ -91,7 +91,7 @@ def plan_campaign(root: Path, policy: dict[str, Any], *, provider: str, models: 
 
 def analyze_campaign(root: Path, out_dir: Path, policy: dict[str, Any]) -> dict[str, Any]:
     record_paths = []
-    for relative in ("local/codex-runs.jsonl", "local/claude-runs.jsonl", "historical/codex-runs.jsonl", "historical/claude-runs.jsonl"):
+    for relative in ("local/codex-runs.jsonl", "local/claude-runs.jsonl", "local/antigravity-runs.jsonl", "historical/codex-runs.jsonl", "historical/claude-runs.jsonl", "historical/antigravity-runs.jsonl"):
         path = out_dir / relative
         if path.is_file():
             record_paths.append(path)
@@ -115,7 +115,7 @@ def analyze_campaign(root: Path, out_dir: Path, policy: dict[str, Any]) -> dict[
     (out_dir / "effectiveness-registry-strong.json").write_text(json.dumps(strong, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     composition_outputs = []
-    for provider in ("codex", "claude"):
+    for provider in ("codex", "claude", "antigravity"):
         path = out_dir / "composition" / f"{provider}-composition-runs.jsonl"
         if path.is_file():
             result = compare_records(path, min_runs=max(3, int(policy["minimum_pairs_for_claim"])), confidence=float(policy["confidence"]))
@@ -139,7 +139,7 @@ def run_campaign(args: argparse.Namespace, root: Path, policy: dict[str, Any]) -
         print("[ERROR] real benchmark campaigns require at least one explicit --model; do not publish evidence for an unnamed provider default", file=sys.stderr)
         return 2
     if args.provider != "command" and not args.dry_run:
-        binary = args.binary or ("codex" if args.provider == "codex" else "claude")
+        binary = args.binary or ("codex" if args.provider == "codex" else "claude" if args.provider == "claude" else "agy" if args.provider == "antigravity" else "")
         if shutil.which(binary) is None:
             print(f"[ERROR] provider binary not found: {binary}", file=sys.stderr)
             return 2
@@ -235,7 +235,7 @@ def build_parser() -> argparse.ArgumentParser:
     analyze = sub.add_parser("analyze")
     for cmd in (plan, run):
         cmd.add_argument("--policy", type=Path, default=Path("evals/benchmark-policy.json"))
-        cmd.add_argument("--provider", choices=("codex", "claude", "command"), required=True)
+        cmd.add_argument("--provider", choices=("codex", "claude", "antigravity", "command"), required=True)
         cmd.add_argument("--model", action="append", default=[])
         cmd.add_argument("--runs", type=int)
         cmd.add_argument("--profile", choices=("core", "full"), default="core")
