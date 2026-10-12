@@ -108,5 +108,15 @@
     "fixture": "evals/live-fixtures/security-hardening",
     "request": "Audit this ownership update end to end. Delegate the trust-boundary work to security-hardening, keep the orchestrator focused on cross-layer evidence, and avoid duplicating security analysis at every layer.",
     "grader_case": "security-hardening-owner-transfer-live"
+  },
+  {
+    "id": "uiux-plus-verification",
+    "skills": [
+      "ui-ux-quality",
+      "verify-change"
+    ],
+    "fixture": "evals/live-fixtures/ui-ux-quality",
+    "request": "Improve the checkout experience with UI/UX quality judgment, then use verify-change only for the final evidence gate. Do not turn final verification into a second full design review.",
+    "grader_case": "ui-ux-quality-checkout-live"
   }
 ]
