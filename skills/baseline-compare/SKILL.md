@@ -1,6 +1,6 @@
 ---
 name: baseline-compare
-description: Classify current failing tests or checks as pre-existing or regressions by comparing against a clean baseline. Use when the repository was already red or failure attribution is uncertain.
+description: Classify failing tests or checks as pre-existing or regressions by comparing with a clean baseline. Use when the repository was already red or attribution is uncertain.
 ---
 
 # Baseline Compare

@@ -1,4 +1,4 @@
-# source-description-sha256: 1124e4865aee3ae905b46dab7756cf0a8b40d71bad6fdfc224a1df70d9470e6f
+# source-description-sha256: 7eb7d4abb36033315b651f764408cd7eaa0845b756f05c154a228b8080a0a74b
 interface:
   display_name: "Baseline Compare"
   short_description: "Separate pre-existing failures from regressions"
