@@ -22,6 +22,14 @@ The following public systems informed the skill's emphasis on accessible primiti
 - [Adobe Spectrum inclusive design](https://spectrum.adobe.com/foundations/inclusivity/inclusive-design) — prevention, context-sensitive help, inclusive interaction, and internationalization.
 - [Figma design-systems learning](https://help.figma.com/hc/en-us/articles/14552901442839-Overview-Introduction-to-design-systems) — principles, foundations, documentation, process, accessibility, tokens, and component architecture.
 
+## Video references
+
+- [NN/g: 10 Usability Heuristics — From Theory to Practice (course preview)](https://www.youtube.com/watch?v=WmmBLgtkjN4) — emphasizes applying heuristics to real interfaces rather than memorizing labels.
+- [Figma Config: Auditing design systems for accessibility](https://www.youtube.com/watch?v=cIUdgKnhAc8) — emphasizes auditing accessibility from design through code and treating contrast as only one part of accessibility.
+- [Google Developers: A11ycasts](https://developers.google.com/web/shows/) — practical platform-level accessibility checks and real-world fixes, including keyboard and focus behavior.
+
+These videos are supporting material. Standards and current project behavior remain stronger evidence for conformance or implementation decisions.
+
 ## External agent-workflow comparison
 
 The public [plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) repository was reviewed as an example of a much heavier UI-specific agent system.
