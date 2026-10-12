@@ -2,7 +2,13 @@ name: CI
 
 on:
   push:
+    branches:
+      - main
   pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -39,8 +45,17 @@ jobs:
         run: python scripts/context_budget.py . --fail-on-budget
       - name: Check portability
         run: python scripts/portability_check.py . --warnings-as-errors
+      - name: Validate activation evals
+        run: python scripts/activation_eval.py validate
+      - name: Dry-run native activation adapters
+        run: >-
+          python scripts/activation_eval.py run --provider codex --dry-run --runs 1 --case debug-direct-01 --output-dir .ci-activation/codex
+          && python scripts/activation_eval.py run --provider claude --dry-run --runs 1 --case debug-direct-01 --output-dir .ci-activation/claude
+          && python scripts/activation_eval.py run --provider antigravity --dry-run --runs 1 --case debug-direct-01 --output-dir .ci-activation/antigravity
       - name: Validate live behavior evals
         run: python scripts/live_eval.py validate
+      - name: Dry-run Antigravity live adapter
+        run: python scripts/live_eval.py run --provider antigravity --dry-run --runs 1 --case project-quality-cross-layer-live --output-dir .ci-live-antigravity
       - name: Validate historical debug evals
         run: python scripts/live_eval.py validate --cases evals/historical-debug-cases.json
       - name: Validate composition evals
