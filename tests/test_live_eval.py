@@ -1,5 +1,7 @@
 from pathlib import Path
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -72,6 +74,36 @@ class LiveEvalTests(unittest.TestCase):
         self.assertIn("--sandbox", command)
         self.assertIn("--model", command)
         self.assertIn("gemini-test", command)
+
+    def test_antigravity_dry_run_works_when_live_eval_is_executed_as_script(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts" / "live_eval.py"),
+                    "run",
+                    "--provider",
+                    "antigravity",
+                    "--dry-run",
+                    "--runs",
+                    "1",
+                    "--case",
+                    "project-quality-cross-layer-live",
+                    "--output-dir",
+                    tmp,
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(0, result.returncode, result.stderr or result.stdout)
+            records = [
+                json.loads(line)
+                for line in (Path(tmp) / "antigravity-runs.jsonl").read_text(encoding="utf-8").splitlines()
+            ]
+            self.assertEqual(2, len(records))
+            self.assertTrue(all(item["status"] == "planned" for item in records))
 
     def test_claude_treatment_loads_only_eval_plugin(self):
         command = build_claude_command(
