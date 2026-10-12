@@ -1,6 +1,6 @@
 ---
 name: structure-feature
-description: Build or extend software features in an existing repository while preserving clean ownership, repository conventions, modular responsibilities, reusable domain logic, and proportional complexity. Use when implementing endpoints, UI flows, services, modules, integrations, data handling, or other new capability where code placement and maintainability matter.
+description: Build or extend features in an existing repository while preserving ownership, conventions, modular responsibilities, reusable domain logic, and proportional complexity. Use when new capability and code placement are the primary work.
 ---
 
 # Structure Feature
