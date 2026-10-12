@@ -72,6 +72,17 @@ class ValidateRepoTests(unittest.TestCase):
                 )
             )
 
+    def test_spec_nested_metadata_is_parsed_without_spec_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "SKILL.md"
+            path.write_text(
+                "---\nname: demo\ndescription: A sufficiently descriptive trigger for testing.\nmetadata:\n  owner: team\n---\nBody\n",
+                encoding="utf-8",
+            )
+            data, problems = parse_minimal_frontmatter(path)
+            self.assertEqual("<mapping>", data["metadata"])
+            self.assertFalse(any(p.level == "ERROR" for p in problems), problems)
+
     def test_invalid_activation_eval_json_fails_validation(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = copy_repo(tmp)
