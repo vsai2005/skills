@@ -138,6 +138,8 @@ def validate_activation_evals(root: Path, skill_names: set[str]) -> list[Problem
     ids: set[str] = set()
     allowed = skill_names | {"none"}
     covered: set[str] = set()
+    positive_counts: dict[str, int] = {name: 0 for name in skill_names}
+    none_count = 0
     for index, case in enumerate(data):
         if not isinstance(case, dict):
             problems.append(Problem("ERROR", path, f"case {index} must be an object"))
@@ -156,12 +158,31 @@ def validate_activation_evals(root: Path, skill_names: set[str]) -> list[Problem
             problems.append(Problem("ERROR", path, f"case {case_id or index} expects unknown skill: {expected}"))
         elif expected != "none":
             covered.add(expected)
+            positive_counts[expected] += 1
+        else:
+            none_count += 1
 
     missing = sorted(skill_names - covered)
     if missing:
         problems.append(Problem("ERROR", path, f"activation evals do not cover skill(s): {', '.join(missing)}"))
-    if not any(isinstance(case, dict) and case.get("expected_primary_skill") == "none" for case in data):
-        problems.append(Problem("ERROR", path, "activation evals need at least one negative/none case"))
+    undercovered = sorted(name for name, count in positive_counts.items() if count < 8)
+    if undercovered:
+        details = ", ".join(f"{name}={positive_counts[name]}" for name in undercovered)
+        problems.append(
+            Problem(
+                "ERROR",
+                path,
+                "activation evals need at least 8 positive cases per skill; " + details,
+            )
+        )
+    if none_count < 8:
+        problems.append(
+            Problem(
+                "ERROR",
+                path,
+                f"activation evals need at least 8 negative/none cases; found {none_count}",
+            )
+        )
     return problems
 
 
