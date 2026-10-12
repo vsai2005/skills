@@ -24,7 +24,6 @@ try:
     from scripts.live_eval_graders import grade_case
     from scripts.live_eval_support import (
         build_antigravity_command,
-        build_antigravity_command,
         build_claude_command,
         build_codex_command,
         command_version,
@@ -46,6 +45,7 @@ except ModuleNotFoundError:
     from eval_provenance import repo_git_head, repo_version, runtime_metadata, sha256_file, sha256_json, sha256_tree
     from live_eval_graders import grade_case
     from live_eval_support import (
+        build_antigravity_command,
         build_claude_command,
         build_codex_command,
         command_version,
