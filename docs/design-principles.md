@@ -68,3 +68,23 @@ Agents should report what was actually run. If a full integration environment is
 ## 9. Provider-neutral core
 
 The core skill instructions avoid product-specific commands when the behavior is general. Host metadata and installation instructions live in dedicated manifests/docs. This keeps one source of truth usable across Agent Skills compatible environments.
+
+## 10. Self-contained skill resources
+
+A selectively installed skill must retain every resource path it names. Put executable helpers under the owning skill's `scripts/` directory, references under `references/`, and templates/static material under `assets/`.
+
+Repository-level helper commands may exist as compatibility wrappers, but they must delegate to the skill-local canonical implementation. CI validates explicit `scripts/`, `references/`, and `assets/` paths so a package cannot ship a dead skill-relative reference.
+
+## 11. Spec conformance and repository policy are separate
+
+The public Agent Skills specification permits optional frontmatter fields beyond `name` and `description`. The repository parser recognizes the public field set, then applies a stricter local portability policy for the shipped skills.
+
+Do not mislabel a repository preference as a standards violation.
+
+## 12. Compatibility is not effectiveness
+
+A host can accept the skill format and still select or execute a skill poorly for a particular model/version. Track structure, packaging, activation-adapter availability, behavior-adapter availability, and published empirical evidence separately.
+
+## 13. Evidence expires
+
+Model and host behavior changes. Published effectiveness claims are bound to the exact skill content and a finite evidence age. Re-run important campaigns after skill changes, major model/host changes, or evidence expiry instead of treating an old benchmark as permanent truth.
