@@ -55,6 +55,8 @@ jobs:
           --exclude "scripts/audit_structure.py"
           --exclude "tests/fixtures/audit_structure/**"
           --fail-on high
+      - name: Package Antigravity plugin
+        run: python scripts/package_antigravity.py . --output-dir .ci-antigravity
       - name: Package smoke test
         run: python scripts/package_release.py . --output-dir .ci-release
       - name: Test release ZIP
