@@ -1,4 +1,4 @@
-# source-description-sha256: 43aec2fb6f1e61b52dfc685fc0ba801b2841eea05c89c19b1c74b537c9731af7
+# source-description-sha256: 431a0986a521f74ac9393c3f45d3ca973de7c4335cdcddd0549854fc69b06d4c
 interface:
   display_name: "Context Engineering"
   short_description: "Load the smallest useful repository context"

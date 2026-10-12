@@ -1,6 +1,6 @@
 ---
 name: context-engineering
-description: Build the smallest useful repository context for a task. Use when the codebase is unfamiliar, large, convention-heavy, or context is stale and project rules, precedents, tests, or contracts must be found. Skip trivial local edits.
+description: Build the smallest useful repository context. Use for unfamiliar, large, convention-heavy, or stale-context codebases where rules, precedents, tests, or contracts must be found. Skip trivial local edits.
 ---
 
 # Context Engineering
