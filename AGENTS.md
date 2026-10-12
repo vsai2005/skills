@@ -31,31 +31,37 @@ Use the smallest applicable workflow:
 
 Do not invoke extra skills for a trivial local edit merely because they exist.
 
-## Required checks
+## Verification policy
 
-Run before finishing changes:
+Run the **smallest check set that can falsify the changed requirement**, then broaden when risk or evidence requires it. Do not run the complete repository gate after every local edit.
 
-```bash
-python3 -m compileall -q scripts tests skills
-python3 scripts/generate_manifest.py .
-python3 scripts/validate_repo.py . --warnings-as-errors
-python3 scripts/openai_metadata_check.py .
-python3 scripts/evidence_freshness.py .
-python3 scripts/activation_eval.py validate
-python3 scripts/context_budget.py . --fail-on-budget
-python3 scripts/portability_check.py . --warnings-as-errors
-python3 scripts/live_eval.py validate
-python3 scripts/live_eval.py validate --cases evals/historical-debug-cases.json
-python3 scripts/composition_eval.py validate
-python3 scripts/benchmark_campaign.py validate
-python3 -m unittest discover -s tests -v
-python3 scripts/audit_structure.py . \
-  --exclude "scripts/audit_structure.py" \
-  --exclude "tests/fixtures/audit_structure/**" \
-  --fail-on high
-```
+Use these defaults:
 
-For release work, also run:
+- **Docs/Markdown only:** validate the affected content and run repository/manifest checks only when the changed files participate in those contracts.
+- **Skill description or metadata:** run repository validation, OpenAI metadata freshness, context budget, and activation validation.
+- **Skill body/reference/asset:** run repository validation, context budget, and the affected deterministic tests/evals. Broaden when routing, shared schemas, or several skills changed.
+- **Python helper/script:** compile the changed module and run its targeted unit tests. Run the full unit suite when shared test/eval infrastructure or common helpers changed.
+- **Eval schema/runner:** validate the affected eval family and run targeted tests. Broaden to all eval validators when common eval infrastructure changed.
+- **Security, public contracts, packaging, release, or broad orchestration changes:** escalate verification according to blast radius and use the appropriate specialist skill.
+
+A failed focused check, a shared-code edit, or an unexpected side effect is a reason to broaden verification. A green focused check is not proof of a consumer layer that was never exercised.
+
+### Output discipline
+
+Keep successful verification output concise so logs do not become model context.
+
+- Prefer quiet/default test output for green runs.
+- For the full Python unit suite, use `python3 -m unittest discover -s tests`. If it fails, rerun the failing module/test with `-v` for diagnosis.
+- Preserve failing test IDs, relevant tracebacks, and command exit status.
+- Do not feed complete green logs back into the model when a summary is enough.
+- When a tool can write a large log/artifact to disk, keep the full evidence there and return a compact summary plus the path.
+- Do not truncate evidence needed to diagnose a failure.
+
+## Pull request and release gate
+
+Pull-request CI remains the comprehensive deterministic backstop across supported Python/OS lanes. A local task does not need to duplicate the whole CI matrix unless CI is unavailable or the failure is being reproduced locally.
+
+Before merge/release, require the relevant CI checks to pass. For release work, also run or confirm:
 
 ```bash
 python3 scripts/pending_tests.py check
@@ -65,4 +71,4 @@ python3 scripts/package_release.py . --output-dir dist
 unzip -t dist/engineering-quality-agent-skills-v$(cat VERSION).zip
 ```
 
-Do not weaken checks just to make CI pass. Fix the underlying issue or document a justified exception.
+Do not weaken checks just to make CI pass. Fix the underlying issue or document a justified exception. If a required check is intentionally delegated to PR CI, report that explicitly instead of claiming it was run locally.
