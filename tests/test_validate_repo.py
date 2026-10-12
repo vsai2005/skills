@@ -43,7 +43,34 @@ class ValidateRepoTests(unittest.TestCase):
                 encoding="utf-8",
             )
             _, problems = parse_minimal_frontmatter(path)
-            self.assertTrue(any("unsupported" in p.message for p in problems))
+            self.assertTrue(any("not supported by the Agent Skills spec" in p.message for p in problems))
+
+    def test_spec_optional_license_is_parsed_without_spec_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "SKILL.md"
+            path.write_text(
+                "---\nname: demo\ndescription: A sufficiently descriptive trigger for testing.\nlicense: MIT\n---\nBody\n",
+                encoding="utf-8",
+            )
+            data, problems = parse_minimal_frontmatter(path)
+            self.assertEqual("MIT", data["license"])
+            self.assertFalse(any(p.level == "ERROR" for p in problems), problems)
+
+    def test_missing_skill_local_script_fails_validation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = copy_repo(tmp)
+            helper = root / "skills" / "verify-change" / "scripts" / "evidence_ledger.py"
+            helper.unlink()
+            refresh_manifest(root)
+            problems = validate_repo(root)
+            self.assertTrue(
+                any(
+                    p.level == "ERROR"
+                    and p.path.name == "SKILL.md"
+                    and "skill-relative resource does not exist: scripts/evidence_ledger.py" in p.message
+                    for p in problems
+                )
+            )
 
     def test_invalid_activation_eval_json_fails_validation(self):
         with tempfile.TemporaryDirectory() as tmp:
