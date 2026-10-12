@@ -35,7 +35,7 @@ Do not force the same ceremony onto every task. `engineering-quality` classifies
 
 ## Build context selectively
 
-Use `context-engineering` when repository-specific facts are likely to change the implementation. `scripts/repo_context.py` is a deterministic starting map; it intentionally does not dump file contents.
+Use `context-engineering` when repository-specific facts are likely to change the implementation. The skill carries its own `scripts/repo_context.py` helper. The repository-level `scripts/repo_context.py` command is a compatibility wrapper for the same canonical implementation. It intentionally does not dump file contents.
 
 ## Ground changing external behavior
 
@@ -63,3 +63,11 @@ Use `humanizer-writing` when accurate prose feels stiff, repetitive, overly temp
 ## Measure and prune workflow
 
 Use `benchmark_campaign.py` for repeated real-model campaigns, then `skill_effectiveness.py` to see whether a version-matched skill helps a specific model enough to justify its cost. Use executable composition cases to catch skill interference and instruction ablation to remove sections that do not measurably help. Never use benchmark results to bypass a mandatory security or contract check for the task at hand.
+
+## Measure automatic activation separately
+
+Behavior can be excellent after explicit invocation while automatic selection is poor. Use `scripts/activation_eval.py` for repeated native-selection experiments and keep those results separate from RED/GREEN behavior scores.
+
+## Treat host compatibility as layered
+
+Use [Host support matrix](host-support.md). A format can be structurally compatible before activation or behavior has been empirically tested on that host/model.
