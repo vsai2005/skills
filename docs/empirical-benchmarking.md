@@ -64,6 +64,19 @@ python3 scripts/benchmark_campaign.py run \
 
 Real campaigns require an explicit `--model`; evidence from an unnamed provider default is deliberately not treated as publishable model-specific evidence.
 
+## Run a real Google Antigravity campaign
+
+```bash
+python3 scripts/benchmark_campaign.py run \
+  --provider antigravity \
+  --model MODEL \
+  --profile full \
+  --runs 5 \
+  --output-dir .verification/benchmarks/antigravity-MODEL
+```
+
+Antigravity campaigns use the same exact skill/case hashes and paired statistical policy as the other providers.
+
 ## Resume an interrupted campaign
 
 Use the same campaign identifier:
@@ -170,8 +183,18 @@ The campaign automatically writes both:
 - `effectiveness-registry.json`: all evidence, including uncertain evidence;
 - `effectiveness-registry-strong.json`: only strong, current evidence.
 
-Do not hand-edit those files into stronger claims. Re-run the campaign when the model, skill, benchmark, or provider interface changes.
+Do not copy raw benchmark artifacts into public release evidence. Publish sanitized strong/current aggregates with an explicit real campaign timestamp:
+
+```bash
+python3 scripts/publish_evidence.py \
+  .verification/benchmarks/codex-MODEL/effectiveness-registry-strong.json \
+  --tested-at 2026-10-12T12:00:00Z
+```
+
+The publisher rejects stale skill hashes, unnamed/default models, weak evidence, and non-strong classifications. `scripts/evidence_freshness.py` then expires published claims when the skill changes or the configured evidence age is exceeded.
+
+Do not hand-edit uncertain evidence into stronger claims. Re-run the campaign when the model, skill, benchmark, or provider interface changes.
 
 ## What this release does not claim
 
-Repository CI validates the campaign engine, schemas, statistics, resume behavior, and dry-run plans. It does **not** call paid external models. Real Codex/Claude evidence exists only after a user runs a campaign with those provider CLIs installed and retains the generated artifacts.
+Repository CI validates the campaign engine, schemas, statistics, resume behavior, and dry-run plans. It does **not** call paid external models. Real Codex/Claude/Antigravity evidence exists only after a user runs a campaign with those provider CLIs installed and retains the generated artifacts.
