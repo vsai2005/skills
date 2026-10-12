@@ -35,7 +35,7 @@ checks.append((
 ))
 
 checks.append((
-    "width: 720px" not in css.lower()
+    not bool(re.search(r"(?<!max-)width\s*:\s*720px\b", css, re.I))
     and (
         "max-width" in css.lower()
         or "width: min(" in css.lower()
