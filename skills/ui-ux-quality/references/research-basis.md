@@ -30,6 +30,15 @@ The following public systems informed the skill's emphasis on accessible primiti
 
 These videos are supporting material. Standards and current project behavior remain stronger evidence for conformance or implementation decisions.
 
+## Native-platform references
+
+- [Apple accessibility for UIKit](https://developer.apple.com/documentation/uikit/accessibility_for_uikit) — standard controls provide accessibility behavior; custom UI must expose the correct accessibility information and interactions.
+- [Apple Dynamic Type](https://developer.apple.com/videos/play/wwdc2024/10074/) — adaptive text and layout behavior for users who choose larger content sizes.
+- [Android: Make apps more accessible](https://developer.android.com/guide/topics/ui/accessibility/apps) — platform accessibility semantics, descriptions, touch targets, and assistive-technology behavior.
+- [Android accessibility principles](https://developer.android.com/guide/topics/ui/accessibility/principles) — clear semantics, operability, and platform-aware accessibility.
+
+These sources are intentionally separated from the web WCAG/APG material so the skill does not apply web implementation rules to native apps.
+
 ## External agent-workflow comparison
 
 The public [plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) repository was reviewed as an example of a much heavier UI-specific agent system.
