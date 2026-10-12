@@ -758,5 +758,35 @@
     "id": "uiux-android-native-14",
     "prompt": "Review this Jetpack Compose flow for TalkBack semantics, text scaling, 48dp touch-target guidance, keyboard/D-pad focus where relevant, and software-keyboard overlap. Keep the review Android-native, not web-centric.",
     "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-premium-15",
+    "prompt": "Make this landing page feel genuinely premium and brand-specific instead of like an AI-generated SaaS template. Improve composition, typography, imagery, and a few signature interactions without adding random effects everywhere.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-motion-16",
+    "prompt": "Design a polished motion system for this React product: shared-element transitions, sliding panels, route continuity, and reduced-motion behavior. Pick the lightest suitable animation tools.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-3d-17",
+    "prompt": "Add an interactive 3D product viewer to this ecommerce product page. It must load progressively, work on weaker mobile devices, support reduced motion, and have a useful non-WebGL fallback.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-scroll-story-18",
+    "prompt": "Turn this product story into an immersive scroll-led experience with pinned stages and visual transitions, but preserve native-feeling scrolling, keyboard access, mobile usability, and performance.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-anti-slop-19",
+    "prompt": "Audit this AI-generated-looking page: generic gradient hero, identical card grids, fake metrics, repeated fade-up animations, and vague copy. Make it product-specific rather than just changing the colors.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-sliding-20",
+    "prompt": "Improve the drawer, bottom sheet, carousel, and master-detail transitions so the directions and dismiss behavior form one coherent spatial model instead of unrelated slide animations.",
+    "expected_primary_skill": "ui-ux-quality"
   }
 ]
