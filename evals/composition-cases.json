@@ -78,5 +78,35 @@
     "fixture": "evals/live-fixtures/engineering-quality",
     "request": "Coordinate this shared behavior change with proportional rigor and finish with evidence, without loading unrelated specialist workflows.",
     "grader_case": "engineering-quality-schema-release-live"
+  },
+  {
+    "id": "project-quality-plus-engineering-quality",
+    "skills": [
+      "project-quality-orchestrator",
+      "engineering-quality"
+    ],
+    "fixture": "evals/live-fixtures/engineering-quality",
+    "request": "Audit this cross-layer release from canonical source to consumed output. Use engineering-quality only for the implementation phase that truly spans modes; do not run two coordinators in parallel or duplicate verification work.",
+    "grader_case": "project-quality-cross-layer-live"
+  },
+  {
+    "id": "project-quality-plus-verification",
+    "skills": [
+      "project-quality-orchestrator",
+      "verify-change"
+    ],
+    "fixture": "evals/live-fixtures/engineering-quality",
+    "request": "Trace this defect through its transformation path, make the smallest shared fix, then use final verification only at the evidence gate. Avoid re-running the same audit logic in both skills.",
+    "grader_case": "project-quality-cross-layer-live"
+  },
+  {
+    "id": "project-quality-plus-security",
+    "skills": [
+      "project-quality-orchestrator",
+      "security-hardening"
+    ],
+    "fixture": "evals/live-fixtures/security-hardening",
+    "request": "Audit this ownership update end to end. Delegate the trust-boundary work to security-hardening, keep the orchestrator focused on cross-layer evidence, and avoid duplicating security analysis at every layer.",
+    "grader_case": "security-hardening-owner-transfer-live"
   }
 ]
