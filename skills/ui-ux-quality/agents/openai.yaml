@@ -1,4 +1,4 @@
-# source-description-sha256: 9494a17e897dd995e8ed9f3e81b2e9933594af8f817285766fca4c571263a431
+# source-description-sha256: 5f83a5bb9f9eccef8682aded5ba785b62473efd3b89be3911a66a493fc56b055
 interface:
   display_name: "UI/UX Quality"
   short_description: "Audit rendered usability, states, and accessibility"
