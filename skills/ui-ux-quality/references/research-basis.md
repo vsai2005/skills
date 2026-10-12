@@ -30,6 +30,45 @@ The following public systems informed the skill's emphasis on accessible primiti
 
 These videos are supporting material. Standards and current project behavior remain stronger evidence for conformance or implementation decisions.
 
+## Premium web, motion, and 3D references
+
+Repositories and documentation reviewed:
+
+- [Motion](https://github.com/motiondivision/motion) — React lifecycle-aware enter/exit, layout/shared-element motion, gestures, and first-class reduced-motion support.
+- [Official GSAP AI Skills](https://github.com/greensock/gsap-skills) — timelines, ScrollTrigger, React lifecycle/cleanup, and performance guidance. The UI/UX skill does not adopt the vendor preference to choose GSAP by default; CSS/native solutions remain the lower-cost first choice.
+- [Three.js](https://github.com/mrdoob/three.js) — core WebGL/3D engine.
+- [React Three Fiber](https://github.com/pmndrs/react-three-fiber) — React renderer for Three.js; its performance guidance informed on-demand rendering, reuse, instancing, LOD, and adaptive quality.
+- [Lenis](https://github.com/darkroomengineering/lenis) — reviewed as a capable smooth-scroll system, but not adopted as a default because replacing native scrolling adds UX/accessibility verification obligations.
+- [Motionstack](https://github.com/discover-dmc/motionstack) and other specialist skill repositories were reviewed for tool coverage and current library boundaries; they are references, not mandatory dependencies.
+
+Selection principle:
+
+```text
+no motion
+-> CSS/native
+-> Motion for React component/layout motion
+-> GSAP for complex choreography/scroll timelines
+-> Three.js/R3F for actual 3D
+```
+
+Do not let two animation engines own the same property on the same element.
+
+Representative video/tutorial material reviewed:
+
+- [JavaScript Mastery: Master Web Animations in 2 Hours](https://www.youtube.com/watch?v=AW1yfBKRMKc) — large React/GSAP scroll-story build used as an implementation example.
+- [Pixel Grid UI: GSAP Scroll Animation Could Look Like a Pro](https://www.youtube.com/watch?v=AEced0SBmYI) — ScrollTrigger/product-page implementation example.
+- [DevWave Diaries: Advanced Supercar Website / ScrollTrigger](https://www.youtube.com/watch?v=33DEprMFi8U) — current cinematic landing-page example.
+
+Tutorial videos are useful for implementation patterns and visual vocabulary, not as standards. The skill keeps accessibility, performance, product fit, and evidence above tutorial aesthetics.
+
+Community/review signals reviewed:
+
+- web-design discussions repeatedly criticize generic gradient/card/hero repetition and unreviewed first drafts as the stronger "AI look", rather than any single style primitive;
+- Awwwards-style discussions repeatedly warn that scroll hijacking and excessive cinematic effects can become frustrating or perform poorly on ordinary Windows/lower-power hardware;
+- the practical conclusion is to pursue intentional product-specific art direction while keeping native behavior, performance, and task completion as hard constraints.
+
+Community opinion is treated as a signal, not normative evidence.
+
 ## Native-platform references
 
 - [Apple accessibility for UIKit](https://developer.apple.com/documentation/uikit/accessibility_for_uikit) — standard controls provide accessibility behavior; custom UI must expose the correct accessibility information and interactions.
