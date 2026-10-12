@@ -748,5 +748,15 @@
     "id": "uiux-semantic-12",
     "prompt": "The same destructive action is red on one screen and styled like the primary action on another. Review the design-system semantic intent and fix the shared owner instead of matching colors by eye.",
     "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-ios-native-13",
+    "prompt": "Audit this SwiftUI settings screen for VoiceOver labels, Dynamic Type, focus after a sheet closes, destructive-action clarity, and native interaction conventions. Do not apply web ARIA rules to it.",
+    "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "uiux-android-native-14",
+    "prompt": "Review this Jetpack Compose flow for TalkBack semantics, text scaling, 48dp touch-target guidance, keyboard/D-pad focus where relevant, and software-keyboard overlap. Keep the review Android-native, not web-centric.",
+    "expected_primary_skill": "ui-ux-quality"
   }
 ]
