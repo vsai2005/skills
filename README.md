@@ -37,7 +37,7 @@ This repository packages a repeatable engineering workflow around those failure 
 | `source-grounded-development` | Version-sensitive external APIs/frameworks | Ground decisions in the exact local version and authoritative sources |
 | `independent-review` | High-risk/fresh-context second review | Catch self-review blind spots before final verification |
 | `security-hardening` | Auth, secrets, untrusted input, command/file/network/value boundaries | Trace trust boundaries, test abuse cases, and repair the owning security control |
-| `ui-ux-quality` | UI/UX audits, responsive/accessibility review, user-facing polish | Improve hierarchy, states, consistency, accessibility, and rendered usability without replacing product identity |
+| `ui-ux-quality` | UI/UX audits, responsive/accessibility review, user-facing polish | Improve task clarity, heuristics, semantic design-system use, states, accessibility, resilience, and rendered usability without replacing product identity |
 | `asd-ste100-writing` | Technical procedures, explanations, release notes, reviews, and user-facing engineering prose | Write clear ASD-STE100-inspired controlled English while preserving exact technical meaning |
 | `humanizer-writing` | Prose that is correct but stiff, repetitive, generic, or machine-like | Make writing natural, specific, and professional without inventing facts or a fake author voice |
 
