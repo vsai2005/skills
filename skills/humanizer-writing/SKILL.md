@@ -5,97 +5,59 @@ description: Improve accurate prose that is stiff, repetitive, generic, or machi
 
 # Humanizer Writing
 
-Make prose feel natural to a real reader without changing what it means. Humanization is an editing task, not an authorship claim and not an AI-detector-bypass task.
+Make accurate prose feel natural to a real reader without changing meaning. Humanization is editing, not an authorship claim or detector-bypass task.
 
-## 1. Diagnose before rewriting
+## 1. Establish the rewrite contract
 
-Identify the audience, purpose, genre, and actual problems first.
+Identify audience, purpose, genre, requested intensity, protected facts/identifiers, and the actual writing problems.
 
-Look for:
+If the text is already natural and clear, do not rewrite it merely because this skill was selected.
 
-- generic scene-setting before the point;
-- repetitive transitions or sentence openings;
-- empty praise and vague benefit language;
-- mechanically uniform sentence or paragraph rhythm;
-- overlong, overformal, or abstract wording;
-- repeated summaries that add no information;
-- a mismatch between the text and the author's established voice.
+Use [references/rewrite-workflow.md](references/rewrite-workflow.md) for the full diagnostic and rewrite sequence.
 
-If the text is already natural and clear, **do not rewrite it just because this skill was selected**. Return it unchanged or make only the specific requested edit.
+## 2. Use the smallest useful intensity
 
-See [references/rewrite-workflow.md](references/rewrite-workflow.md).
-
-## 2. Choose the smallest useful intensity
-
-Use one of these modes:
-
-- **Light** — preserve almost all wording; remove obvious stiffness, repetition, or filler.
-- **Standard** — default; restructure sentences and paragraphs when needed while preserving voice and meaning.
-- **Deep** — use when the draft is strongly templated or when the user supplies an authentic writing sample and wants closer voice matching. Larger structural changes are allowed, but facts and viewpoint remain fixed.
+- **Light** -> remove obvious stiffness, repetition, or filler while preserving nearly all wording.
+- **Standard** -> default; restructure sentences/paragraphs when useful while preserving meaning and voice.
+- **Deep** -> use for strongly templated drafts or evidence-based voice matching; larger structural changes are allowed, but facts and viewpoint stay fixed.
 
 Do not use Deep mode merely because a stronger rewrite is possible.
 
 ## 3. Preserve truth before style
 
-Do not change or invent:
+Do not change or invent facts, numbers, dates, limits, warnings, requirements, citations, quoted text, technical identifiers, UI labels, commands, file paths, error codes, the author's experience/viewpoint, or obligation/uncertainty such as `must`, `may`, and `cannot`.
 
-- facts, numbers, dates, limits, warnings, requirements, citations, or quoted text;
-- technical identifiers, API names, UI labels, commands, file paths, or error codes;
-- the author's actual experience, confidence, role, or point of view;
-- uncertainty or obligation such as `may`, `must`, `should`, or `cannot`.
+Rewrite from the original source rather than a chain of rewrites.
 
-Rewrite from the **original source**, not from a chain of previous rewrites. Repeated rewriting compounds semantic drift.
+Use [references/preservation-and-continuity.md](references/preservation-and-continuity.md) for protected-content and long-form rules.
 
-See [references/preservation-and-continuity.md](references/preservation-and-continuity.md).
+## 4. Match voice only from visible evidence
 
-## 4. Match real voice when evidence exists
+When the user provides representative writing, match observable tendencies such as sentence rhythm, paragraph density, directness, formality, contractions, punctuation, transitions, and vocabulary complexity.
 
-If the user supplies 2-3 representative paragraphs, use them as a voice reference.
+Do not infer identity, demographics, personality, or hidden traits.
 
-Observe only visible writing tendencies such as:
+Use [references/voice-and-genre.md](references/voice-and-genre.md) and [assets/voice-profile-template.md](assets/voice-profile-template.md) when voice matching is material.
 
-- sentence-length range and rhythm;
-- paragraph density;
-- directness and formality;
-- contractions and first/second-person use;
-- punctuation habits;
-- explicit versus implicit transitions;
-- preferred vocabulary complexity.
+## 5. Fix patterns, not isolated punctuation
 
-Do not infer identity, demographics, personality, or hidden traits from a writing sample.
+Do not ban words, em dashes, semicolons, fragments, or three-item lists by rule. Change them only when their use is excessive, inappropriate, or part of a repeated template.
 
-See [references/voice-and-genre.md](references/voice-and-genre.md) and [assets/voice-profile-template.md](assets/voice-profile-template.md).
+Prefer specific nouns/verbs, idea-driven paragraphs, and natural sentence-length variation.
 
-## 5. Fix only what fired
+Use [references/naturalness-rules.md](references/naturalness-rules.md) and [references/patterns-and-examples.md](references/patterns-and-examples.md) when the diagnosis needs detail.
 
-Do not replace one artificial pattern with another. Words such as `however`, em dashes, semicolons, or three-item lists are not forbidden. Change them only when their use is excessive, inappropriate, or part of a repeated template.
+## 6. Keep naturalness separate from deception
 
-Prefer specific nouns and verbs, natural sentence-length variation, and paragraph structure driven by the idea itself.
+Never add fake anecdotes, emotions, opinions, quotations, citations, customer feedback, benchmarks, test results, typos, or errors to appear "human."
 
-See [references/naturalness-rules.md](references/naturalness-rules.md) and [references/patterns-and-examples.md](references/patterns-and-examples.md).
+Do not claim human authorship when unknown and do not optimize for Turnitin, GPTZero, or another detector.
 
-## 6. Separate naturalness from deception
+## 7. Verify preservation and naturalness separately
 
-Never add fake:
+For long work, keep a compact continuity ledger rather than relying on the entire conversation. Use [assets/continuity-ledger.md](assets/continuity-ledger.md).
 
-- anecdotes or first-hand experience;
-- emotions or opinions attributed to the author;
-- quotations, citations, customer feedback, benchmarks, or test results;
-- typos, grammar mistakes, random fragments, or unusual punctuation intended to fool a detector.
-
-Do not claim or imply that the result was written by a human when that fact is unknown. Do not optimize for Turnitin, GPTZero, or another detector.
-
-## 7. Handle long-form work explicitly
-
-For long documents, keep a small continuity ledger with the audience, voice anchors, terminology, protected facts, current argument, and section purpose. Do not depend on a long conversation transcript as the only memory.
-
-Use [assets/continuity-ledger.md](assets/continuity-ledger.md).
-
-## 8. Verify the rewrite
-
-Review naturalness **and** preservation separately.
-
-If repository helpers are available:
+When repository helpers are available:
 
 ```bash
 python3 scripts/humanizer_audit.py audit DRAFT.md
@@ -103,8 +65,8 @@ python3 scripts/humanizer_audit.py compare DRAFT.md HUMANIZED.md --fail-on-warni
 python3 scripts/voice_profile.py VOICE_SAMPLE.md --candidate HUMANIZED.md
 ```
 
-Treat helper output as heuristic evidence, not a verdict on authorship.
+Treat helper output as heuristic evidence, not an authorship verdict.
 
 Use [assets/humanization-review-checklist.md](assets/humanization-review-checklist.md) before finalizing.
 
-When `asd-ste100-writing` also applies, controlled clarity and technical precision win over stylistic variation.
+When `asd-ste100-writing` also applies, controlled clarity, exact terminology, and safety wording take precedence over stylistic variation.

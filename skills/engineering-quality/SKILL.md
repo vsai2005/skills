@@ -5,152 +5,110 @@ description: Coordinate software work spanning multiple engineering modes such a
 
 # Engineering Quality
 
-Coordinate a software change without loading every possible rule blindly. Select the smallest useful workflow, preserve repository intent, and require honest verification before completion.
+Coordinate a software change without loading every workflow at once. Select the smallest useful specialist set, preserve repository intent, control scope, and require honest evidence before completion.
 
-## 1. Choose the rigor level
+## 1. Set rigor and pace
 
-Classify semantic risk before selecting workflow depth. Use [references/adaptive-rigor.md](references/adaptive-rigor.md):
+Classify semantic risk before choosing workflow depth:
 
-- **L0** trivial/mechanical: edit + smallest check;
-- **L1** focused: one specialist + targeted verification;
-- **L2** shared: inspect callers + broader tests/scope review;
-- **L3** high-risk: change contract + independent review + full verification;
-- **L4** long-horizon: staged checkpoints + compact context/handoff state.
+- **L0** trivial/mechanical -> edit + smallest check;
+- **L1** focused -> one specialist + targeted verification;
+- **L2** shared -> inspect callers + broader tests/scope review;
+- **L3** high-risk -> explicit contract + independent review + full verification;
+- **L4** long-horizon -> staged checkpoints + compact handoff state.
 
-De-escalate when inspection shows the task is simpler than expected. Process overhead is a cost.
+Use [references/adaptive-rigor.md](references/adaptive-rigor.md) for escalation/de-escalation rules.
 
-## 2. Choose pace without lowering the safety floor
+Choose **FAST**, **BALANCED** (default), or **THOROUGH** without lowering the safety floor. Use [references/workflow-budgets.md](references/workflow-budgets.md) when retry, churn, or reset limits matter.
 
-Select **FAST**, **BALANCED** (default), or **THOROUGH**. Risk level defines mandatory checks; pace only changes optional depth. Use [references/workflow-budgets.md](references/workflow-budgets.md) for retry/churn reset signals.
-
-## 3. Establish the change contract
+## 2. Establish the change contract
 
 Before substantial edits, determine:
 
 - requested outcome and observable acceptance criteria;
-- whether the task is primarily build, debug, refactor, architecture review, verification, or a real combination;
-- explicit non-goals and areas that should remain unchanged;
-- repository guidance that applies to touched files;
-- public contracts, persisted data, security boundaries, or deployment behavior that may constrain the change.
+- primary mode(s): build, debug, refactor, architecture, verification, or a real combination;
+- explicit non-goals;
+- applicable repository guidance and local precedent;
+- contracts, persisted data, security boundaries, or deployment behavior that constrain the change.
 
-If the repository already contains a good convention, prefer it to inventing a new one.
+Prefer existing repository conventions over new abstractions unless evidence shows they are insufficient.
 
-For larger work, use the compact planning structure in [references/change-contract.md](references/change-contract.md). When a written artifact helps, start from [assets/change-plan.md](assets/change-plan.md).
+Use [references/change-contract.md](references/change-contract.md) or [assets/change-plan.md](assets/change-plan.md) when a written plan helps.
 
-## 4. Select modes deliberately
+## 3. Select only the modes needed now
 
-Use [references/mode-selection.md](references/mode-selection.md) to choose only the modes needed.
+Use [references/mode-selection.md](references/mode-selection.md) for the full routing table.
 
-Typical routing:
+Common routing:
 
-- New capability or extension: apply the `structure-feature` workflow.
-- Reproducible defect, regression, crash, wrong output, or stable failing test: apply the `debug-root-cause` workflow.
-- Behavior-preserving cleanup or decomposition: apply the `refactor-safely` workflow.
-- Shared boundary, dependency direction, ownership, or high-blast-radius change: apply the `guard-architecture` workflow.
-- Test-cost planning/deferred heavy checks: apply the `tiered-testing` workflow.
-- Existing red checks requiring candidate-vs-baseline attribution: apply the `baseline-compare` workflow.
-- Intermittent/nondeterministic tests: apply the `flaky-test-triage` workflow.
-- Repository-context uncertainty/noisy long session: apply `context-engineering`.
-- Version-sensitive external API/framework behavior: apply `source-grounded-development`.
-- High-risk/fresh-context second review: apply `independent-review`.
-- Auth, authorization, secrets, untrusted input, command/file/network boundaries, value transfer, or other attacker-controlled trust boundaries: apply `security-hardening`.
-- User-facing interface quality where hierarchy, interaction states, responsive behavior, accessibility, consistency, or rendered evidence are the primary concern: apply `ui-ux-quality`.
-- Technical prose that needs clear controlled English: apply `asd-ste100-writing` to the prose only, not to code identifiers or quoted contracts.
-- Prose that is accurate but stiff, repetitive, generic, or machine-like: apply `humanizer-writing`; for technical procedures, use it after `asd-ste100-writing` and do not undo controlled terminology or safety wording.
-- Final readiness or pre-merge evidence: apply the `verify-change` workflow.
-- Cross-layer audit or release/freeze work whose main problem is source-to-consumer correctness: hand off to `project-quality-orchestrator` rather than running both orchestration workflows in parallel.
+- new capability -> `structure-feature`;
+- reproducible defect -> `debug-root-cause`;
+- behavior-preserving cleanup -> `refactor-safely`;
+- shared boundary/blast radius -> `guard-architecture`;
+- test-cost/deferred checks -> `tiered-testing`;
+- already-red baseline -> `baseline-compare`;
+- intermittent test -> `flaky-test-triage`;
+- repository-context uncertainty -> `context-engineering`;
+- version-sensitive external behavior -> `source-grounded-development`;
+- high-risk fresh-context review -> `independent-review`;
+- trust/security boundary -> `security-hardening`;
+- user-facing interface quality -> `ui-ux-quality`;
+- controlled technical prose -> `asd-ste100-writing`;
+- natural fact-preserving prose -> `humanizer-writing`;
+- final readiness -> `verify-change`;
+- broad source-to-consumer audit/release-freeze work -> `project-quality-orchestrator`.
 
-When the host exposes those skills separately, consult only the selected skill for the current phase and only the references needed now. Default to one specialist; use two only when the phase genuinely spans both concerns. Do not preload later-phase skills. When it does not, use [references/mode-selection.md](references/mode-selection.md) as the fallback summary. Do not assume another skill was loaded merely because its name is mentioned here.
+Default to one specialist for the current phase. Use two only when that phase genuinely spans both concerns. Do not preload later-phase skills or turn a narrow task into a broad rewrite.
 
-Do not turn a narrow task into a broad rewrite merely because several skills are available.
+## 4. Inspect, scope, and preserve safeguards
 
-## 5. Inspect before changing
+Before changing code, identify the current owner, strongest nearby precedent, protecting tests, important callers/consumers, and generated/vendor boundaries. Search before adding a new helper, service, validator, abstraction, error type, or configuration path.
 
-Read enough of the repository to answer:
-
-- Where does this responsibility live today?
-- Which nearby implementation is the best local precedent?
-- Which tests currently protect this behavior?
-- Which callers/consumers depend on the affected contract?
-- Are relevant files generated, vendored, or intentionally special?
-
-Search before adding a new helper, service, validator, abstraction, error type, or configuration path.
-
-## 6. Control scope
-
-Maintain a mental or written change map:
+Keep a compact map:
 
 ```text
 Need -> owner -> files -> contracts -> verification
 ```
 
-When actual edits expand materially beyond the expected map, stop adding patches and reassess why. Broad scope can be correct, but it should be explainable.
+If edits expand materially beyond the expected map, reassess instead of stacking more patches. Use [references/scope-control.md](references/scope-control.md) for escalation signals.
 
-Use [references/scope-control.md](references/scope-control.md) for scope-expansion signals.
+Do not obtain green status by silently reducing assurance. Treat weakened assertions, skipped tests, disabled checks, broad ignores, swallowed exceptions, test-only production branches, or mocks that bypass the real defect as review triggers.
 
-## 7. Preserve safeguards
+## 5. Keep architecture proportional
 
-Do not obtain success by silently reducing assurance. Treat these as review triggers:
+Avoid both:
 
-- weakening assertions or deleting edge-case tests;
-- adding skipped tests;
-- disabling lint/type/security rules;
-- introducing broad `any`, ignores, or suppression comments;
-- swallowing exceptions;
-- adding test-only branches to production logic;
-- replacing a failing integration path with a mock that no longer exercises the defect.
+- **patch stacking** around a bad core rule;
+- **ceremonial architecture** with abstractions that have no current responsibility.
 
-A safeguard may change when the requirement or safeguard itself is wrong. Make that reason explicit.
+Prefer the smallest structure that gives the change one clear owner and keeps likely future changes understandable.
 
-## 8. Keep architecture proportional
+## 6. Verify according to risk
 
-Avoid both extremes:
+Start with the cheapest evidence that can falsify the requirement, then broaden:
 
-- **patch stacking**: more conditions, fallbacks, and special cases around a bad core rule;
-- **ceremonial architecture**: interfaces, factories, layers, or directories with no current responsibility.
-
-Prefer the smallest structure that gives the change one clear home and keeps likely future changes understandable.
-
-## 9. Verify in layers
-
-Use the cheapest reliable evidence first, then expand according to risk:
-
-1. focused test or reproduction;
+1. reproduction/focused test;
 2. nearby unit/integration tests;
-3. typecheck/lint/static checks where applicable;
+3. type/lint/static checks when applicable;
 4. broader suite for shared/high-blast-radius code;
-5. build/runtime/e2e checks when behavior crosses those boundaries.
+5. build/runtime/e2e when behavior crosses those boundaries.
 
-For security-sensitive, data-migration, concurrency, auth, file-system, command-execution, or externally visible API changes, review failure paths explicitly.
+Review realistic failure paths explicitly for security, auth, migration, concurrency, file/process, or externally visible API changes.
 
-## 10. Perform a completion review
+For the final completion gate use [references/completion-contract.md](references/completion-contract.md) rather than duplicating its checklist here.
 
-Before declaring done, inspect the final diff rather than trusting the sequence of edits.
+## 7. Finish from the final diff and evidence
 
-Confirm:
+Before declaring done, inspect the final candidate for behavior, ownership, contracts, regression protection, safeguard integrity, dead/replacement code, debug residue, and stale verification.
 
-- the requested behavior is implemented or defect removed;
-- the final code expresses the general rule rather than only known examples;
-- responsibilities remain understandable;
-- no unnecessary duplicate logic or dead replacement code remains;
-- public contracts changed only intentionally;
-- meaningful regression coverage exists for meaningful defects;
-- safeguards were preserved or justified;
-- temporary debug code and accidental suppression are absent;
-- verification claims match commands actually run.
-
-Use [references/completion-contract.md](references/completion-contract.md) for the full gate.
-
-## 11. Report evidence, not confidence
-
-Finish with a compact summary containing:
+Report:
 
 - what changed and why;
-- root cause for bug work, when applicable;
+- root cause when applicable;
 - important architecture/contract decisions;
-- verification actually run and result;
-- remaining risk, unverified environment, or deliberate temporary debt.
+- checks actually run and their results;
+- remaining risk, unavailable environment, or bounded temporary debt.
 
-When a workaround remains, use [references/technical-debt.md](references/technical-debt.md) to record its reason, bounded scope, risk, and removal condition.
+Use [references/technical-debt.md](references/technical-debt.md) when a workaround remains.
 
-Do not state that the whole system is verified if only targeted checks were run.
+Do not state that the whole system is verified when only targeted checks were run.
