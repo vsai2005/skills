@@ -51,7 +51,7 @@ Confirm any review evidence still matches the current diff. Do not add an indepe
 
 ## 6. Apply the completion gate and report
 
-Use [references/completion-gate.md](references/completion-gate.md). A failed gate means fix the issue or report the remaining risk; do not hide it.
+Before declaring ready, apply the [completion gate](references/completion-gate.md). A failed gate means fix the issue or report the remaining risk; do not hide it.
 
 Build `Verified` / `Not verified` from the evidence ledger, including outstanding `PENDING_TESTS.md` items. Evidence is not verified when stale, unbound to current Git state, or produced by a command that changed the candidate without an allowed state transition.
 
