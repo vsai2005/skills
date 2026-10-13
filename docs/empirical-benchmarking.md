@@ -176,6 +176,13 @@ Each case runs:
 
 The comparison uses repeated matched runs and a bootstrap interval for `combined - best(single)`. The result is `SYNERGY`, `NEUTRAL_OR_REDUNDANT`, `INTERFERENCE`, or `INCONCLUSIVE`.
 
+## Instruction-level ablation
+
+When testing whether a specific instruction section still earns its context
+cost, use [token-aware instruction ablation](instruction-ablation.md). Treat
+`PRUNE_CANDIDATE` as a human-review signal, not an automatic deletion, and
+require real token data before claiming savings.
+
 ## Publication rule
 
 The campaign automatically writes both:
