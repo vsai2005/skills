@@ -23,7 +23,7 @@ If the task intentionally changes behavior, separate that change from the behavi
 
 Before moving logic, find existing tests that characterize the area. When coverage is weak and the behavior matters, add focused characterization tests or another reliable observation method before restructuring.
 
-Use [references/behavior-lock.md](references/behavior-lock.md). For larger work, capture the sequence and preservation boundary with [assets/refactor-plan.md](assets/refactor-plan.md).
+Before structural edits, use the [behavior lock](references/behavior-lock.md). For larger work, capture the sequence and preservation boundary with the [refactor plan](assets/refactor-plan.md).
 
 ## 3. Identify the structural problem
 
@@ -44,7 +44,7 @@ Decide where each responsibility should live, using existing repository conventi
 
 A refactor should reduce ambiguity about ownership. If the proposed destination creates more layers but no clearer owner, reconsider it.
 
-See [references/refactoring-strategies.md](references/refactoring-strategies.md). For an end-to-end decomposition example, see [references/case-study-component-refactor.md](references/case-study-component-refactor.md).
+For technique selection, see [refactoring strategies](references/refactoring-strategies.md). For an end-to-end decomposition example, see the [component case study](references/case-study-component-refactor.md).
 
 ## 5. Refactor in small semantic steps
 
