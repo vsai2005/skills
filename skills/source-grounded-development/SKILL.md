@@ -26,7 +26,7 @@ Do not invoke external research for behavior fully owned by this repository.
 
 ## 3. Use sources in priority order
 
-Follow [references/source-priority.md](references/source-priority.md):
+For source ordering and conflict handling, follow [source priority](references/source-priority.md):
 
 1. local version/configuration evidence;
 2. official documentation for that version;
