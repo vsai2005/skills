@@ -29,7 +29,7 @@ For each important behavior affected by the change, answer:
 - Who should translate external/framework/provider representations?
 - Is this shared because it is semantically shared, or only because two files look similar?
 
-Use [references/dependency-boundaries.md](references/dependency-boundaries.md).
+For dependency direction and ownership rules, use [boundary guidance](references/dependency-boundaries.md).
 
 ## 3. Trace blast radius
 
@@ -43,7 +43,7 @@ Inspect direct and meaningful indirect consumers before changing a shared primit
 - tests/fixtures that encode the contract;
 - deployment overlap and rollback.
 
-Use [references/blast-radius.md](references/blast-radius.md).
+For shared-change scope and affected consumers, use [blast-radius guidance](references/blast-radius.md).
 
 ## 4. Detect architecture drift
 
@@ -57,7 +57,7 @@ Common drift signals:
 - direct database/provider access bypassing an established boundary;
 - compatibility branches leaking into many callers.
 
-See [references/architecture-drift.md](references/architecture-drift.md).
+For drift signals and review triggers, see [architecture drift](references/architecture-drift.md).
 
 ## 5. Prefer local repair before redesign
 
