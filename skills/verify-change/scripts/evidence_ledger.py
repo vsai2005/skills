@@ -332,10 +332,119 @@ def _snapshot_fields(snapshot: RepoSnapshot) -> dict[str, str | None]:
     }
 
 
+def _artifact_metadata(path: Path, data: bytes) -> dict[str, object]:
+    text = data.decode("utf-8", "replace")
+    return {
+        "path": str(path.resolve()),
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "bytes": len(data),
+        "lines": len(text.splitlines()),
+    }
+
+
+def _write_captured_output(
+    artifact_root: Path,
+    evidence_id: str,
+    stdout: bytes,
+    stderr: bytes,
+) -> dict[str, object]:
+    run_name = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:6]
+    run_dir = artifact_root.resolve() / evidence_id / run_name
+    run_dir.mkdir(parents=True, exist_ok=False)
+    stdout_path = run_dir / "stdout.log"
+    stderr_path = run_dir / "stderr.log"
+    stdout_path.write_bytes(stdout)
+    stderr_path.write_bytes(stderr)
+    return {
+        "artifact_dir": str(run_dir),
+        "stdout_artifact": _artifact_metadata(stdout_path, stdout),
+        "stderr_artifact": _artifact_metadata(stderr_path, stderr),
+    }
+
+
+def _latest_artifact_event(
+    events: list[dict[str, object]], evidence_id: str
+) -> dict[str, object] | None:
+    for event in reversed(events):
+        if (
+            str(event.get("id")) == evidence_id
+            and event.get("event") == "run"
+            and event.get("capture_output") is True
+        ):
+            return event
+    return None
+
+
+def render_capture_summary(event: dict[str, object]) -> str:
+    stdout_meta = event.get("stdout_artifact")
+    stderr_meta = event.get("stderr_artifact")
+    stdout_meta = stdout_meta if isinstance(stdout_meta, dict) else {}
+    stderr_meta = stderr_meta if isinstance(stderr_meta, dict) else {}
+    duration = event.get("duration_seconds")
+    duration_text = f"{float(duration):.3f}s" if isinstance(duration, (int, float)) else "n/a"
+    return (
+        f"{event.get('id')} {event.get('label')}: exit {event.get('exit_code')} in {duration_text}; "
+        f"stdout {stdout_meta.get('bytes', 0)} B/{stdout_meta.get('lines', 0)} lines; "
+        f"stderr {stderr_meta.get('bytes', 0)} B/{stderr_meta.get('lines', 0)} lines; "
+        f"full evidence: {event.get('artifact_dir')}"
+    )
+
+
+def view_captured_output(
+    events: list[dict[str, object]],
+    evidence_id: str,
+    *,
+    stream: str,
+    start_line: int = 1,
+    line_count: int = 80,
+    tail: int | None = None,
+) -> str:
+    if line_count < 1 or line_count > 200:
+        raise ValueError("--line-count must be between 1 and 200")
+    if start_line < 1:
+        raise ValueError("--start-line must be at least 1")
+    if tail is not None and (tail < 1 or tail > 200):
+        raise ValueError("--tail must be between 1 and 200")
+
+    event = _latest_artifact_event(events, evidence_id)
+    if event is None:
+        raise ValueError(f"no captured output found for evidence id {evidence_id}")
+
+    meta = event.get(f"{stream}_artifact")
+    if not isinstance(meta, dict) or not meta.get("path"):
+        raise ValueError(f"{stream} artifact is unavailable for evidence id {evidence_id}")
+
+    path = Path(str(meta["path"]))
+    try:
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError as exc:
+        raise ValueError(f"cannot read retained artifact {path}: {exc}") from exc
+
+    if tail is not None:
+        selected = lines[-tail:]
+        first = max(1, len(lines) - len(selected) + 1)
+    else:
+        first = start_line
+        selected = lines[start_line - 1 : start_line - 1 + line_count]
+
+    last = first + len(selected) - 1 if selected else first - 1
+    header = (
+        f"[{evidence_id} {stream} lines {first}-{last} of {len(lines)}; "
+        f"sha256 {meta.get('sha256', 'unknown')}]"
+    )
+    return header + ("\n" + "\n".join(selected) if selected else "\n<no lines>")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Record verification evidence and render Verified / Not verified sections.")
     parser.add_argument("--ledger", type=Path, default=DEFAULT_LEDGER, help=f"Ledger path (default: {DEFAULT_LEDGER})")
     parser.add_argument("--repo", type=Path, default=Path("."), help="Repository used for staleness checks (default: current directory)")
+    parser.add_argument(
+        "--artifact-dir",
+        type=Path,
+        default=None,
+        help="Directory for retained command output (default: <ledger-dir>/evidence-artifacts)",
+    )
     subparsers = parser.add_subparsers(dest="action", required=True)
 
     plan_parser = subparsers.add_parser("plan", help="Register a command that should be verified")
@@ -352,6 +461,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Allow this verification command to modify repository state; use only for deliberate generators/formatters",
     )
+    run_parser.add_argument(
+        "--capture-output",
+        action="store_true",
+        help="Retain full stdout/stderr as local artifacts and print only a compact evidence summary",
+    )
     run_parser.add_argument("command", nargs=argparse.REMAINDER)
 
     record_parser = subparsers.add_parser("record", help="Record evidence produced by another runner; it is not treated as locally verified")
@@ -359,6 +473,13 @@ def main(argv: list[str] | None = None) -> int:
     record_parser.add_argument("--label", required=True)
     record_parser.add_argument("--command", required=True)
     record_parser.add_argument("--exit-code", required=True, type=int)
+
+    view_parser = subparsers.add_parser("view", help="Read a bounded range from retained captured output")
+    view_parser.add_argument("--id", required=True)
+    view_parser.add_argument("--stream", choices=("stdout", "stderr"), default="stdout")
+    view_parser.add_argument("--start-line", type=int, default=1)
+    view_parser.add_argument("--line-count", type=int, default=80)
+    view_parser.add_argument("--tail", type=int, default=None)
 
     report_parser = subparsers.add_parser("report", help="Render Verified / Not verified sections")
     report_parser.add_argument("--pending-tests", type=Path, default=Path("PENDING_TESTS.md"), help="Include outstanding PENDING_TESTS.md entries when the file exists")
@@ -389,11 +510,21 @@ def main(argv: list[str] | None = None) -> int:
             command_cwd = (args.cwd or args.repo).resolve()
             before = repository_snapshot(args.repo)
             started = time.monotonic()
-            completed = subprocess.run(command, cwd=str(command_cwd), check=False)
+            if args.capture_output:
+                completed = subprocess.run(
+                    command,
+                    cwd=str(command_cwd),
+                    check=False,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+            else:
+                completed = subprocess.run(command, cwd=str(command_cwd), check=False)
             duration = time.monotonic() - started
             after = repository_snapshot(args.repo)
             changed = before != after
-            append_event(args.ledger, {
+
+            event: dict[str, object] = {
                 "event": "run",
                 "id": event_id,
                 "label": args.label,
@@ -405,7 +536,25 @@ def main(argv: list[str] | None = None) -> int:
                 **_snapshot_fields(after),
                 "state_changed_during_run": changed,
                 "allow_state_change": bool(args.allow_state_change),
-            })
+                "capture_output": bool(args.capture_output),
+            }
+            if args.capture_output:
+                artifact_root = (
+                    args.artifact_dir
+                    if args.artifact_dir is not None
+                    else args.ledger.parent / "evidence-artifacts"
+                )
+                event.update(
+                    _write_captured_output(
+                        artifact_root,
+                        event_id,
+                        completed.stdout or b"",
+                        completed.stderr or b"",
+                    )
+                )
+            append_event(args.ledger, event)
+            if args.capture_output:
+                print(render_capture_summary(event))
             return completed.returncode
 
         if args.action == "record":
@@ -423,6 +572,19 @@ def main(argv: list[str] | None = None) -> int:
                 **_snapshot_fields(snapshot),
             })
             print(event_id)
+            return 0
+
+        if args.action == "view":
+            print(
+                view_captured_output(
+                    events,
+                    args.id,
+                    stream=args.stream,
+                    start_line=args.start_line,
+                    line_count=args.line_count,
+                    tail=args.tail,
+                )
+            )
             return 0
 
         snapshot = repository_snapshot(args.repo)
