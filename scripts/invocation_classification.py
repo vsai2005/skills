@@ -16,9 +16,9 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from scripts.context_budget import measure
+    from scripts.context_budget import _frontmatter
 except ModuleNotFoundError:  # direct script execution from scripts/
-    from context_budget import measure
+    from context_budget import _frontmatter
 
 CLASSES = ("model-default", "explicit-candidate", "undecided")
 
@@ -51,8 +51,25 @@ def load_policy(path: Path) -> dict[str, Any]:
     return data
 
 
+def discovery_budgets(root: Path) -> dict[str, int]:
+    """Read only root SKILL.md frontmatter; do not scan progressive resources."""
+    skills_root = root / "skills"
+    if not skills_root.is_dir():
+        raise ValueError(f"skills directory missing: {skills_root}")
+    budgets: dict[str, int] = {}
+    for skill_dir in sorted(path for path in skills_root.iterdir() if path.is_dir()):
+        skill_md = skill_dir / "SKILL.md"
+        if not skill_md.is_file():
+            continue
+        meta = _frontmatter(skill_md)
+        name = meta.get("name", skill_dir.name)
+        description = meta.get("description", "")
+        budgets[name] = len(name) + len(description)
+    return budgets
+
+
 def validate_policy(root: Path, policy: dict[str, Any]) -> list[str]:
-    skills = {item.name for item in measure(root)}
+    skills = set(discovery_budgets(root))
     classes = policy["classes"]
     listed = [skill for class_name in CLASSES for skill in classes[class_name]]
 
@@ -72,7 +89,7 @@ def validate_policy(root: Path, policy: dict[str, Any]) -> list[str]:
 
 
 def report(root: Path, policy: dict[str, Any]) -> dict[str, Any]:
-    budgets = {item.name: item for item in measure(root)}
+    budgets = discovery_budgets(root)
     problems = validate_policy(root, policy)
     if problems:
         raise ValueError("; ".join(problems))
@@ -81,8 +98,8 @@ def report(root: Path, policy: dict[str, Any]) -> dict[str, Any]:
     undecided = list(policy["classes"]["undecided"])
     model_default = list(policy["classes"]["model-default"])
 
-    total_chars = sum(item.discovery_chars for item in budgets.values())
-    candidate_chars = sum(budgets[name].discovery_chars for name in explicit)
+    total_chars = sum(budgets.values())
+    candidate_chars = sum(budgets[name] for name in explicit)
     hypothetical_chars = total_chars - candidate_chars
 
     return {
