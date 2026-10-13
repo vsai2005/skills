@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from scripts.invocation_classification import load_policy, report, validate_policy
+from scripts.invocation_classification import discovery_budgets, load_policy, report, validate_policy
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,6 +32,22 @@ class InvocationClassificationTests(unittest.TestCase):
         )
         self.assertIn("Hypothetical", result["claim_boundary"])
         self.assertFalse(result["enforced"])
+
+    def test_discovery_measurement_does_not_scan_progressive_resources(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            skill = root / "skills" / "sample"
+            (skill / "references").mkdir(parents=True)
+            (skill / "SKILL.md").write_text(
+                "---\nname: sample\ndescription: Focused sample skill for discovery measurement.\n---\n\n# Sample\n",
+                encoding="utf-8",
+            )
+            (skill / "references" / "binary.bin").write_bytes(b"\xff" * 10000)
+            budgets = discovery_budgets(root)
+            self.assertEqual(
+                len("sample") + len("Focused sample skill for discovery measurement."),
+                budgets["sample"],
+            )
 
     def test_duplicate_classification_is_rejected(self):
         policy = load_policy(ROOT / "evals" / "invocation-policy.json")
