@@ -43,13 +43,13 @@ python3 scripts/evidence_ledger.py run \
   -- python3 -m unittest discover -s tests
 ```
 
-The ledger writes complete stdout/stderr under:
+The ledger streams complete stdout/stderr directly to:
 
 ```text
 .verification/evidence-artifacts/<evidence-id>/<run>/
 ```
 
-and prints only a compact summary containing the evidence ID, exit status, duration, retained output sizes, and artifact directory.
+so large logs do not need to be held in Python memory. It prints only a compact summary containing the Evidence ID, exit status, duration, retained output sizes, and artifact directory. A failed command also includes a bounded tail excerpt so the immediate failure signal is visible without dumping the full log.
 
 The full artifacts remain local and are ignored by this repository's Git configuration. Do not capture secrets or private data merely because the artifact is local; follow the same diagnostic redaction rules as ordinary logs.
 
@@ -74,11 +74,13 @@ python3 scripts/evidence_ledger.py view \
   --tail 60
 ```
 
-A view is bounded to at most 200 lines. It prints the retained SHA-256 identity and line range with the selected output.
+A view is bounded to at most 200 lines. Before displaying anything, it confines the artifact path to the configured artifact root and verifies the retained SHA-256/size identity. It then prints the evidence identity and requested line range with the selected output.
+
+Explicit Evidence IDs are path-safe identifiers: letters, digits, `.`, `_`, and `-` only, starting with a letter or digit. This prevents an Evidence ID from escaping the artifact root.
 
 Do **not** rerun an otherwise-current verification command merely because its original output was too large for context. Reuse the Evidence ID and inspect the retained artifact. Rerun only when the candidate changed, the evidence is stale, the command itself must change, or the original execution was invalid.
 
-If `--artifact-dir` is overridden to a path inside the repository outside excluded verification bookkeeping, the resulting artifact files count as repository mutation. This prevents captured output from silently changing the candidate while remaining marked verified.
+If `--artifact-dir` is overridden, pass the same option when using `view`; retained paths outside that allowed root are rejected. If the custom artifact directory is inside the repository outside excluded verification bookkeeping, the resulting files count as repository mutation. This prevents captured output from silently changing the candidate while remaining marked verified.
 
 ## External evidence is not local verification
 
