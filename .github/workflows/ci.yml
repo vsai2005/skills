@@ -51,6 +51,8 @@ jobs:
         run: python scripts/context_budget.py . --fail-on-budget
       - name: Audit context pointers
         run: python scripts/context_pointer_audit.py .
+      - name: Report invocation classification
+        run: python scripts/invocation_classification.py .
       - name: Check portability
         run: python scripts/portability_check.py . --warnings-as-errors
       - name: Validate activation evals
