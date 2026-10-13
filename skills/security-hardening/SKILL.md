@@ -62,7 +62,7 @@ Security verification should prove both allow and deny behavior at the actual bo
 - secret/log inspection;
 - runtime request/response or persistence evidence when the boundary is integration-level.
 
-Use [references/security-verification.md](references/security-verification.md).
+For abuse-path and boundary checks, use [security verification](references/security-verification.md).
 
 ## 7. Report residual risk precisely
 
