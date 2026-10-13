@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "enforced": false,
+  "purpose": "Classify invocation candidates for measurement only. This file does not change host discovery or activation behavior.",
+  "classes": {
+    "explicit-candidate": [
+      "engineering-quality",
+      "project-quality-orchestrator"
+    ],
+    "undecided": [
+      "independent-review",
+      "verify-change"
+    ],
+    "model-default": [
+      "asd-ste100-writing",
+      "baseline-compare",
+      "context-engineering",
+      "debug-root-cause",
+      "flaky-test-triage",
+      "guard-architecture",
+      "humanizer-writing",
+      "refactor-safely",
+      "security-hardening",
+      "source-grounded-development",
+      "structure-feature",
+      "tiered-testing",
+      "ui-ux-quality"
+    ]
+  },
+  "rationale": {
+    "explicit-candidate": "Broad orchestration workflows are plausible explicit human workflows; measure before withholding them from model discovery.",
+    "undecided": "Final-review workflows may be useful both automatically and explicitly; keep current behavior until provider-backed activation evidence exists.",
+    "model-default": "Focused specialists can be useful for automatic selection and remain model-visible in the experiment."
+  }
+}
