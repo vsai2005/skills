@@ -67,6 +67,22 @@ class ContextBudgetTests(unittest.TestCase):
             self.assertIn(largest_path, expected)
             self.assertEqual(expected[largest_path], largest_bytes)
 
+
+    def test_largest_progressive_resource_is_ranked_by_token_estimate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill = Path(tmp) / "skill"
+            (skill / "references").mkdir(parents=True)
+            (skill / "references" / "more-bytes.md").write_text("é" * 100, encoding="utf-8")
+            (skill / "references" / "more-tokens.md").write_text("x" * 150, encoding="utf-8")
+
+            _count, _total, _tokens, largest_path, largest_bytes, largest_tokens = _resources(
+                skill
+            )
+
+            self.assertEqual("references/more-tokens.md", largest_path)
+            self.assertEqual(150, largest_bytes)
+            self.assertEqual(38, largest_tokens)
+
     def test_tight_budget_reports_violation(self):
         budgets = measure(ROOT)
         problems = violations(
