@@ -27,7 +27,7 @@ Do not alternate between synonyms such as `service`, `process`, and `component` 
 
 Define an uncommon domain term when the reader may not know it. Do not invent simpler names for official API or product terms.
 
-See [references/writing-rules.md](references/writing-rules.md).
+For controlled-language rules, see [writing rules](references/writing-rules.md).
 
 ## 3. Keep sentences short and direct
 
@@ -70,7 +70,7 @@ Prefer common, concrete wording:
 
 Avoid vague pronouns when the referent is not obvious. Break long noun clusters into clearer phrases.
 
-See [references/examples.md](references/examples.md).
+For before/after patterns, see [examples](references/examples.md).
 
 ## 6. Format for scanning
 
@@ -96,6 +96,6 @@ At this level:
 
 ## 8. Review before delivery
 
-Use [assets/writing-review-checklist.md](assets/writing-review-checklist.md).
+Before finalizing, use the [review checklist](assets/writing-review-checklist.md).
 
 Confirm that the result is easier to understand **and** technically equivalent to the source. If clarity and technical accuracy conflict, preserve accuracy and explain the unavoidable complexity only when needed.
