@@ -61,23 +61,18 @@ def _git_changed(root: Path) -> list[str]:
     return sorted(set(out))
 
 
-def _instruction_files(root: Path) -> list[str]:
-    found: list[str] = []
+def _context_documents(root: Path) -> tuple[list[str], list[str]]:
+    """Find repository instructions and shared-vocabulary paths in one scan."""
+    instructions: list[str] = []
+    vocabulary: list[str] = []
     for path in _iter_files(root):
         name = path.name
         rel = path.relative_to(root).as_posix()
         if name in INSTRUCTION_NAMES or rel == ".github/copilot-instructions.md" or rel.startswith(".cursor/rules/"):
-            found.append(rel)
-    return sorted(found)
-
-
-def _vocabulary_sources(root: Path) -> list[str]:
-    """Return paths to existing shared-vocabulary documents without reading them."""
-    found: list[str] = []
-    for path in _iter_files(root):
-        if path.name.casefold() in VOCABULARY_NAMES:
-            found.append(path.relative_to(root).as_posix())
-    return sorted(found)
+            instructions.append(rel)
+        if name.casefold() in VOCABULARY_NAMES:
+            vocabulary.append(rel)
+    return sorted(instructions), sorted(vocabulary)
 
 
 def _manifest_info(root: Path) -> tuple[list[str], dict[str, str], list[str]]:
@@ -155,12 +150,12 @@ def build_context(root: Path, target: Path | None = None) -> dict[str, Any]:
         raise ValueError(f"repository root is not a directory: {root}")
     manifests, versions, commands = _manifest_info(root)
     nearby, tests = _nearby(root, target)
-    vocabulary_sources = _vocabulary_sources(root)
+    instructions, vocabulary_sources = _context_documents(root)
     top = sorted(p.name for p in root.iterdir() if p.is_dir() and p.name not in EXCLUDED_DIRS)[:30]
     return {
         "root": str(root),
         "target": None if target is None else str(target),
-        "instructions": _instruction_files(root),
+        "instructions": instructions,
         "manifests": manifests,
         "versions": versions,
         "vocabulary_sources": vocabulary_sources,
