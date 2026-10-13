@@ -253,7 +253,9 @@ class EvidenceLedgerTests(unittest.TestCase):
                     "import sys; print('needle-error', file=sys.stderr); raise SystemExit(7)",
                 ])
             self.assertEqual(7, code)
-            self.assertNotIn("needle-error", visible.getvalue())
+            self.assertIn("failure excerpt:", visible.getvalue())
+            self.assertIn("needle-error", visible.getvalue())
+            self.assertLess(len(visible.getvalue()), 2500)
 
             drill = StringIO()
             with redirect_stdout(drill):
@@ -269,6 +271,104 @@ class EvidenceLedgerTests(unittest.TestCase):
                     ]),
                 )
             self.assertIn("needle-error", drill.getvalue())
+
+    def test_capture_rejects_path_traversal_evidence_id(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            init_git_repo(root)
+            ledger = root / ".verification" / "evidence.jsonl"
+            code = main([
+                "--ledger", str(ledger),
+                "--repo", str(root),
+                "run",
+                "--id", "../escape",
+                "--label", "Unsafe id",
+                "--capture-output",
+                "--",
+                sys.executable,
+                "-c",
+                "print('should not run')",
+            ])
+            self.assertEqual(2, code)
+            self.assertFalse((root / "escape").exists())
+            self.assertEqual([], load_events(ledger))
+
+    def test_view_rejects_tampered_artifact_digest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            init_git_repo(root)
+            ledger = root / ".verification" / "evidence.jsonl"
+            with redirect_stdout(StringIO()):
+                self.assertEqual(
+                    0,
+                    main([
+                        "--ledger", str(ledger),
+                        "--repo", str(root),
+                        "run",
+                        "--id", "EV-TAMPER",
+                        "--label", "Captured",
+                        "--capture-output",
+                        "--",
+                        sys.executable,
+                        "-c",
+                        "print('original')",
+                    ]),
+                )
+            event = load_events(ledger)[-1]
+            Path(event["stdout_artifact"]["path"]).write_text("tampered\n", encoding="utf-8")
+            self.assertEqual(
+                2,
+                main([
+                    "--ledger", str(ledger),
+                    "--repo", str(root),
+                    "view",
+                    "--id", "EV-TAMPER",
+                    "--stream", "stdout",
+                    "--tail", "5",
+                ]),
+            )
+
+    def test_view_rejects_artifact_path_outside_allowed_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            init_git_repo(root)
+            ledger = root / ".verification" / "evidence.jsonl"
+            outside = root / "app.txt"
+            append_event(
+                ledger,
+                {
+                    "event": "run",
+                    "id": "EV-ESCAPE",
+                    "label": "Crafted",
+                    "command": "pytest",
+                    "exit_code": 0,
+                    "timestamp": "2026-01-01T00:00:00Z",
+                    "capture_output": True,
+                    "stdout_artifact": {
+                        "path": str(outside),
+                        "sha256": "0" * 64,
+                        "bytes": outside.stat().st_size,
+                        "lines": 1,
+                    },
+                    "stderr_artifact": {
+                        "path": str(outside),
+                        "sha256": "0" * 64,
+                        "bytes": outside.stat().st_size,
+                        "lines": 1,
+                    },
+                },
+            )
+            self.assertEqual(
+                2,
+                main([
+                    "--ledger", str(ledger),
+                    "--repo", str(root),
+                    "view",
+                    "--id", "EV-ESCAPE",
+                    "--stream", "stdout",
+                    "--tail", "1",
+                ]),
+            )
 
     def test_custom_captured_artifact_inside_repo_counts_as_mutation(self):
         with tempfile.TemporaryDirectory() as tmp:
