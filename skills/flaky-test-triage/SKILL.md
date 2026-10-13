@@ -25,7 +25,7 @@ Or choose N directly when cost/history requires it:
 python3 scripts/flake_check.py --runs 20 --timeout 120 -- <exact command>
 ```
 
-Capture child output, keep timeout/infrastructure/zero-test runs separate from ordinary test failures, and report `failures / comparable N`, the observed percentage, and sampling uncertainty. Configure known runner-specific zero-test exit codes when needed; do not count "no tests selected" as a passing or failing test run. Use [references/repetition.md](references/repetition.md).
+For repetition counts, comparable-run handling, and sampling uncertainty, use [repetition guidance](references/repetition.md). Keep timeout/infrastructure/zero-test runs separate from ordinary failures, and do not count "no tests selected" as a passing or failing run.
 
 ## 3. Compare isolation versus suite/order
 
@@ -33,7 +33,7 @@ Run the test alone and in the suite/context where it flakes. Check whether order
 
 ## 4. Check shared-resource contention
 
-Inspect mutable globals, temp paths, ports, databases, caches, files, clocks, external rate limits, worker pools, and asynchronous cleanup. Use [references/order-and-contention.md](references/order-and-contention.md).
+When order, shared state, or contention is plausible, inspect mutable globals, temp paths, ports, databases, caches, files, clocks, rate limits, worker pools, and cleanup with [order/contention guidance](references/order-and-contention.md).
 
 ## 5. Form and test a causal hypothesis
 

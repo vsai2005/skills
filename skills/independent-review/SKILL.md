@@ -50,7 +50,7 @@ Avoid style commentary unless it materially affects maintainability or repositor
 
 ## 5. Resolve before final verification
 
-The implementer should address or explicitly disposition important findings, then rerun relevant verification. Treat the review as bound to the reviewed diff; if substantive behavior changes afterward, re-review the affected surface. When available, use `scripts/review_state.py` as described in [references/review-tiers.md](references/review-tiers.md) so stale review approval is detected mechanically. `verify-change` remains the final evidence gate.
+The implementer should address or explicitly disposition important findings, then rerun relevant verification. Treat the review as bound to the reviewed diff; if substantive behavior changes afterward, re-review the affected surface. When available, use `scripts/review_state.py` to detect stale review approval mechanically. `verify-change` remains the final evidence gate.
 
 For substantial reviews use [assets/review-report.md](assets/review-report.md) and [references/review-scope.md](references/review-scope.md).
 

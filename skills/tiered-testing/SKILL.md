@@ -25,7 +25,7 @@ Run the fastest relevant reproduction/check before editing when practical, then 
 
 A cheap-looking edit becomes high-risk when it changes a shared primitive, contract, schema, auth rule, parser, persistence model, provider adapter, build/config path, or dependency used broadly.
 
-When a shared-code trigger applies, run at least one broader representative check **before** continuing deep implementation. Use [references/shared-code-triggers.md](references/shared-code-triggers.md).
+When a shared-code trigger applies, use [shared-code triggers](references/shared-code-triggers.md) to choose at least one broader representative check **before** continuing deep implementation.
 
 ## 4. Defer heavy checks explicitly, never mentally
 
@@ -35,7 +35,7 @@ If a heavy check cannot run now, add it to `PENDING_TESTS.md` with:
 - why it is deferred;
 - explicit trigger for running it.
 
-Use `scripts/pending_tests.py` when available. Follow [references/pending-tests.md](references/pending-tests.md) and [assets/PENDING_TESTS.template.md](assets/PENDING_TESTS.template.md).
+When deferring a heavy check, use `scripts/pending_tests.py` when available; follow the [pending-test rules](references/pending-tests.md) and record it with the [template](assets/PENDING_TESTS.template.md).
 
 ## 5. Clear the queue at the trigger
 

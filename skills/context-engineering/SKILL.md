@@ -31,7 +31,7 @@ Prefer, in order:
 6. relevant public types/contracts;
 7. only the documentation needed for the change.
 
-Use [references/context-selection.md](references/context-selection.md). `scripts/repo_context.py` can produce a deterministic starting map.
+For selection and stopping rules, use the [context-selection guide](references/context-selection.md). `scripts/repo_context.py` can produce a deterministic starting map.
 
 ## 3. Read for ownership, not volume
 
@@ -54,7 +54,7 @@ When context becomes noisy:
 - keep decisions that still constrain the task;
 - summarize long exploration into a compact handoff/state note.
 
-See [references/context-hygiene.md](references/context-hygiene.md).
+For stale-context pruning and preservation rules, see [context hygiene](references/context-hygiene.md).
 
 ## 5. Stop when the map is sufficient
 

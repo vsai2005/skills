@@ -22,7 +22,7 @@ Changing the command between baseline and candidate invalidates the classificati
 
 When Git history is available, create an isolated worktree at the comparison ref and run the same command there. This avoids mutating the candidate tree and reduces hidden baseline drift.
 
-Follow [references/worktree-baseline.md](references/worktree-baseline.md).
+For an isolated clean comparison, follow the [worktree baseline](references/worktree-baseline.md).
 
 ## 3. Capture both failure inventories
 
@@ -43,7 +43,7 @@ Also note baseline failures that disappeared; they may indicate an intentional f
 
 Sometimes the historical ref cannot run unchanged because dependencies, fixtures, or infrastructure no longer exist. If rebuilding the baseline manually, enumerate **every** modification made to get it running and explain why it should not affect the failure being classified.
 
-Use [references/manual-baseline.md](references/manual-baseline.md) and [assets/baseline-report.md](assets/baseline-report.md).
+If automation is unavailable, use the [manual baseline](references/manual-baseline.md); for handoff, use the [report template](assets/baseline-report.md).
 
 ## 6. Treat uncertain equivalence as unknown, not pre-existing
 

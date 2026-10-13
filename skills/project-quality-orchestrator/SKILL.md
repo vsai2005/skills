@@ -24,8 +24,6 @@ Start with:
 source -> transformation/projection -> delivery boundary -> consumed output
 ```
 
-Use [references/consumer-path.md](references/consumer-path.md) when the path or semantic correctness needs detailed review.
-
 ## 2. Load only justified specialists
 
 Delegate rather than copying specialist rules:
