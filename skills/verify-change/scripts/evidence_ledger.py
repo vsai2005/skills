@@ -275,7 +275,7 @@ def render_report(states: list[EvidenceState], pending_tests: list[object] | Non
     lines = ["## Verified"]
     if verified:
         for state in verified:
-            lines.append(f"- {state.label}: `{state.command}` — exit 0 at {state.timestamp}")
+            lines.append(f"- [{state.id}] {state.label}: `{state.command}` — exit 0 at {state.timestamp}")
     else:
         lines.append("- None recorded.")
 
@@ -296,7 +296,7 @@ def render_report(states: list[EvidenceState], pending_tests: list[object] | Non
                 reason = "verification command changed repository state; rerun on the resulting candidate"
             else:
                 reason = state.status
-            lines.append(f"- {state.label}: `{state.command}` — {reason} at {state.timestamp}")
+            lines.append(f"- [{state.id}] {state.label}: `{state.command}` — {reason} at {state.timestamp}")
 
     pending_tests = pending_tests or []
     for item in pending_tests:
@@ -521,6 +521,20 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 completed = subprocess.run(command, cwd=str(command_cwd), check=False)
             duration = time.monotonic() - started
+            captured_fields: dict[str, object] = {}
+            if args.capture_output:
+                artifact_root = (
+                    args.artifact_dir
+                    if args.artifact_dir is not None
+                    else args.ledger.parent / "evidence-artifacts"
+                )
+                captured_fields = _write_captured_output(
+                    artifact_root,
+                    event_id,
+                    completed.stdout or b"",
+                    completed.stderr or b"",
+                )
+
             after = repository_snapshot(args.repo)
             changed = before != after
 
@@ -538,20 +552,8 @@ def main(argv: list[str] | None = None) -> int:
                 "allow_state_change": bool(args.allow_state_change),
                 "capture_output": bool(args.capture_output),
             }
-            if args.capture_output:
-                artifact_root = (
-                    args.artifact_dir
-                    if args.artifact_dir is not None
-                    else args.ledger.parent / "evidence-artifacts"
-                )
-                event.update(
-                    _write_captured_output(
-                        artifact_root,
-                        event_id,
-                        completed.stdout or b"",
-                        completed.stderr or b"",
-                    )
-                )
+            if captured_fields:
+                event.update(captured_fields)
             append_event(args.ledger, event)
             if args.capture_output:
                 print(render_capture_summary(event))
