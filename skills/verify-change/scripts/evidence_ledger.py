@@ -12,7 +12,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import re
 import shlex
 import subprocess
 import sys
@@ -166,44 +165,6 @@ def _snapshot_is_stale(recorded: RepoSnapshot, current: RepoSnapshot | None) -> 
     )
 
 
-def _canonical_command(command: str) -> tuple[str, ...]:
-    """Canonicalize command text while preserving Windows backslashes."""
-    windows_path = re.search(r"(?:^|[\s\"\'])[A-Za-z]:\\", command) is not None
-    try:
-        parts = shlex.split(command, posix=not windows_path)
-    except ValueError:
-        return tuple(command.split())
-    if windows_path:
-        parts = [
-            part[1:-1]
-            if len(part) >= 2 and part[0] == part[-1] and part[0] in {"'", '"'}
-            else part
-            for part in parts
-        ]
-    return tuple(parts)
-
-
-def _known_command(events: list[dict[str, object]], evidence_id: str) -> str | None:
-    for event in events:
-        if str(event.get("id")) != evidence_id:
-            continue
-        command = str(event.get("command") or "").strip()
-        if command:
-            return command
-    return None
-
-
-def require_command_identity(events: list[dict[str, object]], evidence_id: str, command: str) -> None:
-    """Reject reusing an evidence ID for a different verification command."""
-    known = _known_command(events, evidence_id)
-    if known is None:
-        return
-    if _canonical_command(known) != _canonical_command(command):
-        raise ValueError(
-            f"evidence id {evidence_id} is already bound to `{known}`; refusing different command `{command}`"
-        )
-
-
 def current_states(
     events: list[dict[str, object]], current_snapshot: RepoSnapshot | None = None
 ) -> list[EvidenceState]:
@@ -219,7 +180,7 @@ def current_states(
         command = str(event.get("command") or (previous.command if previous else ""))
         if command:
             known = bound_commands.get(event_id)
-            if known is not None and _canonical_command(known) != _canonical_command(command):
+            if known is not None and canonical_command(known) != canonical_command(command):
                 raise ValueError(f"ledger command identity changed for evidence id {event_id}")
             bound_commands[event_id] = known or command
 
@@ -335,6 +296,7 @@ def _snapshot_fields(snapshot: RepoSnapshot) -> dict[str, str | None]:
 _SCRIPT_DIR = str(Path(__file__).resolve().parent)
 if _SCRIPT_DIR not in sys.path:
     sys.path.insert(0, _SCRIPT_DIR)
+from evidence_commands import canonical_command, require_command_identity  # noqa: E402
 from evidence_artifacts import (  # noqa: E402
     describe_captured_output,
     failure_excerpt,
