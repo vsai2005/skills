@@ -182,8 +182,9 @@ class EvidenceLedgerTests(unittest.TestCase):
             stdout_meta = event["stdout_artifact"]
             artifact = Path(stdout_meta["path"])
             self.assertTrue(artifact.is_file())
-            self.assertGreaterEqual(len(artifact.read_text(encoding="utf-8")), 20000)
-            self.assertEqual(20001, stdout_meta["bytes"])
+            artifact_bytes = artifact.read_bytes()
+            self.assertGreaterEqual(len(artifact_bytes), 20000)
+            self.assertEqual(len(artifact_bytes), stdout_meta["bytes"])
 
             state = current_states(load_events(ledger), repository_snapshot(root))[0]
             self.assertEqual("verified", state.status)
