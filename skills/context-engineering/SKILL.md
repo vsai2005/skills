@@ -33,6 +33,8 @@ Prefer, in order:
 
 For selection and stopping rules, use the [context-selection guide](references/context-selection.md). `scripts/repo_context.py` can produce a deterministic starting map.
 
+When recurring domain terms affect search, naming, contracts, or handoff quality, use only the relevant entries from an existing detected glossary/domain vocabulary source; follow [shared-vocabulary guidance](references/shared-vocabulary.md). Do not invent a glossary solely to shorten prompts.
+
 ## 3. Read for ownership, not volume
 
 Answer these questions before editing:
@@ -56,8 +58,10 @@ When context becomes noisy:
 
 For stale-context pruning and preservation rules, see [context hygiene](references/context-hygiene.md).
 
+At a meaningful phase boundary, choose **Continue**, **Clear**, **Handoff**, **Subagent**, or **Compact** using the [phase-boundary decision rules](references/phase-boundaries.md). Subagents are for genuinely independent work, not automatic token savings.
+
 ## 5. Stop when the map is sufficient
 
 Do not keep browsing after ownership, constraints, precedent, tests, and contracts are clear. Continue with the task using the appropriate specialist skill.
 
-For long work or session boundaries, use `scripts/session_handoff.py` and [assets/context-map.md](assets/context-map.md).
+When the selected boundary action is Handoff, use `scripts/session_handoff.py`; for a reusable handoff/context artifact, use the [context-map template](assets/context-map.md).
