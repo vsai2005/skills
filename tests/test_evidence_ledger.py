@@ -153,6 +153,147 @@ class EvidenceLedgerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "command identity changed"):
             current_states(events)
 
+    def test_capture_output_retains_full_log_but_prints_compact_summary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            init_git_repo(root)
+            ledger = root / ".verification" / "evidence.jsonl"
+            visible = StringIO()
+            with redirect_stdout(visible):
+                code = main([
+                    "--ledger", str(ledger),
+                    "--repo", str(root),
+                    "run",
+                    "--id", "EV-CAP",
+                    "--label", "Noisy tests",
+                    "--capture-output",
+                    "--",
+                    sys.executable,
+                    "-c",
+                    "print('x' * 20000)",
+                ])
+            self.assertEqual(0, code)
+            summary = visible.getvalue()
+            self.assertLess(len(summary), 1000)
+            self.assertIn("EV-CAP Noisy tests: exit 0", summary)
+            self.assertNotIn("x" * 100, summary)
+
+            event = load_events(ledger)[-1]
+            stdout_meta = event["stdout_artifact"]
+            artifact = Path(stdout_meta["path"])
+            self.assertTrue(artifact.is_file())
+            self.assertGreaterEqual(len(artifact.read_text(encoding="utf-8")), 20000)
+            self.assertEqual(20001, stdout_meta["bytes"])
+
+            state = current_states(load_events(ledger), repository_snapshot(root))[0]
+            self.assertEqual("verified", state.status)
+            self.assertIn("[EV-CAP]", render_report([state]))
+
+    def test_view_reads_only_requested_retained_lines(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            init_git_repo(root)
+            ledger = root / ".verification" / "evidence.jsonl"
+            with redirect_stdout(StringIO()):
+                self.assertEqual(
+                    0,
+                    main([
+                        "--ledger", str(ledger),
+                        "--repo", str(root),
+                        "run",
+                        "--id", "EV-VIEW",
+                        "--label", "Many lines",
+                        "--capture-output",
+                        "--",
+                        sys.executable,
+                        "-c",
+                        "for i in range(1, 301): print(f'line-{i:03d}')",
+                    ]),
+                )
+
+            visible = StringIO()
+            with redirect_stdout(visible):
+                self.assertEqual(
+                    0,
+                    main([
+                        "--ledger", str(ledger),
+                        "--repo", str(root),
+                        "view",
+                        "--id", "EV-VIEW",
+                        "--stream", "stdout",
+                        "--start-line", "101",
+                        "--line-count", "3",
+                    ]),
+                )
+            viewed = visible.getvalue()
+            self.assertIn("lines 101-103 of 300", viewed)
+            self.assertIn("line-101", viewed)
+            self.assertIn("line-103", viewed)
+            self.assertNotIn("line-100", viewed)
+            self.assertNotIn("line-104", viewed)
+
+    def test_failed_capture_keeps_full_stderr_for_bounded_drilldown(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            init_git_repo(root)
+            ledger = root / ".verification" / "evidence.jsonl"
+            visible = StringIO()
+            with redirect_stdout(visible):
+                code = main([
+                    "--ledger", str(ledger),
+                    "--repo", str(root),
+                    "run",
+                    "--id", "EV-FAIL",
+                    "--label", "Failing check",
+                    "--capture-output",
+                    "--",
+                    sys.executable,
+                    "-c",
+                    "import sys; print('needle-error', file=sys.stderr); raise SystemExit(7)",
+                ])
+            self.assertEqual(7, code)
+            self.assertNotIn("needle-error", visible.getvalue())
+
+            drill = StringIO()
+            with redirect_stdout(drill):
+                self.assertEqual(
+                    0,
+                    main([
+                        "--ledger", str(ledger),
+                        "--repo", str(root),
+                        "view",
+                        "--id", "EV-FAIL",
+                        "--stream", "stderr",
+                        "--tail", "5",
+                    ]),
+                )
+            self.assertIn("needle-error", drill.getvalue())
+
+    def test_custom_captured_artifact_inside_repo_counts_as_mutation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            init_git_repo(root)
+            ledger = root / ".verification" / "evidence.jsonl"
+            with redirect_stdout(StringIO()):
+                self.assertEqual(
+                    0,
+                    main([
+                        "--ledger", str(ledger),
+                        "--repo", str(root),
+                        "--artifact-dir", str(root / "captured-output"),
+                        "run",
+                        "--id", "EV-ART",
+                        "--label", "Captured in repo",
+                        "--capture-output",
+                        "--",
+                        sys.executable,
+                        "-c",
+                        "print('ok')",
+                    ]),
+                )
+            state = current_states(load_events(ledger), repository_snapshot(root))[0]
+            self.assertEqual("mutated", state.status)
+
 
 if __name__ == "__main__":
     unittest.main()
