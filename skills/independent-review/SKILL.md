@@ -1,6 +1,6 @@
 ---
 name: independent-review
-description: Perform a fresh-context second review of meaningful or high-risk software changes to catch self-review blind spots. Judge the final diff against the request, constraints, contracts, and actual evidence. Use when independence is specifically useful, not for an ordinary readiness check.
+description: Perform a fresh-context second review of meaningful or high-risk changes to catch self-review blind spots. Judge the final diff against the request, contracts, and evidence; not for an ordinary readiness check.
 ---
 
 # Independent Review

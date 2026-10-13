@@ -1,6 +1,6 @@
 ---
 name: security-hardening
-description: Handle security-sensitive changes across auth, permissions, untrusted input, secrets, command/file/network boundaries, uploads, persistence, value transfer, or dependencies. Use abuse-case-driven verification at trust boundaries.
+description: Handle security-sensitive changes across auth, permissions, untrusted input, secrets, command/file/network boundaries, uploads, persistence, value transfer, or dependencies. Verify trust boundaries with abuse cases.
 ---
 
 # Security Hardening

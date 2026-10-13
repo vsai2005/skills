@@ -1,6 +1,6 @@
 ---
 name: source-grounded-development
-description: Use authoritative current sources when implementation depends on a version-sensitive external API, framework, SDK, service, database, auth library, deployment tool, or package. Skip behavior fully defined inside the repository.
+description: Use authoritative current sources when implementation depends on version-sensitive external APIs, frameworks, SDKs, services, databases, auth libraries, deployment tools, or packages. Skip behavior fully defined in-repo.
 ---
 
 # Source-Grounded Development

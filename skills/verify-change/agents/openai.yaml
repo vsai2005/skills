@@ -1,4 +1,4 @@
-# source-description-sha256: a8a5fa0def4f05752770d382815fd045d8e70efcd79f0f7dd1d3e6f582ffce34
+# source-description-sha256: 8d1b759c1cbc45bd629a22cf1da78b299c31afb9dee1c2aed7ab9547a0b264bd
 interface:
   display_name: "Verify Change"
   short_description: "Run honest completion checks before declaring done"

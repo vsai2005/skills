@@ -1,6 +1,6 @@
 ---
 name: refactor-safely
-description: Refactor, simplify, split, modernize, or deduplicate existing code while preserving intended behavior and public contracts. Use when structural improvement is primary and behavior should remain stable unless explicitly changed.
+description: Refactor, simplify, split, modernize, or deduplicate code while preserving intended behavior and public contracts. Use when structural improvement is primary.
 ---
 
 # Refactor Safely

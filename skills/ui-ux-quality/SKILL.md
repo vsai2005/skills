@@ -1,6 +1,6 @@
 ---
 name: ui-ux-quality
-description: Audit or improve user-facing interfaces when hierarchy, interaction states, responsive behavior, accessibility, consistency, and rendered evidence are primary concerns. Use for UI/UX review or polish; not for backend-only work or ordinary feature architecture.
+description: Audit or improve user-facing interfaces when hierarchy, interaction states, responsive behavior, accessibility, consistency, or rendered evidence are primary. Not for backend-only work or ordinary feature architecture.
 ---
 
 # UI/UX Quality

@@ -1,4 +1,4 @@
-# source-description-sha256: 1f00411e6f903150e0cffec6ad7b24848cb5e54d7c9d678a0fe5b3a431987626
+# source-description-sha256: 51403501dc299b01ceaf8b8bf34859e5df2b60466e87e4b3104879ee4c5ffe0a
 interface:
   display_name: "Humanizer Writing"
   short_description: "Make prose natural without changing meaning"

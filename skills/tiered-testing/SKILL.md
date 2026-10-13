@@ -1,6 +1,6 @@
 ---
 name: tiered-testing
-description: Plan verification in cheap and heavy tiers so fast checks run early and expensive suites run deliberately. Use when test scope, shared-code blast radius, or deferred verification needs explicit handling.
+description: Plan verification in cheap and heavy tiers. Use when test scope, shared-code blast radius, or deferred verification needs explicit handling.
 ---
 
 # Tiered Testing

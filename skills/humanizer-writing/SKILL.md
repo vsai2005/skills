@@ -1,6 +1,6 @@
 ---
 name: humanizer-writing
-description: Improve accurate prose that is stiff, repetitive, generic, or machine-like while preserving meaning and authentic voice. Do not invent experience, errors, citations, or human authorship, and do not optimize for detector evasion.
+description: Improve accurate prose that is stiff, repetitive, generic, or machine-like while preserving meaning and voice. Do not invent experience, errors, citations, or human authorship, and do not optimize for detector evasion.
 ---
 
 # Humanizer Writing

@@ -1,4 +1,4 @@
-# source-description-sha256: 2b7e2747f221508bc7f71bbe5cbc134313a21756ee94af3885d65d616fbd8d14
+# source-description-sha256: f7d0fee83bd4fe579535f29da7b81f77327117f526e51d5e0a1ae0170488f424
 interface:
   display_name: "Debug Root Cause"
   short_description: "Fix bugs with causal evidence and safe diagnostics"

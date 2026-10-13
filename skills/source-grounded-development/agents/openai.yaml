@@ -1,4 +1,4 @@
-# source-description-sha256: a3c9733527dc0bd641c61e6550d4f20cb97585116add15bde203624b95f1c62c
+# source-description-sha256: 180d7b68559e0af88e9b1d6ea7181a936bdb7c67f609214db45e52303be4dcc2
 interface:
   display_name: "Source-Grounded Development"
   short_description: "Ground version-sensitive code in current sources"

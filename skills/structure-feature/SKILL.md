@@ -1,6 +1,6 @@
 ---
 name: structure-feature
-description: Build or extend features in an existing repository while preserving ownership, conventions, modular responsibilities, reusable domain logic, and proportional complexity. Use when new capability and code placement are the primary work.
+description: Build or extend repository features while preserving ownership, conventions, modular responsibilities, and proportional complexity. Use when new capability and code placement are primary.
 ---
 
 # Structure Feature
