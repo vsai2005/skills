@@ -336,9 +336,12 @@ _SCRIPT_DIR = str(Path(__file__).resolve().parent)
 if _SCRIPT_DIR not in sys.path:
     sys.path.insert(0, _SCRIPT_DIR)
 from evidence_artifacts import (  # noqa: E402
+    describe_captured_output,
+    failure_excerpt,
+    prepare_capture_paths,
     render_capture_summary,
+    validate_evidence_id,
     view_captured_output,
-    write_captured_output as _write_captured_output,
 )
 
 def main(argv: list[str] | None = None) -> int:
@@ -394,7 +397,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         events = load_events(args.ledger)
         if args.action == "plan":
-            event_id = args.id or new_id()
+            event_id = validate_evidence_id(args.id or new_id())
             require_command_identity(events, event_id, args.command)
             append_event(args.ledger, {
                 "event": "plan",
@@ -410,36 +413,38 @@ def main(argv: list[str] | None = None) -> int:
             command = args.command[1:] if args.command and args.command[0] == "--" else args.command
             if not command:
                 raise ValueError("run command must not be empty")
-            event_id = args.id or new_id()
+            event_id = validate_evidence_id(args.id or new_id())
             command_text = shlex.join(command)
             require_command_identity(events, event_id, command_text)
             command_cwd = (args.cwd or args.repo).resolve()
             before = repository_snapshot(args.repo)
             started = time.monotonic()
-            if args.capture_output:
-                completed = subprocess.run(
-                    command,
-                    cwd=str(command_cwd),
-                    check=False,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                )
-            else:
-                completed = subprocess.run(command, cwd=str(command_cwd), check=False)
-            duration = time.monotonic() - started
             captured_fields: dict[str, object] = {}
+            capture_paths: dict[str, Path] | None = None
             if args.capture_output:
                 artifact_root = (
                     args.artifact_dir
                     if args.artifact_dir is not None
                     else args.ledger.parent / "evidence-artifacts"
                 )
-                captured_fields = _write_captured_output(
-                    artifact_root,
-                    event_id,
-                    completed.stdout or b"",
-                    completed.stderr or b"",
-                )
+                capture_paths = prepare_capture_paths(artifact_root, event_id)
+                with (
+                    capture_paths["stdout"].open("wb") as stdout_handle,
+                    capture_paths["stderr"].open("wb") as stderr_handle,
+                ):
+                    completed = subprocess.run(
+                        command,
+                        cwd=str(command_cwd),
+                        check=False,
+                        stdout=stdout_handle,
+                        stderr=stderr_handle,
+                    )
+                captured_fields = describe_captured_output(capture_paths)
+                if completed.returncode != 0:
+                    captured_fields["failure_excerpt"] = failure_excerpt(capture_paths)
+            else:
+                completed = subprocess.run(command, cwd=str(command_cwd), check=False)
+            duration = time.monotonic() - started
 
             after = repository_snapshot(args.repo)
             changed = before != after
@@ -466,7 +471,7 @@ def main(argv: list[str] | None = None) -> int:
             return completed.returncode
 
         if args.action == "record":
-            event_id = args.id or new_id()
+            event_id = validate_evidence_id(args.id or new_id())
             require_command_identity(events, event_id, args.command)
             snapshot = repository_snapshot(args.repo)
             append_event(args.ledger, {
@@ -483,11 +488,17 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         if args.action == "view":
+            artifact_root = (
+                args.artifact_dir
+                if args.artifact_dir is not None
+                else args.ledger.parent / "evidence-artifacts"
+            )
             print(
                 view_captured_output(
                     events,
                     args.id,
                     stream=args.stream,
+                    artifact_root=artifact_root,
                     start_line=args.start_line,
                     line_count=args.line_count,
                     tail=args.tail,
