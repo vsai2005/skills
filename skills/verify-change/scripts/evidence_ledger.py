@@ -10,7 +10,6 @@ explicitly allows state changes.
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import hashlib
 import json
 import re
@@ -333,20 +332,14 @@ def _snapshot_fields(snapshot: RepoSnapshot) -> dict[str, str | None]:
     }
 
 
-_ARTIFACT_HELPER = Path(__file__).with_name("evidence_artifacts.py")
-_ARTIFACT_SPEC = importlib.util.spec_from_file_location(
-    "_verify_change_evidence_artifacts", _ARTIFACT_HELPER
+_SCRIPT_DIR = str(Path(__file__).resolve().parent)
+if _SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPT_DIR)
+from evidence_artifacts import (  # noqa: E402
+    render_capture_summary,
+    view_captured_output,
+    write_captured_output as _write_captured_output,
 )
-if _ARTIFACT_SPEC is None or _ARTIFACT_SPEC.loader is None:
-    raise ImportError(f"cannot load evidence artifact helper: {_ARTIFACT_HELPER}")
-_ARTIFACTS = importlib.util.module_from_spec(_ARTIFACT_SPEC)
-sys.modules[_ARTIFACT_SPEC.name] = _ARTIFACTS
-_ARTIFACT_SPEC.loader.exec_module(_ARTIFACTS)
-
-_write_captured_output = _ARTIFACTS.write_captured_output
-render_capture_summary = _ARTIFACTS.render_capture_summary
-view_captured_output = _ARTIFACTS.view_captured_output
-
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Record verification evidence and render Verified / Not verified sections.")
