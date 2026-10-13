@@ -23,6 +23,14 @@ MANIFEST_NAMES = {
 }
 EXCLUDED_DIRS = {".git", "node_modules", "vendor", ".venv", "venv", "dist", "build", ".next", "target", "__pycache__"}
 TEST_MARKERS = ("test", "tests", "spec", "specs", "__tests__")
+VOCABULARY_NAMES = {
+    "glossary.md",
+    "vocabulary.md",
+    "terms.md",
+    "domain-glossary.md",
+    "domain-terms.md",
+    "domain-language.md",
+}
 
 
 def _rel(path: Path, root: Path) -> str:
@@ -60,6 +68,15 @@ def _instruction_files(root: Path) -> list[str]:
         rel = path.relative_to(root).as_posix()
         if name in INSTRUCTION_NAMES or rel == ".github/copilot-instructions.md" or rel.startswith(".cursor/rules/"):
             found.append(rel)
+    return sorted(found)
+
+
+def _vocabulary_sources(root: Path) -> list[str]:
+    """Return paths to existing shared-vocabulary documents without reading them."""
+    found: list[str] = []
+    for path in _iter_files(root):
+        if path.name.casefold() in VOCABULARY_NAMES:
+            found.append(path.relative_to(root).as_posix())
     return sorted(found)
 
 
@@ -138,6 +155,7 @@ def build_context(root: Path, target: Path | None = None) -> dict[str, Any]:
         raise ValueError(f"repository root is not a directory: {root}")
     manifests, versions, commands = _manifest_info(root)
     nearby, tests = _nearby(root, target)
+    vocabulary_sources = _vocabulary_sources(root)
     top = sorted(p.name for p in root.iterdir() if p.is_dir() and p.name not in EXCLUDED_DIRS)[:30]
     return {
         "root": str(root),
@@ -145,6 +163,7 @@ def build_context(root: Path, target: Path | None = None) -> dict[str, Any]:
         "instructions": _instruction_files(root),
         "manifests": manifests,
         "versions": versions,
+        "vocabulary_sources": vocabulary_sources,
         "likely_commands": commands,
         "top_level_directories": top,
         "nearby_source": nearby,
@@ -159,6 +178,7 @@ def render_text(data: dict[str, Any]) -> str:
     sections = [
         ("Applicable instructions", data["instructions"]),
         ("Manifests", data["manifests"]),
+        ("Existing vocabulary sources", data["vocabulary_sources"]),
         ("Top-level directories", data["top_level_directories"]),
         ("Nearby source", data["nearby_source"]),
         ("Nearby tests", data["nearby_tests"]),
