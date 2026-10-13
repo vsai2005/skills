@@ -106,15 +106,19 @@ def prepare_invocation(
     workspace: Path,
     run_dir: Path,
     command_json: str | None,
+    skills: list[tuple[str, Path]] | None = None,
 ) -> tuple[list[str], dict[str, str] | None, str]:
-    skills = _all_skills(repo)
+    skills = skills if skills is not None else _all_skills(repo)
 
     if provider in {"codex", "antigravity"}:
         for name, source in skills:
             copy_skill_readonly(source, workspace / ".agents" / "skills" / name)
+        strategy = "native-workspace-skills"
+        if len(skills) != len(_all_skills(repo)):
+            strategy = "native-workspace-skills-filtered"
         if provider == "codex":
-            return build_codex_command(binary, prompt, model=model), None, "native-workspace-skills"
-        return build_antigravity_command(binary, prompt, model=model), None, "native-workspace-skills"
+            return build_codex_command(binary, prompt, model=model), None, strategy
+        return build_antigravity_command(binary, prompt, model=model), None, strategy
 
     if provider == "claude":
         plugin_dir = prepare_claude_plugin_skills(run_dir, skills)
@@ -128,7 +132,7 @@ def prepare_invocation(
                 max_budget_usd=None,
             ),
             None,
-            "native-plugin-all-skills",
+            "native-plugin-all-skills" if len(skills) == len(_all_skills(repo)) else "native-plugin-filtered-skills",
         )
 
     if provider == "command":
@@ -163,6 +167,10 @@ def summarize(records: list[dict[str, Any]]) -> dict[str, Any]:
     detectable = [r for r in completed if r.get("detection_status") == "observed"]
     correct = [r for r in detectable if r.get("matched")]
     unknown = [r for r in completed if r.get("detection_status") == "unknown"]
+    eligible = [r for r in completed if r.get("expected_skill_visible", True)]
+    eligible_detectable = [r for r in eligible if r.get("detection_status") == "observed"]
+    eligible_correct = [r for r in eligible_detectable if r.get("matched")]
+    withheld = [r for r in completed if not r.get("expected_skill_visible", True)]
     by_expected = Counter(str(r.get("expected_primary_skill")) for r in records)
     return {
         "records": len(records),
@@ -170,6 +178,15 @@ def summarize(records: list[dict[str, Any]]) -> dict[str, Any]:
         "detectable": len(detectable),
         "correct": len(correct),
         "accuracy_on_detectable": round(len(correct) / len(detectable), 4) if detectable else None,
+        "eligible_completed": len(eligible),
+        "eligible_detectable": len(eligible_detectable),
+        "eligible_correct": len(eligible_correct),
+        "accuracy_on_detectable_eligible": (
+            round(len(eligible_correct) / len(eligible_detectable), 4)
+            if eligible_detectable
+            else None
+        ),
+        "withheld_expected_cases": len(withheld),
         "unknown_detection": len(unknown),
         "expected_case_counts": dict(sorted(by_expected.items())),
     }
@@ -209,8 +226,21 @@ def run_command(args: argparse.Namespace, repo: Path) -> int:
     if records_path.exists() and not args.append:
         records_path.unlink()
 
+    excluded = set(args.exclude_skill)
+    unknown_excluded = sorted(excluded - skill_names)
+    if unknown_excluded:
+        print(f"[ERROR] unknown excluded skill(s): {', '.join(unknown_excluded)}", file=sys.stderr)
+        return 2
+    if args.provider == "command" and excluded:
+        print("[ERROR] --exclude-skill is unsupported for provider=command because the custom command controls its own skill catalog", file=sys.stderr)
+        return 2
+    visible_skills = [(name, path) for name, path in _all_skills(repo) if name not in excluded]
+    if not visible_skills:
+        print("[ERROR] --exclude-skill cannot hide every skill", file=sys.stderr)
+        return 2
+
     records: list[dict[str, Any]] = []
-    skill_list = sorted(skill_names)
+    skill_list = sorted(name for name, _path in visible_skills)
     for case in selected:
         for repetition in range(1, args.runs + 1):
             run_dir = output_dir / args.provider / case["id"] / f"run-{repetition:03d}"
@@ -228,6 +258,7 @@ def run_command(args: argparse.Namespace, repo: Path) -> int:
                     workspace=workspace,
                     run_dir=run_dir,
                     command_json=args.command_json,
+                    skills=visible_skills,
                 )
             except (OSError, ValueError) as exc:
                 print(f"[ERROR] {case['id']}: {exc}", file=sys.stderr)
@@ -245,6 +276,12 @@ def run_command(args: argparse.Namespace, repo: Path) -> int:
                 "case_id": case["id"],
                 "run": repetition,
                 "expected_primary_skill": case["expected_primary_skill"],
+                "expected_skill_visible": (
+                    case["expected_primary_skill"] == "none"
+                    or case["expected_primary_skill"] in skill_list
+                ),
+                "visible_skills": skill_list,
+                "excluded_skills": sorted(excluded),
                 "loading_strategy": strategy,
                 **runtime_metadata(),
             }
@@ -319,6 +356,12 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--command-json", default=None)
     run.add_argument("--dry-run", action="store_true")
     run.add_argument("--append", action="store_true")
+    run.add_argument(
+        "--exclude-skill",
+        action="append",
+        default=[],
+        help="Hide this skill from native automatic discovery; repeat to hide multiple skills.",
+    )
     return parser
 
 
