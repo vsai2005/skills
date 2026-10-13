@@ -21,7 +21,7 @@ For a high-value regression test, [references/mutation-probe.md](references/muta
 
 ## 3. Build evidence, then verify by risk
 
-For non-trivial work, register readiness checks with [references/evidence-ledger.md](references/evidence-ledger.md) and `scripts/evidence_ledger.py` when available.
+For non-trivial or noisy verification, use the [evidence ledger](references/evidence-ledger.md) and `scripts/evidence_ledger.py` to bind checks to candidate state and retain large output outside active context.
 
 Run the cheapest evidence that can falsify the requirement, then broaden:
 

@@ -12,7 +12,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import re
 import shlex
 import subprocess
 import sys
@@ -166,44 +165,6 @@ def _snapshot_is_stale(recorded: RepoSnapshot, current: RepoSnapshot | None) -> 
     )
 
 
-def _canonical_command(command: str) -> tuple[str, ...]:
-    """Canonicalize command text while preserving Windows backslashes."""
-    windows_path = re.search(r"(?:^|[\s\"\'])[A-Za-z]:\\", command) is not None
-    try:
-        parts = shlex.split(command, posix=not windows_path)
-    except ValueError:
-        return tuple(command.split())
-    if windows_path:
-        parts = [
-            part[1:-1]
-            if len(part) >= 2 and part[0] == part[-1] and part[0] in {"'", '"'}
-            else part
-            for part in parts
-        ]
-    return tuple(parts)
-
-
-def _known_command(events: list[dict[str, object]], evidence_id: str) -> str | None:
-    for event in events:
-        if str(event.get("id")) != evidence_id:
-            continue
-        command = str(event.get("command") or "").strip()
-        if command:
-            return command
-    return None
-
-
-def require_command_identity(events: list[dict[str, object]], evidence_id: str, command: str) -> None:
-    """Reject reusing an evidence ID for a different verification command."""
-    known = _known_command(events, evidence_id)
-    if known is None:
-        return
-    if _canonical_command(known) != _canonical_command(command):
-        raise ValueError(
-            f"evidence id {evidence_id} is already bound to `{known}`; refusing different command `{command}`"
-        )
-
-
 def current_states(
     events: list[dict[str, object]], current_snapshot: RepoSnapshot | None = None
 ) -> list[EvidenceState]:
@@ -219,7 +180,7 @@ def current_states(
         command = str(event.get("command") or (previous.command if previous else ""))
         if command:
             known = bound_commands.get(event_id)
-            if known is not None and _canonical_command(known) != _canonical_command(command):
+            if known is not None and canonical_command(known) != canonical_command(command):
                 raise ValueError(f"ledger command identity changed for evidence id {event_id}")
             bound_commands[event_id] = known or command
 
@@ -275,7 +236,7 @@ def render_report(states: list[EvidenceState], pending_tests: list[object] | Non
     lines = ["## Verified"]
     if verified:
         for state in verified:
-            lines.append(f"- {state.label}: `{state.command}` — exit 0 at {state.timestamp}")
+            lines.append(f"- [{state.id}] {state.label}: `{state.command}` — exit 0 at {state.timestamp}")
     else:
         lines.append("- None recorded.")
 
@@ -296,7 +257,7 @@ def render_report(states: list[EvidenceState], pending_tests: list[object] | Non
                 reason = "verification command changed repository state; rerun on the resulting candidate"
             else:
                 reason = state.status
-            lines.append(f"- {state.label}: `{state.command}` — {reason} at {state.timestamp}")
+            lines.append(f"- [{state.id}] {state.label}: `{state.command}` — {reason} at {state.timestamp}")
 
     pending_tests = pending_tests or []
     for item in pending_tests:
@@ -332,10 +293,29 @@ def _snapshot_fields(snapshot: RepoSnapshot) -> dict[str, str | None]:
     }
 
 
+_SCRIPT_DIR = str(Path(__file__).resolve().parent)
+if _SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPT_DIR)
+from evidence_commands import canonical_command, require_command_identity  # noqa: E402
+from evidence_artifacts import (  # noqa: E402
+    describe_captured_output,
+    failure_excerpt,
+    prepare_capture_paths,
+    render_capture_summary,
+    validate_evidence_id,
+    view_captured_output,
+)
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Record verification evidence and render Verified / Not verified sections.")
     parser.add_argument("--ledger", type=Path, default=DEFAULT_LEDGER, help=f"Ledger path (default: {DEFAULT_LEDGER})")
     parser.add_argument("--repo", type=Path, default=Path("."), help="Repository used for staleness checks (default: current directory)")
+    parser.add_argument(
+        "--artifact-dir",
+        type=Path,
+        default=None,
+        help="Directory for retained command output (default: <ledger-dir>/evidence-artifacts)",
+    )
     subparsers = parser.add_subparsers(dest="action", required=True)
 
     plan_parser = subparsers.add_parser("plan", help="Register a command that should be verified")
@@ -352,6 +332,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Allow this verification command to modify repository state; use only for deliberate generators/formatters",
     )
+    run_parser.add_argument(
+        "--capture-output",
+        action="store_true",
+        help="Retain full stdout/stderr as local artifacts and print only a compact evidence summary",
+    )
     run_parser.add_argument("command", nargs=argparse.REMAINDER)
 
     record_parser = subparsers.add_parser("record", help="Record evidence produced by another runner; it is not treated as locally verified")
@@ -360,6 +345,13 @@ def main(argv: list[str] | None = None) -> int:
     record_parser.add_argument("--command", required=True)
     record_parser.add_argument("--exit-code", required=True, type=int)
 
+    view_parser = subparsers.add_parser("view", help="Read a bounded range from retained captured output")
+    view_parser.add_argument("--id", required=True)
+    view_parser.add_argument("--stream", choices=("stdout", "stderr"), default="stdout")
+    view_parser.add_argument("--start-line", type=int, default=1)
+    view_parser.add_argument("--line-count", type=int, default=80)
+    view_parser.add_argument("--tail", type=int, default=None)
+
     report_parser = subparsers.add_parser("report", help="Render Verified / Not verified sections")
     report_parser.add_argument("--pending-tests", type=Path, default=Path("PENDING_TESTS.md"), help="Include outstanding PENDING_TESTS.md entries when the file exists")
     args = parser.parse_args(argv)
@@ -367,7 +359,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         events = load_events(args.ledger)
         if args.action == "plan":
-            event_id = args.id or new_id()
+            event_id = validate_evidence_id(args.id or new_id())
             require_command_identity(events, event_id, args.command)
             append_event(args.ledger, {
                 "event": "plan",
@@ -383,17 +375,43 @@ def main(argv: list[str] | None = None) -> int:
             command = args.command[1:] if args.command and args.command[0] == "--" else args.command
             if not command:
                 raise ValueError("run command must not be empty")
-            event_id = args.id or new_id()
+            event_id = validate_evidence_id(args.id or new_id())
             command_text = shlex.join(command)
             require_command_identity(events, event_id, command_text)
             command_cwd = (args.cwd or args.repo).resolve()
             before = repository_snapshot(args.repo)
             started = time.monotonic()
-            completed = subprocess.run(command, cwd=str(command_cwd), check=False)
+            captured_fields: dict[str, object] = {}
+            capture_paths: dict[str, Path] | None = None
+            if args.capture_output:
+                artifact_root = (
+                    args.artifact_dir
+                    if args.artifact_dir is not None
+                    else args.ledger.parent / "evidence-artifacts"
+                )
+                capture_paths = prepare_capture_paths(artifact_root, event_id)
+                with (
+                    capture_paths["stdout"].open("wb") as stdout_handle,
+                    capture_paths["stderr"].open("wb") as stderr_handle,
+                ):
+                    completed = subprocess.run(
+                        command,
+                        cwd=str(command_cwd),
+                        check=False,
+                        stdout=stdout_handle,
+                        stderr=stderr_handle,
+                    )
+                captured_fields = describe_captured_output(capture_paths)
+                if completed.returncode != 0:
+                    captured_fields["failure_excerpt"] = failure_excerpt(capture_paths)
+            else:
+                completed = subprocess.run(command, cwd=str(command_cwd), check=False)
             duration = time.monotonic() - started
+
             after = repository_snapshot(args.repo)
             changed = before != after
-            append_event(args.ledger, {
+
+            event: dict[str, object] = {
                 "event": "run",
                 "id": event_id,
                 "label": args.label,
@@ -405,11 +423,17 @@ def main(argv: list[str] | None = None) -> int:
                 **_snapshot_fields(after),
                 "state_changed_during_run": changed,
                 "allow_state_change": bool(args.allow_state_change),
-            })
+                "capture_output": bool(args.capture_output),
+            }
+            if captured_fields:
+                event.update(captured_fields)
+            append_event(args.ledger, event)
+            if args.capture_output:
+                print(render_capture_summary(event))
             return completed.returncode
 
         if args.action == "record":
-            event_id = args.id or new_id()
+            event_id = validate_evidence_id(args.id or new_id())
             require_command_identity(events, event_id, args.command)
             snapshot = repository_snapshot(args.repo)
             append_event(args.ledger, {
@@ -423,6 +447,25 @@ def main(argv: list[str] | None = None) -> int:
                 **_snapshot_fields(snapshot),
             })
             print(event_id)
+            return 0
+
+        if args.action == "view":
+            artifact_root = (
+                args.artifact_dir
+                if args.artifact_dir is not None
+                else args.ledger.parent / "evidence-artifacts"
+            )
+            print(
+                view_captured_output(
+                    events,
+                    args.id,
+                    stream=args.stream,
+                    artifact_root=artifact_root,
+                    start_line=args.start_line,
+                    line_count=args.line_count,
+                    tail=args.tail,
+                )
+            )
             return 0
 
         snapshot = repository_snapshot(args.repo)
