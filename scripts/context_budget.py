@@ -81,7 +81,7 @@ def _resources(skill_dir: Path) -> tuple[int, int, int, str | None, int, int]:
         total_chars += chars
 
         tokens = math.ceil(chars / 4)
-        if len(data) > largest_bytes:
+        if tokens > largest_tokens or (tokens == largest_tokens and len(data) > largest_bytes):
             largest_path = path.relative_to(skill_dir).as_posix()
             largest_bytes = len(data)
             largest_tokens = tokens
@@ -154,7 +154,6 @@ def summarize(budgets: list[SkillBudget]) -> dict[str, int]:
         "max_skill_lines": max((item.skill_lines for item in budgets), default=0),
         "max_skill_tokens": max_skill_tokens,
         "max_resource_bytes": max((item.resource_bytes for item in budgets), default=0),
-        "max_single_resource_bytes": max((item.largest_resource_bytes for item in budgets), default=0),
         "max_single_resource_tokens": max(
             (item.rough_largest_resource_tokens for item in budgets), default=0
         ),
