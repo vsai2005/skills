@@ -55,7 +55,7 @@ Do not claim human authorship when unknown and do not optimize for Turnitin, GPT
 
 ## 7. Verify preservation and naturalness separately
 
-For long work, keep a compact continuity ledger rather than relying on the entire conversation. Use [assets/continuity-ledger.md](assets/continuity-ledger.md).
+For long work, use the [continuity ledger](assets/continuity-ledger.md) instead of relying on the entire conversation.
 
 When repository helpers are available:
 
