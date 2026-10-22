@@ -19,7 +19,7 @@ class ContextBudgetTests(unittest.TestCase):
     def test_current_repository_is_within_declared_budget(self):
         budgets = measure(ROOT)
         stats = summarize(budgets)
-        self.assertEqual(17, stats["skills"])
+        self.assertEqual(18, stats["skills"])
         self.assertGreater(stats["total_resource_bytes"], 0)
         self.assertEqual(
             [],
