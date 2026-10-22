@@ -4,6 +4,10 @@ All notable changes to this project will be documented here.
 
 ## Unreleased
 
+- Added `cinematic-3d-web`, a dedicated production workflow for original cinematic Three.js/WebGL experiences, hybrid live-3D + image/foreground compositing, scroll-directed camera choreography, materials/lighting/atmosphere, AI asset provenance, responsive fallbacks, and screenshot-driven visual verification.
+- Added progressive-disclosure references for shot design, hybrid compositing, Three.js production, materials/lighting/atmosphere, AI asset generation, and performance-focused rendered QA instead of expanding the general UI/UX skill.
+- Added an explicit reference-rights boundary: Kage is treated as an architectural/design case study because its repository grants no reuse license for original code/artwork, while directly reused or substantially adapted MIT-licensed material must preserve its notice.
+
 - Added `ui-ux-quality`, a selective user-facing interface workflow for hierarchy, interaction states, responsive behavior, accessibility, design-system consistency, and rendered/runtime evidence.
 - Added progressive-disclosure UI/UX review, accessibility, and state/responsive references rather than expanding the always-loaded orchestrators.
 - Routed substantial UI/UX work from `engineering-quality` and `project-quality-orchestrator` to the dedicated specialist only when justified.
