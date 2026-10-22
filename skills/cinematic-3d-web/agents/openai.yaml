@@ -1,0 +1,5 @@
+# source-description-sha256: 39b5a8763116e84d22b62dedb43006db29b0d209ccee39eb33aa629240b560a2
+interface:
+  display_name: "Cinematic 3D Web"
+  short_description: "Build cinematic hybrid Three.js web experiences"
+  default_prompt: "Use $cinematic-3d-web to turn this visual brief into an original cinematic web experience. Design the shots first, choose the correct 3D/2D layer ownership, build the camera/lighting/material/atmosphere systems, and iterate from rendered screenshots while preserving responsive performance, reduced motion, and accessibility."
