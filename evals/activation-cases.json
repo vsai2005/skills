@@ -788,5 +788,45 @@
     "id": "uiux-sliding-20",
     "prompt": "Improve the drawer, bottom sheet, carousel, and master-detail transitions so the directions and dismiss behavior form one coherent spatial model instead of unrelated slide animations.",
     "expected_primary_skill": "ui-ux-quality"
+  },
+  {
+    "id": "cinematic3d-direct-01",
+    "prompt": "Use cinematic-3d-web to build an original premium Three.js landing page. Design the shots before detailed geometry and verify the rendered result on desktop and mobile.",
+    "expected_primary_skill": "cinematic-3d-web"
+  },
+  {
+    "id": "cinematic3d-hybrid-02",
+    "prompt": "I want a Kage-level cinematic feel without copying Kage. Combine live 3D with generated background plates and transparent foreground elements so the page feels deep but stays efficient.",
+    "expected_primary_skill": "cinematic-3d-web"
+  },
+  {
+    "id": "cinematic3d-flat-fix-03",
+    "prompt": "This AI-generated Three.js hero technically works but looks like a basic game prototype: boxy geometry, flat lighting, no depth, generic camera, and too much bloom. Make it cinematic.",
+    "expected_primary_skill": "cinematic-3d-web"
+  },
+  {
+    "id": "cinematic3d-scroll-world-04",
+    "prompt": "Turn these five story chapters into one continuous scroll-driven 3D world with authored camera shots, atmosphere, foreground framing, native reversible scrolling, and a reduced-motion version.",
+    "expected_primary_skill": "cinematic-3d-web"
+  },
+  {
+    "id": "cinematic3d-architecture-05",
+    "prompt": "Build a cinematic architectural WebGL experience where the camera moves through a futuristic research facility. I care about composition, material realism, lighting, fog, and shot continuity more than raw polygon count.",
+    "expected_primary_skill": "cinematic-3d-web"
+  },
+  {
+    "id": "cinematic3d-product-06",
+    "prompt": "Create a premium real-time 3D product hero with deliberate studio cinematography, material response, a small number of signature effects, responsive quality tiers, and a static fallback.",
+    "expected_primary_skill": "cinematic-3d-web"
+  },
+  {
+    "id": "cinematic3d-assets-07",
+    "prompt": "Plan the AI visual assets for this immersive Three.js site: concept frames, distant plates, alpha foreground cutouts, prompts, provenance, and how each one should match the live camera and lighting.",
+    "expected_primary_skill": "cinematic-3d-web"
+  },
+  {
+    "id": "cinematic3d-performance-08",
+    "prompt": "Our cinematic WebGL page looks good on a gaming laptop but melts phones. Keep the composition while designing adaptive DPR, shadow, particles, postprocessing, visibility gating, and mobile fallback behavior.",
+    "expected_primary_skill": "cinematic-3d-web"
   }
 ]
