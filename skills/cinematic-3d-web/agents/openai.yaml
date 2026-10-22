@@ -1,4 +1,4 @@
-# source-description-sha256: e9c4b0370ec5115e3a62bbe6527a094ec1cf1b21b2538088ec9b700851426939
+# source-description-sha256: d45ce6d770856fda0e7d1173a53cd8da7294b8f85d097418434012b88a0035fa
 interface:
   display_name: "Cinematic 3D Web"
   short_description: "Build cinematic hybrid Three.js web experiences"
