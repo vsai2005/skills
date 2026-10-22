@@ -1,6 +1,6 @@
 ---
 name: cinematic-3d-web
-description: Build or improve cinematic web experiences with Three.js/WebGL, authored scroll camera shots, hybrid 3D plus image/foreground layers, lighting/materials/atmosphere, AI visual assets, responsive fallbacks, and screenshot-driven iteration. Use for immersive landing pages, product worlds, or flat AI 3D.
+description: Build cinematic Three.js/WebGL sites with shot design, hybrid layers, scroll, and QA.
 ---
 
 # Cinematic 3D Web
