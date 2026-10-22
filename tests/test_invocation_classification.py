@@ -15,9 +15,9 @@ class InvocationClassificationTests(unittest.TestCase):
         self.assertFalse(policy["enforced"])
         self.assertEqual([], validate_policy(ROOT, policy))
         result = report(ROOT, policy)
-        self.assertEqual(17, result["skills"])
+        self.assertEqual(18, result["skills"])
         self.assertEqual(
-            17,
+            18,
             sum(result["classification_counts"].values()),
         )
 
