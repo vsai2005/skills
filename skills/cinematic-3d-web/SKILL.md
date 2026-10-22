@@ -5,16 +5,16 @@ description: Build or improve cinematic web experiences with Three.js/WebGL, aut
 
 # Cinematic 3D Web
 
-Build the final frame, not merely a 3D scene. Coordinate art direction, camera, real-time 3D, layered imagery, atmosphere, motion, performance, and rendered verification. More polygons, bloom, particles, or shaders do not substitute for composition.
+Build the final frame, not merely a 3D scene. Coordinate art direction, camera, layers, atmosphere, motion, performance, and rendered verification.
 
 ## 1. Choose the production mode
 
 Use the smallest capable mode:
 
 - DOM/CSS for decorative depth.
-- Focused Three.js for one interactive hero, product, room, sculpture, or spatial object.
+- Focused Three.js for one interactive hero or spatial object.
 - Scroll-directed 3D world when several beats share one continuous space.
-- Hybrid cinematic composition when live 3D benefits from plates, alpha foregrounds, or DOM layers.
+- Hybrid composition when live 3D benefits from plates, alpha foregrounds, or DOM.
 - Pre-rendered video when exact photographic motion matters more than real-time control.
 
 Do not force every pixel into WebGL. Use [references/hybrid-compositing.md](references/hybrid-compositing.md) when layer ownership is unclear.
@@ -60,7 +60,7 @@ A useful hybrid stack:
 6. semantic DOM typography/navigation/controls;
 7. restrained post-processing.
 
-Every layer needs a role. Do not hide weak camera or lighting behind blur, grain, glow, or particles.
+Every layer needs a role; effects must not conceal weak composition.
 
 ## 5. Build in visual-priority order
 
@@ -95,7 +95,7 @@ Reduced motion must preserve the full reading experience with stable keyframes, 
 
 ## 7. Generate assets for explicit roles
 
-AI imagery is a production layer, not a substitute for scene design. Useful roles include concept frames, distant plates, editorial stills, transparent foregrounds, texture sources, matte extensions, and static posters.
+AI imagery is a production layer, not a substitute for scene design. Useful roles include concept frames, plates, transparent foregrounds, texture sources, and static posters.
 
 Keep a stable style preamble across related assets. Record purpose, model/provider, prompt/reference, dimensions, transparency, edits, rights, and final path.
 
@@ -132,7 +132,7 @@ Preserve focal composition while reducing invisible GPU cost. Pause/reduce work 
 
 ## 10. Preserve product usability
 
-Keep semantic DOM content outside the canvas, visible focus, usable mobile navigation, readable contrast, accessible control names, reduced motion, and a meaningful static/WebGL-failure fallback. Essential actions must not depend on hover or the 3D renderer.
+Keep semantic DOM content, visible focus, usable mobile navigation, readable contrast, reduced motion, accessible controls, and a meaningful WebGL fallback. Essential actions must not depend on hover or the 3D renderer.
 
 Use `ui-ux-quality` for broader responsive, accessibility, and usability review.
 
