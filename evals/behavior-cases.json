@@ -552,5 +552,90 @@
       "Verify reduced motion, touch/mobile, ordinary Windows/lower-power hardware, and fallback behavior.",
       "Prefer removing the custom scroller over preserving it when it cannot meet the interaction and performance contract."
     ]
+  },
+  {
+    "id": "cinematic3d-shot-first",
+    "skills": [
+      "cinematic-3d-web"
+    ],
+    "fixture": "A developer has a detailed futuristic city model but the landing page still feels like a model viewer. The camera is centered, the whole city is evenly lit, text sits wherever space remains, and every section adds more meshes.",
+    "request": "Make the experience feel like a cinematic product story rather than a 3D demo.",
+    "expected_behaviors": [
+      "Define the visual contract and authored shot ledger before adding more detailed geometry.",
+      "Repair focal hierarchy, camera/lens choice, foreground-midground-background separation, negative space, and light hierarchy before micro-detail.",
+      "Treat major scroll states as shots with explicit transitions and mobile reinterpretations.",
+      "Do not use extra geometry or bloom as a substitute for composition."
+    ]
+  },
+  {
+    "id": "cinematic3d-hybrid-layer-ownership",
+    "skills": [
+      "cinematic-3d-web"
+    ],
+    "fixture": "A forest-temple scene attempts to model every distant tree, leaf, rock, cloud, and foreground branch in WebGL. It is expensive and still looks less detailed than the approved concept frame.",
+    "request": "Keep the live camera and lighting but reach the concept's richness efficiently.",
+    "expected_behaviors": [
+      "Assign visual elements to WebGL, image plates, alpha foregrounds, DOM, or CSS according to whether they need spatial interaction, parallax, lighting, semantics, or only dense static detail.",
+      "Keep the primary spatial subject live while allowing distant detail and near-camera organic framing to use appropriate 2D assets.",
+      "Require perspective, light direction, haze, sharpness, black level, and motion to agree across live and generated layers.",
+      "Do not misrepresent static plates as live 3D."
+    ]
+  },
+  {
+    "id": "cinematic3d-flat-lighting-material",
+    "skills": [
+      "cinematic-3d-web"
+    ],
+    "fixture": "The Three.js scene uses flat colored MeshStandardMaterial objects, a strong AmbientLight, several colored point lights, maximum bloom, and no fog. Everything is visible but nothing has depth.",
+    "request": "Fix the cinematic quality without turning every dial up further.",
+    "expected_behaviors": [
+      "Treat surface roughness/normal/texture scale and physically meaningful material response as primary material work.",
+      "Establish key/fill/rim/practical/environment light roles and preserve intentional darkness instead of lighting every surface equally.",
+      "Use atmosphere and depth falloff to separate distance bands.",
+      "Reduce bloom or other finish effects when they are masking weak light/material hierarchy."
+    ]
+  },
+  {
+    "id": "cinematic3d-scroll-accessible",
+    "skills": [
+      "cinematic-3d-web",
+      "ui-ux-quality"
+    ],
+    "fixture": "A scroll-driven WebGL story hijacks wheel input, camera state is derived from several independent listeners, reverse scrolling lands in different states, and users with reduced motion still get continuous fly-through animation.",
+    "request": "Keep the cinematic story but make the interaction production-ready.",
+    "expected_behaviors": [
+      "Use native reversible document scrolling with one normalized or section-local progress source of truth.",
+      "Map camera, target, lights, fog, foregrounds, and UI states from the same authored conductor rather than competing listeners.",
+      "Provide stable reduced-motion states or still frames while preserving the complete reading order.",
+      "Preserve semantic DOM content, keyboard focus, anchor/navigation behavior, and a useful WebGL failure fallback."
+    ]
+  },
+  {
+    "id": "cinematic3d-generated-assets-rights",
+    "skills": [
+      "cinematic-3d-web"
+    ],
+    "fixture": "The team wants to copy artwork and source code from an impressive public 3D site whose README says no reuse license is granted, while also generating matching foreground images with inconsistent prompts.",
+    "request": "Use the site as inspiration but build our own production pipeline.",
+    "expected_behaviors": [
+      "Treat the unlicensed project as a high-level architectural or art-direction reference rather than copying its original code or artwork.",
+      "Create original shot, geometry, material, lighting, and asset decisions for the new work.",
+      "Use a stable style preamble and role-specific prompts for plates, cutouts, posters, or texture sources.",
+      "Record asset source/model/prompt/input references/rights notes and preserve required notices for any separately licensed material that is actually reused."
+    ]
+  },
+  {
+    "id": "cinematic3d-adaptive-performance",
+    "skills": [
+      "cinematic-3d-web"
+    ],
+    "fixture": "A hybrid cinematic scene uses devicePixelRatio=3, five full-screen transparent layers, several shadow-casting lights, a bloom chain, dense particles, and continuous rendering even when off-screen.",
+    "request": "Make it run well on weaker devices without destroying the visual idea.",
+    "expected_behaviors": [
+      "Profile likely fill-rate, transparency, shadow, particle, and post-processing costs instead of assuming triangles are the only bottleneck.",
+      "Use a quality ladder with bounded/adaptive render scale or DPR, shadow policy, particle draw range, texture/post-processing policy, and slower or disabled expensive effects on weaker tiers.",
+      "Pause or reduce rendering when hidden or off-screen and dispose resources when the application lifecycle requires it.",
+      "Preserve focal composition first and reduce expensive invisible dimensions before removing the central visual concept."
+    ]
   }
 ]
