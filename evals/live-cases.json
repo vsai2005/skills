@@ -723,5 +723,40 @@
       "*.css",
       "*.md"
     ]
+  },
+  {
+    "id": "cinematic-3d-web-production-live",
+    "skill": "cinematic-3d-web",
+    "fixture": "evals/live-fixtures/cinematic-3d-web",
+    "request": "Turn this flat Three.js-style hero into an original production-ready cinematic scroll experience. Before detailed polish, create PRODUCTION_PLAN.md with the visual contract, at least three authored shots, a hybrid layer map, mobile reinterpretation, reduced-motion/WebGL fallback, and performance policy. Keep semantic DOM content and native anchor/scroll behavior. In scene.js, move from one hardcoded camera to authored shot states and one scroll conductor, cap rendering quality for weaker devices, handle hidden-page work, and provide a visible static fallback when Three.js/WebGL is unavailable. Do not add remote runtime dependencies or copy another site's code/artwork.",
+    "pass_threshold": 1,
+    "graders": [
+      {
+        "id": "cinematic-production-contract",
+        "type": "command",
+        "argv": [
+          "python3",
+          "{repo}/evals/graders/grade_cinematic_3d_web.py",
+          "{workspace}"
+        ],
+        "weight": 6
+      },
+      {
+        "id": "meaningful-change",
+        "type": "changed_files_min",
+        "count": 2,
+        "weight": 1
+      }
+    ],
+    "manual_checks": [
+      "The plan fixes camera/composition/light/layer ownership before proposing extra geometry or maximum effects.",
+      "The implementation keeps one coherent world and explains what remains live 3D versus static/generated layers.",
+      "The agent does not claim browser or GPU checks it did not actually run."
+    ],
+    "expected_change_globs": [
+      "*.html",
+      "*.js",
+      "*.md"
+    ]
   }
 ]
