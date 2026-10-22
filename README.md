@@ -38,6 +38,7 @@ This repository packages a repeatable engineering workflow around those failure 
 | `independent-review` | High-risk/fresh-context second review | Catch self-review blind spots before final verification |
 | `security-hardening` | Auth, secrets, untrusted input, command/file/network/value boundaries | Trace trust boundaries, test abuse cases, and repair the owning security control |
 | `ui-ux-quality` | UI/UX audits, premium visual direction, motion/3D, responsive/accessibility review | Improve task clarity, product-specific visual identity, semantic design systems, motion/3D restraint, states, accessibility, resilience, and rendered usability |
+| `cinematic-3d-web` | Cinematic Three.js/WebGL, scroll worlds, hybrid 2D/3D composition, AI visual assets | Design shots first, assign layers deliberately, build camera/light/material/atmosphere systems, and iterate from rendered evidence with performance/fallback discipline |
 | `asd-ste100-writing` | Technical procedures, explanations, release notes, reviews, and user-facing engineering prose | Write clear ASD-STE100-inspired controlled English while preserving exact technical meaning |
 | `humanizer-writing` | Prose that is correct but stiff, repetitive, generic, or machine-like | Make writing natural, specific, and professional without inventing facts or a fake author voice |
 
@@ -89,6 +90,7 @@ Classify the change
   |-- changing external API ---> source-grounded-development
   |-- security/trust boundary --> security-hardening
   |-- UI/UX quality -----------> ui-ux-quality
+  |-- cinematic 3D/WebGL ------> cinematic-3d-web
   |-- high-risk second review --> independent-review
   |-- controlled technical prose -> asd-ste100-writing
   |-- natural prose rewrite ------> humanizer-writing
@@ -192,6 +194,14 @@ ASD-STE100 compliance.
 ```text
 Humanize this engineering update with humanizer-writing. Keep every factual claim,
 number, identifier, and source intact; remove templated filler and repetitive rhythm.
+```
+
+
+```text
+Build this premium scroll-driven 3D landing page with cinematic-3d-web. Create a shot
+ledger before detailed geometry, choose what belongs in WebGL versus plates/alpha
+foregrounds/DOM, author camera and lighting intentionally, and iterate from desktop
+and mobile screenshots with reduced-motion and performance fallbacks.
 ```
 
 
